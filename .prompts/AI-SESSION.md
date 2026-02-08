@@ -1,0 +1,283 @@
+# AI Development Session
+
+> **AI Agent Responsibility:** This file is managed by the AI agent. The human only provides the initial project description—the AI fills in and updates everything else.
+
+---
+
+## 🤖 AI Agent Instructions
+
+**On first session:**
+1. Fill in the Project Overview table (name, description, root, date)
+2. Document the Project Goals from the user's description
+3. Begin with SOP-000 and update the tracker as you progress
+
+**On each SOP completion:**
+1. Update the SOP's status in the Progress Tracker (⬚ → ✅)
+2. Record the actual output locations
+3. Add any notes about deviations or decisions
+4. Update the "Current Session" section for the next SOP
+5. Update the "Session Prompt Template" with current state
+6. Add an entry to the Session Log
+
+**On session resume:**
+1. Read this file to recover context
+2. Continue from the next incomplete SOP
+3. Update all sections as you progress
+
+---
+
+## 📋 Project Overview
+
+| Field | Value |
+|-------|-------|
+| **Project Name** | Listly - Smart Shopping Companion |
+| **Description** | Mobile-first PWA for smart shopping list management with real-time collaboration, AI suggestions, and pantry tracking |
+| **Project Root** | `/home/eima40x4c/Projects/listly` |
+| **Started** | 2026-02-07 |
+
+---
+
+## Project Goals
+
+- Smart shopping list management with multiple lists and real-time collaboration
+- Auto-categorization of items by store aisle for efficient shopping
+- Budget tracking with price history to help users save money
+- AI-powered suggestions based on purchase patterns
+- Pantry inventory management with expiration date tracking
+- Meal planning and recipe integration to streamline shopping
+- Offline-first PWA with background sync for reliability
+- Location-based reminders when near stores
+
+---
+
+## SOP Progress Tracker
+
+### Phase 0: Initialization
+
+| SOP | Title | Status | Output Location | Notes |
+|-----|-------|--------|-----------------|-------|
+| 000 | Requirements Gathering | ✅ | `/docs/requirements.md` | Complete |
+| 001 | Tech Stack Selection | ✅ | `/docs/tech-stack.md` | Complete - Selected Next.js, PostgreSQL, Supabase |
+| 002 | Repository Setup | ⬚ | `README.md`, `.gitignore` | |
+| 003 | Project Structure | ⬚ | Folder structure | |
+| 004 | Environment Setup | ⬚ | `.env.example`, `/docs/setup.md` | |
+| 005 | Design Patterns | ⬚ | `/docs/architecture/design-patterns.md` | |
+| 006 | Code Style Standards | ⬚ | Linter/formatter configs | |
+
+### Phase 1: Database
+
+| SOP | Title | Status | Output Location | Notes |
+|-----|-------|--------|-----------------|-------|
+| 100 | Database Selection | ⬚ | `/docs/tech-stack.md` | |
+| 101 | Schema Design | ⬚ | `/docs/database/erd.md`, migrations | |
+| 103 | Seed Data | ⬚ | `/seeds/` or `/fixtures/` | |
+
+### Phase 2: Backend
+
+| SOP | Title | Status | Output Location | Notes |
+|-----|-------|--------|-----------------|-------|
+| 200 | API Design | ⬚ | `/docs/api/openapi.yaml` | |
+| 201 | Authentication | ⬚ | Auth module/routes | |
+| 202 | Authorization | ⬚ | `/docs/authorization.md`, middleware | |
+| 203 | Error Handling | ⬚ | Error handler module | |
+| 204 | Validation | ⬚ | Validation schemas | |
+
+### Phase 3: Frontend
+
+| SOP | Title | Status | Output Location | Notes |
+|-----|-------|--------|-----------------|-------|
+| 300 | Component Architecture | ⬚ | `/src/components/` structure | |
+| 301 | Styling Standards | ⬚ | Style configs, design tokens | |
+| 302 | API Integration | ⬚ | API client module | |
+| 303 | Form Handling | ⬚ | Form components/hooks | |
+
+### Phase 4: AI Integration (If Applicable)
+
+| SOP | Title | Status | Output Location | Notes |
+|-----|-------|--------|-----------------|-------|
+| 400 | AI Feasibility | ⬚ | `/docs/ai-feasibility.md` | |
+| 401 | LLM Integration | ⬚ | AI service module | |
+| 404 | AI Testing | ⬚ | AI test suite | |
+| 405 | Cost Monitoring | ⬚ | Cost tracking setup | |
+
+### Phase 5: Quality
+
+| SOP | Title | Status | Output Location | Notes |
+|-----|-------|--------|-----------------|-------|
+| 500 | Unit Testing | ⬚ | Test configuration, `/tests/unit/` | |
+| 501 | Integration Testing | ⬚ | `/tests/integration/` | |
+| 503 | Code Review | ⬚ | PR template, review checklist | |
+| 504 | Security Audit | ⬚ | Security scan configs | |
+
+### Phase 6: Deployment
+
+| SOP | Title | Status | Output Location | Notes |
+|-----|-------|--------|-----------------|-------|
+| 602 | Container Standards | ⬚ | `Dockerfile`, `docker-compose.yml` | |
+| 603 | Deployment Strategy | ⬚ | `/docs/deployment.md` | |
+| 604 | Monitoring & Alerting | ⬚ | Monitoring configs | |
+| 605 | Incident Response | ⬚ | `/docs/incident-response.md` | |
+
+**Status Legend:**
+- ⬚ Not Started
+- 🔄 In Progress  
+- ✅ Complete
+- ⏭️ Skipped (not applicable)
+
+---
+
+## 🔄 Current Session
+
+### Active SOP
+
+**SOP:** SOP-002  
+**Title:** Repository Setup  
+**Status:** ⬚ Not Started
+
+### Context Files to Read
+
+```
+.sops/phase-0-initialization/SOP-002-repository-setup.md    # The procedure
+/docs/requirements.md                                        # Project context
+/docs/tech-stack.md                                         # Tech stack decisions
+```
+
+### Expected Outputs
+
+- [ ] `README.md`
+- [ ] `.gitignore`
+- [ ] `CONTRIBUTING.md`
+- [ ] `.github/pull_request_template.md`
+- [ ] Repository pushed to remote
+- [ ] Branch protection configured
+
+---
+
+## 📝 Session Prompt Template
+
+```markdown
+## Context
+
+I'm working on Listly - Smart Shopping Companion: Mobile-first PWA for smart shopping list management with real-time collaboration, AI suggestions, and pantry tracking.
+
+**Project location:** /home/eima40x4c/Projects/listly
+**Session tracker:** `.prompts/AI-SESSION.md`
+**SOPs location:** `.sops/`
+
+## Completed Work
+
+The following SOPs have been completed:
+- SOP-000: Requirements → `/docs/requirements.md`
+- SOP-001: Tech Stack Selection → `/docs/tech-stack.md`
+
+## Current Task
+
+Execute **SOP-002** (Repository Setup).
+
+**Read these files:**
+1. `.sops/phase-0-initialization/SOP-002-repository-setup.md` — The procedure
+2. `/docs/requirements.md` — Project context
+3. `/docs/tech-stack.md` — Tech stack decisions
+
+**Follow the SOP's Procedure section step by step.**
+**Create all outputs listed in the SOP's Outputs section.**
+**Update `.prompts/AI-SESSION.md` when complete.**
+```
+
+---
+
+## 📓 Session Log
+
+### Session 1 — 2026-02-07
+
+**SOPs Completed:** SOP-000 (Requirements Gathering)  
+**Files Created:**
+- `/docs/requirements.md` — Comprehensive requirements with 29 user stories across 8 epics
+**Notes:** 
+- Defined 8 epics: Shopping Lists, Collaboration, Budget/Price, AI Suggestions, Pantry/Expiration, Meal Planning, Offline-First, Location Reminders
+- MVP scope includes core list management, sharing, real-time sync, basic budget, PWA install
+- AI features deferred to Phase 3 to reduce initial complexity
+- Location reminders deferred to Phase 4 due to privacy complexity
+
+### Session 2 — 2026-02-08
+
+**SOPs Completed:** SOP-001 (Tech Stack Selection)  
+**Files Created:**
+- `/docs/tech-stack.md` — Comprehensive tech stack documentation with decision matrices and rationale
+**Tech Stack Summary:**
+- **Frontend:** Next.js 14 + React 18 + TypeScript
+- **Styling:** Tailwind CSS + shadcn/ui
+- **Backend:** Next.js API Routes (serverless)
+- **Database:** PostgreSQL 16 + Prisma ORM
+- **Real-time:** Supabase Realtime
+- **Authentication:** NextAuth.js 5
+- **State Management:** Zustand
+- **PWA:** next-pwa
+- **Hosting:** Vercel (frontend) + Supabase (database)
+**Notes:**
+- Selected T3 Stack pattern (Next.js, TypeScript, Prisma) with Supabase for real-time collaboration
+- Cost-optimized for MVP: ~$8/month (only Apple Developer Program), scales to ~$100/month at 500 users
+- PWA-first approach with offline support via service workers and IndexedDB
+- Real-time collaboration via Supabase Realtime (CDC from PostgreSQL)
+- All major categories evaluated with decision matrices: frontend, database, auth, real-time, state management
+
+---
+
+## 🔗 Quick Reference
+
+### Directory Structure
+
+```
+{project-root}/
+├── .prompts/
+│   ├── AI-GUIDE.md       # How to use SOPs with AI agents
+│   └── AI-SESSION.md     # This file (active session tracker)
+├── .sops/
+│   ├── README.md         # SOP index
+│   ├── templates/        # Reusable templates
+│   ├── phase-0-initialization/
+│   ├── phase-1-database/
+│   ├── phase-2-backend/
+│   ├── phase-3-frontend/
+│   ├── phase-4-ai-integration/
+│   ├── phase-5-quality/
+│   └── phase-6-deployment/
+├── docs/                 # Generated documentation
+├── src/                  # Source code
+└── ...
+```
+
+### Recommended SOP Order
+
+```
+Phase 0 (Sequential)
+────────────────────
+000 → 001 → 002 → 003 → 004 → 005 → 006
+
+Phase 1-3 (Can parallelize frontend/backend after DB)
+──────────────────────────────────────────────────────
+100 → 101 → 103
+            ↓
+      ┌─────┴─────┐
+      ↓           ↓
+    Phase 2    Phase 3
+    (Backend)  (Frontend)
+      ↓           ↓
+      └─────┬─────┘
+            ↓
+    Phase 4 (Optional)
+            ↓
+    Phase 5 (Quality)
+            ↓
+    Phase 6 (Deploy)
+```
+
+---
+
+## ⚠️ Important Notes
+
+1. **AI manages this file** — Human only provides initial project description
+2. **Always read SOPs first** — Don't assume; follow the documented procedure
+3. **Check prerequisites** — Ensure previous SOP outputs exist before starting
+4. **Update after each SOP** — Keep this tracker current
+5. **Document deviations** — Note any departures from SOPs in the session log
