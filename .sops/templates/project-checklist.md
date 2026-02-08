@@ -59,10 +59,10 @@
 
 ### Code Style Standards (SOP-006)
 
-- [ ] Linter configured: **********\_**********
-- [ ] Formatter configured: **********\_**********
-- [ ] Pre-commit hooks set up
-- [ ] Style guide documented or linked
+- [x] Linter configured: ESLint with TypeScript, React, Import Sorting
+- [x] Formatter configured: Prettier with Tailwind CSS plugin
+- [x] Pre-commit hooks set up
+- [x] Style guide documented or linked
 
 ---
 
@@ -70,7 +70,7 @@
 
 ### Database Selection (SOP-100)
 
-- [ ] Database engine selected: **********\_**********
+- [ ] Database engine selected: ****\*\*****\_****\*\*****
 - [ ] Justification documented
 - [ ] Local database setup instructions added
 
@@ -101,14 +101,14 @@
 
 ### Authentication (SOP-201)
 
-- [ ] Auth method selected: **********\_**********
+- [ ] Auth method selected: ****\*\*****\_****\*\*****
 - [ ] Token management implemented
 - [ ] Password hashing configured
 - [ ] Session/token expiry defined
 
 ### Authorization (SOP-202)
 
-- [ ] Roles defined: **********\_**********
+- [ ] Roles defined: ****\*\*****\_****\*\*****
 - [ ] Permission matrix documented
 - [ ] Route protection implemented
 
@@ -137,7 +137,7 @@
 
 ### Styling Standards (SOP-301)
 
-- [ ] CSS methodology selected: **********\_**********
+- [ ] CSS methodology selected: ****\*\*****\_****\*\*****
 - [ ] Design tokens/variables defined
 - [ ] Responsive breakpoints set
 - [ ] Accessibility basics covered (WCAG 2.1 AA)
@@ -225,7 +225,7 @@
 
 ### Deployment Strategy (SOP-601)
 
-- [ ] Deployment method selected: **********\_**********
+- [ ] Deployment method selected: ****\*\*****\_****\*\*****
 - [ ] Rollback procedure documented
 - [ ] Feature flags considered (if needed)
 

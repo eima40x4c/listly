@@ -65,7 +65,7 @@
 | 003 | Project Structure      | ✅     | `src/`, `tsconfig.json`, `/docs/architecture/project-structure.md`                                               | Complete - Next.js App Router structure with path aliases   |
 | 004 | Environment Setup      | ✅     | `.env.example`, `/docs/environment-variables.md`, `/docs/development-setup.md`, `docker-compose.yml`, `.vscode/` | Complete - Environment configuration with Docker services   |
 | 005 | Design Patterns        | ✅     | `/docs/architecture/patterns.md`                                                                                 | Complete - Modular Monolith with feature-based organization |
-| 006 | Code Style Standards   | ⬚      | Linter/formatter configs                                                                                         |                                                             |
+| 006 | Code Style Standards   | ✅     | `eslint.config.js`, `prettier.config.js`, `.prettierignore`, `lint-staged.config.js`, `.husky/pre-commit`        | Complete - ESLint, Prettier, import sorting, git hooks      |
 
 ### Phase 1: Database
 
@@ -134,23 +134,21 @@
 
 ### Active SOP
 
-**SOP:** SOP-006
-**Title:** Code Style Standards
+**SOP:** SOP-100
+**Title:** Database Selection
 **Status:** ⬚ Not Started
 
 ### Context Files to Read
 
 ```
-.sops/phase-0-initialization/SOP-006-code-style-standards.md
+.sops/phase-1-database/SOP-100-database-selection.md
 /docs/tech-stack.md
-/docs/architecture/patterns.md
 ```
 
 ### Expected Outputs
 
-- [ ] ESLint configuration
-- [ ] Prettier configuration
-- [ ] Code style documentation
+- [ ] Database selection documentation
+- [ ] Database configuration
 
 ---
 
@@ -169,22 +167,24 @@ I'm working on Listly - Smart Shopping Companion: Mobile-first PWA for smart sho
 
 The following SOPs have been completed:
 
-- SOP-000: Requirements → `/docs/requirements.md`
-- SOP-001: Tech Stack Selection → `/docs/tech-stack.md`
-- SOP-002: Repository Setup → Git initialized, documentation created
-- SOP-003: Project Structure → Folder structure, path aliases, documentation
-- SOP-004: Environment Setup → Environment variables, Docker, development scripts
-- SOP-005: Design Patterns → `/docs/architecture/patterns.md`
+- Phase 0: Initialization
+  - SOP-000 (Requirements Gathering)
+  - SOP-001 (Tech Stack Selection)
+  - SOP-002 (Repository Setup)
+  - SOP-003 (Project Structure)
+  - SOP-004 (Environment Setup)
+  - SOP-005 (Design Patterns)
+  - SOP-006 (Code Style Standards)
 
 ## Current Task
 
-Execute **SOP-006** (Code Style Standards).
+Execute **SOP-100** (Database Selection).
 
 **Read these files:**
 
-1. `.sops/phase-0-initialization/SOP-006-code-style-standards.md` — The procedure
-2. `/docs/tech-stack.md` — Tech stack decisions
-3. `/docs/architecture/patterns.md` — Design patterns
+1. `.sops/phase-1-database/SOP-100-database-selection.md` — The procedure
+2. `/docs/requirements.md` — Data requirements from user stories
+3. `/docs/tech-stack.md` — Tech stack decisions
 
 **Refer to `AI-GUIDE.md` to attend to your responsibilities and for guidance on best practices.**
 **Follow the SOP's Procedure section step by step.**
@@ -407,6 +407,49 @@ Execute **SOP-006** (Code Style Standards).
 - Repository + Service pattern creates clean separation of concerns
 - All patterns include TypeScript examples specific to Listly domain
 - Ready for SOP-006 (Code Style Standards)
+
+### Session 6 — 2026-02-08
+
+**SOPs Completed:** SOP-006 (Code Style Standards)
+**Files Created:**
+
+- `eslint.config.js` — ESLint 9+ flat configuration with TypeScript, React, and Prettier integration
+- `prettier.config.js` — Prettier configuration with Tailwind CSS plugin
+- `.prettierignore` — Prettier exclusion patterns
+- `lint-staged.config.js` — Staged file linting configuration
+- `.husky/pre-commit` — Git pre-commit hook for automated linting
+- Updated `package.json` — Updated lint and format scripts
+- Updated `.vscode/settings.json` — Disabled organize imports on save (ESLint handles it)
+
+**Code Style Configuration:**
+
+- **ESLint:** TypeScript, React Hooks, Import Sorting, Prettier integration
+  - Rules: no-unused-vars with `_` prefix exception, explicit-any warning, consistent-type-imports
+  - React hooks rules and exhaustive-deps warning
+  - Simple-import-sort for automatic import organization
+  - No console warnings (except warn/error)
+- **Prettier:** 80 char line width, single quotes, 2-space tabs, trailing commas (ES5), LF line endings
+  - Tailwind CSS plugin for class sorting
+- **Import Organization:** Automatic sorting (React/Next.js → External → Internal → Relative)
+- **Git Hooks:** Pre-commit hook runs lint-staged for auto-fix on commit
+- **VS Code:** Format on save, ESLint auto-fix, Prettier as default formatter
+
+**Naming Conventions:**
+
+- Variables: camelCase (`userName`, `isLoading`)
+- Constants: SCREAMING_SNAKE_CASE (`MAX_RETRIES`, `API_URL`)
+- Functions: camelCase with verb prefix (`getUserById`, `handleSubmit`)
+- Classes/Interfaces/Types: PascalCase (no "I" prefix for interfaces)
+- Components: PascalCase (`UserCard`, `NavBar`)
+- Hooks: camelCase with "use" prefix (`useAuth`, `useUsers`)
+- Files: Components use PascalCase, utilities use kebab-case
+
+**Notes:**
+
+- ESLint plugins installed: prettier, import, simple-import-sort, react, react-hooks
+- Lint-staged ensures only changed files are linted on commit
+- Husky pre-commit hook prevents non-compliant code from being committed
+- Ready for Phase 1 (Database) — SOP-100 (Database Selection)
 
 ---
 
