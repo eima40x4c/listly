@@ -1,8 +1,8 @@
 # Project Initialization Checklist
 
-> **Project Name:** Listly - Smart Shopping Companion  
-> **Start Date:** 2026-02-07  
-> **Lead Developer:** AI Agent  
+> **Project Name:** Listly - Smart Shopping Companion
+> **Start Date:** 2026-02-07
+> **Lead Developer:** AI Agent
 > **Target Completion:** TBD
 
 ---
@@ -10,12 +10,14 @@
 ## Phase 0: Initialization
 
 ### Requirements & Planning
+
 - [x] Stakeholder requirements documented (SOP-000)
 - [x] User stories written with acceptance criteria
 - [x] MVP scope defined and approved
 - [ ] Timeline and milestones established
 
 ### Tech Stack Selection (SOP-001)
+
 - [x] Programming language(s) selected: TypeScript
 - [x] Framework(s) selected: Next.js 14 (React 18)
 - [x] Database type selected: PostgreSQL 16
@@ -23,6 +25,7 @@
 - [x] Decision rationale documented
 
 ### Repository Setup (SOP-002)
+
 - [x] Repository created
 - [x] Branch protection rules configured
 - [x] `.gitignore` configured for tech stack
@@ -31,29 +34,33 @@
 - [x] Commit message format documented
 
 ### Project Structure (SOP-003)
+
 - [x] Folder structure created per SOP-003
 - [x] Naming conventions documented
 - [x] Module boundaries defined
 
 ### Environment Setup (SOP-004)
-- [ ] `.env.example` template created
-- [ ] Local development instructions documented
-- [ ] Required tools/versions listed
-- [ ] Dev container configured (if applicable)
+
+- [x] `.env.example` template created
+- [x] Local development instructions documented
+- [x] Required tools/versions listed
+- [x] Dev container configured (if applicable)
 
 ### Design Patterns (SOP-005)
-- [ ] Architectural pattern selected: _____________________
+
+- [ ] Architectural pattern selected: **********\_**********
   - [ ] MVC / MVVM / Clean Architecture / Other
 - [ ] Code-level patterns identified:
   - [ ] Repository Pattern (data access)
   - [ ] Service Pattern (business logic)
   - [ ] Factory Pattern (object creation)
-  - [ ] Other: _____________________
+  - [ ] Other: **********\_**********
 - [ ] Pattern usage documented in `/docs/architecture/`
 
 ### Code Style Standards (SOP-006)
-- [ ] Linter configured: _____________________
-- [ ] Formatter configured: _____________________
+
+- [ ] Linter configured: **********\_**********
+- [ ] Formatter configured: **********\_**********
 - [ ] Pre-commit hooks set up
 - [ ] Style guide documented or linked
 
@@ -62,11 +69,13 @@
 ## Phase 1: Database & Data Layer
 
 ### Database Selection (SOP-100)
-- [ ] Database engine selected: _____________________
+
+- [ ] Database engine selected: **********\_**********
 - [ ] Justification documented
 - [ ] Local database setup instructions added
 
 ### Schema Design (SOP-101)
+
 - [ ] ERD diagram created
 - [ ] Table naming follows conventions
 - [ ] Primary/foreign keys defined
@@ -74,6 +83,7 @@
 - [ ] Schema reviewed by team member
 
 ### Seed Data (SOP-102)
+
 - [ ] Seed script created
 - [ ] Test data covers edge cases
 - [ ] Seed data is anonymized (no real PII)
@@ -83,29 +93,34 @@
 ## Phase 2: API & Backend
 
 ### API Design (SOP-200)
+
 - [ ] API specification created (OpenAPI/Swagger)
 - [ ] Endpoints follow RESTful conventions
 - [ ] Versioning strategy defined
 - [ ] Rate limiting considered
 
 ### Authentication (SOP-201)
-- [ ] Auth method selected: _____________________
+
+- [ ] Auth method selected: **********\_**********
 - [ ] Token management implemented
 - [ ] Password hashing configured
 - [ ] Session/token expiry defined
 
 ### Authorization (SOP-202)
-- [ ] Roles defined: _____________________
+
+- [ ] Roles defined: **********\_**********
 - [ ] Permission matrix documented
 - [ ] Route protection implemented
 
 ### Error Handling (SOP-203)
+
 - [ ] Standard error response format defined
 - [ ] Error codes documented
 - [ ] Logging configured
 - [ ] User-friendly messages for common errors
 
 ### Validation (SOP-204)
+
 - [ ] Input validation library selected
 - [ ] Request schemas defined
 - [ ] Sanitization for user inputs
@@ -115,28 +130,33 @@
 ## Phase 3: Frontend
 
 ### Component Architecture (SOP-300)
+
 - [ ] Component structure defined
 - [ ] State management approach selected
 - [ ] Shared components identified
 
 ### Styling Standards (SOP-301)
-- [ ] CSS methodology selected: _____________________
+
+- [ ] CSS methodology selected: **********\_**********
 - [ ] Design tokens/variables defined
 - [ ] Responsive breakpoints set
 - [ ] Accessibility basics covered (WCAG 2.1 AA)
 
 ### API Integration (SOP-302)
+
 - [ ] API client/wrapper created
 - [ ] Loading states handled
 - [ ] Error states handled
 - [ ] Caching strategy defined (if needed)
 
 ### Form Handling (SOP-303)
+
 - [ ] Form library selected (if any)
 - [ ] Validation feedback patterns
 - [ ] Submission loading states
 
-### Progressive Web App (SOP-304) — *Optional*
+### Progressive Web App (SOP-304) — _Optional_
+
 - [ ] PWA required for this project: ☐ Yes / ☐ No
 - [ ] Service worker configured (Serwist/next-pwa)
 - [ ] Web manifest with icons
@@ -168,21 +188,25 @@
 ## Phase 5: Quality Assurance
 
 ### Unit Testing (SOP-500)
+
 - [ ] Test framework configured
-- [ ] Coverage threshold set: _____%
+- [ ] Coverage threshold set: **\_**%
 - [ ] Critical paths identified for testing
 
 ### Integration Testing (SOP-501)
+
 - [ ] Integration test setup complete
 - [ ] API contract tests written
 - [ ] Database integration tests written
 
 ### Code Review (SOP-502)
+
 - [ ] PR template created
 - [ ] Review checklist defined
-- [ ] Minimum reviewers set: _____
+- [ ] Minimum reviewers set: **\_**
 
 ### Security Audit (SOP-503)
+
 - [ ] Dependency scanner configured
 - [ ] OWASP Top 10 reviewed
 - [ ] Secrets detection enabled
@@ -193,23 +217,27 @@
 ## Phase 6: Deployment
 
 ### Container Standards (SOP-600)
+
 - [ ] Dockerfile created
 - [ ] Multi-stage build (if applicable)
 - [ ] Image size optimized
 - [ ] Non-root user configured
 
 ### Deployment Strategy (SOP-601)
-- [ ] Deployment method selected: _____________________
+
+- [ ] Deployment method selected: **********\_**********
 - [ ] Rollback procedure documented
 - [ ] Feature flags considered (if needed)
 
 ### Monitoring & Alerting (SOP-602)
+
 - [ ] Health check endpoint created
 - [ ] Logging aggregation configured
 - [ ] Key metrics identified
 - [ ] Alert thresholds set
 
 ### Incident Response (SOP-603)
+
 - [ ] Severity levels defined
 - [ ] Escalation contacts listed
 - [ ] Runbook for common issues
@@ -218,11 +246,11 @@
 
 ## Final Sign-Off
 
-| Role | Name | Date | Signature |
-|------|------|------|-----------|
-| Lead Developer | | | |
-| Reviewer | | | |
-| Project Owner | | | |
+| Role           | Name | Date | Signature |
+| -------------- | ---- | ---- | --------- |
+| Lead Developer |      |      |           |
+| Reviewer       |      |      |           |
+| Project Owner  |      |      |           |
 
 ---
 
