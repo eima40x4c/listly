@@ -114,10 +114,19 @@
 
 ### Authentication (SOP-201)
 
-- [ ] Auth method selected: \***\*\*\*\*\***\_\***\*\*\*\*\***
-- [ ] Token management implemented
-- [ ] Password hashing configured
-- [ ] Session/token expiry defined
+- [x] Auth method selected: **NextAuth.js v5 with JWT sessions**
+- [x] OAuth providers configured: **Google (primary), Apple (primary), GitHub (optional)**
+- [x] Email/password credentials implemented as **fallback**
+- [x] Token management implemented
+- [x] Password hashing configured (bcryptjs, 12 rounds)
+- [x] Session/token expiry defined (30 days with 24h refresh)
+- [x] Password validation rules enforced (8+ chars, uppercase, lowercase, number)
+- [x] Registration endpoint created (email/password fallback)
+- [x] OAuth sign-in events sync provider info to User model
+- [x] Protected route utilities created (server & API)
+- [x] Client-side session hooks created (signInWithGoogle, signInWithApple, signInWithCredentials)
+- [x] Type definitions for NextAuth extended
+- [x] SessionProvider component created
 
 ### Authorization (SOP-202)
 

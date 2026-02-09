@@ -80,7 +80,7 @@
 | SOP | Title          | Status | Output Location                                    | Notes                                                                   |
 | --- | -------------- | ------ | -------------------------------------------------- | ----------------------------------------------------------------------- |
 | 200 | API Design     | ✅     | `/docs/api/openapi.yaml`, `/docs/api/endpoints.md` | Complete - Full REST API specification with 12 resources, OpenAPI 3.0.3 |
-| 201 | Authentication | ⬚      | Auth module/routes                                 |                                                                         |
+| 201 | Authentication | ✅     | Auth module, routes, docs                          | Complete - OAuth primary (Google, Apple) + email/password fallback      |
 | 202 | Authorization  | ⬚      | `/docs/authorization.md`, middleware               |                                                                         |
 | 203 | Error Handling | ⬚      | Error handler module                               |                                                                         |
 | 204 | Validation     | ⬚      | Validation schemas                                 |                                                                         |
@@ -134,18 +134,19 @@
 
 ### Active SOP
 
-**SOP:** SOP-201
-**Title:** Authentication
+**SOP:** SOP-202
+**Title:** Authorization
 **Status:** ⬚ Not Started
 
 ### Context Files to Read
 
 ```
-.sops/phase-2-api-backend/SOP-201-authentication.md
+.sops/phase-2-api-backend/SOP-202-authorization.md
 /docs/requirements.md
 /docs/tech-stack.md
 /docs/api/openapi.yaml
 prisma/schema.prisma
+src/lib/auth.ts
 ```
 
 ### Expected Outputs
@@ -178,18 +179,20 @@ The following SOPs have been completed:
   - Environment Setup, Design Patterns, Code Style Standards
 - Phase 1: Database (SOPs 100-102)
   - Database Selection, Schema Design, Seed Data
+- Phase 2: Backend
+  - (SOP-200) API Design
 
 ## Current Task
 
-Execute **SOP-200** (API Design).
+Execute **SOP-201** (Authentication).
 
 **Read these files:**
 
-1. `.sops/phase-2-backend/SOP-200-api-design.md` — The procedure
-2. `.sops/templates/api-design-template.yaml` as OpenAPI starting point
-3. `/docs/requirements.md` — Requirements
-4. `prisma/schema.prisma` — Database schema
-5. `/docs/architecture/patterns.md` — Design patterns
+1. `.sops/phase-2-backend/SOP-201-authentication.md` — The procedure
+2. `/docs/requirements.md` — Requirements
+3. `/docs/tech-stack.md` — Tech stack decisions
+4. `/docs/api/openapi.yaml` — API specification
+5. `prisma/schema.prisma` — Database schema
 
 **Refer to `AI-GUIDE.md` to attend to your responsibilities and for guidance on best practices.**
 **Follow the SOP's Procedure section step by step.**
@@ -710,6 +713,39 @@ Execute **SOP-200** (API Design).
 - All endpoints follow SOP-200 REST conventions
 - Validation, authentication, and error handling patterns documented
 - Ready for SOP-201 (Authentication)
+
+#### SOP-201: Authentication (2026-02-09)
+
+**Status:** ✅ Complete
+
+**Outputs:**
+
+- `src/lib/db.ts` — Prisma client singleton
+- `src/lib/auth.ts` — NextAuth configuration with JWT and Prisma adapter
+- `src/lib/auth/password.ts` — Password hashing utilities (bcryptjs, 12 rounds)
+- `src/lib/auth/validation.ts` — Password and email validation
+- `src/lib/auth/session.ts` — Server-side session utilities (requireAuth, getCurrentUser, etc.)
+- `src/lib/auth/api.ts` — API route protection utilities (withAuth, withVerifiedEmail)
+- `src/lib/auth/SessionProvider.tsx` — Client SessionProvider component
+- `src/app/api/auth/[...nextauth]/route.ts` — NextAuth API route handler
+- `src/app/api/auth/register/route.ts` — User registration endpoint
+- `src/hooks/useAuth.ts` — Client-side authentication hook
+- `src/types/next-auth.d.ts` — NextAuth type extensions
+- Updated `/docs/environment-variables.md` with authentication notes
+
+**Notes:**
+
+- NextAuth.js v5 with JWT session strategy (30-day expiration, 24h refresh)
+- **OAuth primary**: Google and Apple providers configured per requirements
+- **Email/password fallback**: Credentials provider with bcrypt (12 rounds)
+- OAuth sign-in events sync provider/providerId to User model
+- OAuth users get emailVerified=true automatically
+- New users (OAuth or credentials) get default UserPreferences created
+- Password requirements: min 8 chars, uppercase, lowercase, number
+- Protected route utilities for server components and API routes
+- Client hooks with signInWithGoogle, signInWithApple, signInWithCredentials
+- Type-safe session and JWT with custom user properties
+- Ready for SOP-202 (Authorization)
 
 ---
 

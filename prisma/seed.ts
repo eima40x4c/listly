@@ -1,13 +1,13 @@
 /**
  * Listly Database Seed Script
- * 
+ *
  * This script populates the database with:
  * - Reference data (categories, stores)
  * - Test user accounts
  * - Sample shopping lists and items
  * - Pantry items and recipes
  * - Edge case data for testing
- * 
+ *
  * Run: pnpm db:seed
  */
 
@@ -254,8 +254,8 @@ async function seedStores(categories: any[]) {
       longitude: -122.4194,
     },
     {
-      name: 'Trader Joe\'s - Mission District',
-      chain: 'Trader Joe\'s',
+      name: "Trader Joe's - Mission District",
+      chain: "Trader Joe's",
       address: '456 Valencia St, San Francisco, CA 94103',
       latitude: 37.7599,
       longitude: -122.4148,
@@ -285,16 +285,56 @@ async function seedStores(categories: any[]) {
     // Only for Whole Foods as an example
     if (store.chain === 'Whole Foods') {
       const categoryMappings = [
-        { categoryId: categories.find(c => c.slug === 'produce')?.id, aisleNumber: '1', sortOrder: 1 },
-        { categoryId: categories.find(c => c.slug === 'bakery')?.id, aisleNumber: '2', sortOrder: 2 },
-        { categoryId: categories.find(c => c.slug === 'meat-seafood')?.id, aisleNumber: '3', sortOrder: 3 },
-        { categoryId: categories.find(c => c.slug === 'dairy-eggs')?.id, aisleNumber: '4', sortOrder: 4 },
-        { categoryId: categories.find(c => c.slug === 'frozen-foods')?.id, aisleNumber: '5', sortOrder: 5 },
-        { categoryId: categories.find(c => c.slug === 'pantry-staples')?.id, aisleNumber: '6-8', sortOrder: 6 },
-        { categoryId: categories.find(c => c.slug === 'beverages')?.id, aisleNumber: '9', sortOrder: 7 },
-        { categoryId: categories.find(c => c.slug === 'snacks-candy')?.id, aisleNumber: '10', sortOrder: 8 },
-        { categoryId: categories.find(c => c.slug === 'household')?.id, aisleNumber: '11', sortOrder: 9 },
-        { categoryId: categories.find(c => c.slug === 'health-beauty')?.id, aisleNumber: '12', sortOrder: 10 },
+        {
+          categoryId: categories.find((c) => c.slug === 'produce')?.id,
+          aisleNumber: '1',
+          sortOrder: 1,
+        },
+        {
+          categoryId: categories.find((c) => c.slug === 'bakery')?.id,
+          aisleNumber: '2',
+          sortOrder: 2,
+        },
+        {
+          categoryId: categories.find((c) => c.slug === 'meat-seafood')?.id,
+          aisleNumber: '3',
+          sortOrder: 3,
+        },
+        {
+          categoryId: categories.find((c) => c.slug === 'dairy-eggs')?.id,
+          aisleNumber: '4',
+          sortOrder: 4,
+        },
+        {
+          categoryId: categories.find((c) => c.slug === 'frozen-foods')?.id,
+          aisleNumber: '5',
+          sortOrder: 5,
+        },
+        {
+          categoryId: categories.find((c) => c.slug === 'pantry-staples')?.id,
+          aisleNumber: '6-8',
+          sortOrder: 6,
+        },
+        {
+          categoryId: categories.find((c) => c.slug === 'beverages')?.id,
+          aisleNumber: '9',
+          sortOrder: 7,
+        },
+        {
+          categoryId: categories.find((c) => c.slug === 'snacks-candy')?.id,
+          aisleNumber: '10',
+          sortOrder: 8,
+        },
+        {
+          categoryId: categories.find((c) => c.slug === 'household')?.id,
+          aisleNumber: '11',
+          sortOrder: 9,
+        },
+        {
+          categoryId: categories.find((c) => c.slug === 'health-beauty')?.id,
+          aisleNumber: '12',
+          sortOrder: 10,
+        },
       ];
 
       for (const mapping of categoryMappings) {
@@ -323,7 +363,7 @@ async function seedUserPreferences(users: any[]) {
     await prisma.userPreferences.create({
       data: {
         userId: user.id,
-        defaultBudgetWarning: 100.00,
+        defaultBudgetWarning: 100.0,
         defaultCurrency: 'USD',
         notificationsEnabled: true,
         locationReminders: user.email === 'alice@example.com', // Only Alice has location reminders on
@@ -335,19 +375,23 @@ async function seedUserPreferences(users: any[]) {
   console.log(`✓ Created preferences for ${users.length} users`);
 }
 
-async function seedShoppingLists(users: any[], stores: any[], categories: any[]) {
+async function seedShoppingLists(
+  users: any[],
+  stores: any[],
+  categories: any[]
+) {
   console.log('🛒 Seeding shopping lists...');
 
-  const alice = users.find(u => u.email === 'alice@example.com');
-  const bob = users.find(u => u.email === 'bob@example.com');
-  const demo = users.find(u => u.email === 'demo@listly.com');
+  const alice = users.find((u) => u.email === 'alice@example.com');
+  const bob = users.find((u) => u.email === 'bob@example.com');
+  const demo = users.find((u) => u.email === 'demo@listly.com');
 
   // Alice's active grocery list
   const aliceGroceryList = await prisma.shoppingList.create({
     data: {
       name: 'Weekly Groceries',
       description: 'Regular weekly shopping',
-      budget: 150.00,
+      budget: 150.0,
       status: 'ACTIVE',
       color: '#3b82f6',
       icon: '🛒',
@@ -357,10 +401,10 @@ async function seedShoppingLists(users: any[], stores: any[], categories: any[])
   });
 
   // Add items to Alice's list
-  const produceCategory = categories.find(c => c.slug === 'produce');
-  const dairyCategory = categories.find(c => c.slug === 'dairy-eggs');
-  const pantryCategory = categories.find(c => c.slug === 'pantry-staples');
-  const meatCategory = categories.find(c => c.slug === 'meat-seafood');
+  const produceCategory = categories.find((c) => c.slug === 'produce');
+  const dairyCategory = categories.find((c) => c.slug === 'dairy-eggs');
+  const pantryCategory = categories.find((c) => c.slug === 'pantry-staples');
+  const meatCategory = categories.find((c) => c.slug === 'meat-seafood');
 
   await prisma.listItem.createMany({
     data: [
@@ -368,7 +412,7 @@ async function seedShoppingLists(users: any[], stores: any[], categories: any[])
         name: 'Organic Bananas',
         quantity: 6,
         unit: 'pcs',
-        estimatedPrice: 3.50,
+        estimatedPrice: 3.5,
         categoryId: produceCategory?.id,
         listId: aliceGroceryList.id,
         addedById: alice.id,
@@ -413,7 +457,7 @@ async function seedShoppingLists(users: any[], stores: any[], categories: any[])
         name: 'Pasta',
         quantity: 2,
         unit: 'boxes',
-        estimatedPrice: 4.50,
+        estimatedPrice: 4.5,
         categoryId: pantryCategory?.id,
         listId: aliceGroceryList.id,
         addedById: alice.id,
@@ -457,7 +501,7 @@ async function seedShoppingLists(users: any[], stores: any[], categories: any[])
     data: {
       name: 'Weekend BBQ Party',
       description: 'Supplies for Saturday BBQ',
-      budget: 200.00,
+      budget: 200.0,
       status: 'ACTIVE',
       color: '#ef4444',
       icon: '🎉',
@@ -466,8 +510,8 @@ async function seedShoppingLists(users: any[], stores: any[], categories: any[])
     },
   });
 
-  const beveragesCategory = categories.find(c => c.slug === 'beverages');
-  const snacksCategory = categories.find(c => c.slug === 'snacks-candy');
+  const beveragesCategory = categories.find((c) => c.slug === 'beverages');
+  const snacksCategory = categories.find((c) => c.slug === 'snacks-candy');
 
   await prisma.listItem.createMany({
     data: [
@@ -485,8 +529,8 @@ async function seedShoppingLists(users: any[], stores: any[], categories: any[])
         name: 'Hamburger Buns',
         quantity: 2,
         unit: 'packs',
-        estimatedPrice: 8.00,
-        categoryId: categories.find(c => c.slug === 'bakery')?.id,
+        estimatedPrice: 8.0,
+        categoryId: categories.find((c) => c.slug === 'bakery')?.id,
         listId: bobPartyList.id,
         addedById: bob.id,
         sortOrder: 2,
@@ -495,7 +539,7 @@ async function seedShoppingLists(users: any[], stores: any[], categories: any[])
         name: 'Soda Variety Pack',
         quantity: 2,
         unit: 'cases',
-        estimatedPrice: 20.00,
+        estimatedPrice: 20.0,
         categoryId: beveragesCategory?.id,
         listId: bobPartyList.id,
         addedById: bob.id,
@@ -505,7 +549,7 @@ async function seedShoppingLists(users: any[], stores: any[], categories: any[])
         name: 'Potato Chips',
         quantity: 3,
         unit: 'bags',
-        estimatedPrice: 12.00,
+        estimatedPrice: 12.0,
         categoryId: snacksCategory?.id,
         listId: bobPartyList.id,
         addedById: bob.id,
@@ -536,7 +580,7 @@ async function seedShoppingLists(users: any[], stores: any[], categories: any[])
     },
   });
 
-  const householdCategory = categories.find(c => c.slug === 'household');
+  const householdCategory = categories.find((c) => c.slug === 'household');
 
   await prisma.listItem.createMany({
     data: [
@@ -580,7 +624,7 @@ async function seedShoppingLists(users: any[], stores: any[], categories: any[])
     data: {
       name: 'Last Week Shopping',
       description: 'Completed grocery run',
-      budget: 85.00,
+      budget: 85.0,
       status: 'COMPLETED',
       color: '#22c55e',
       icon: '✅',
@@ -596,7 +640,7 @@ async function seedShoppingLists(users: any[], stores: any[], categories: any[])
         name: 'Avocados',
         quantity: 4,
         unit: 'pcs',
-        estimatedPrice: 5.00,
+        estimatedPrice: 5.0,
         categoryId: produceCategory?.id,
         listId: completedList.id,
         addedById: demo.id,
@@ -609,7 +653,7 @@ async function seedShoppingLists(users: any[], stores: any[], categories: any[])
         quantity: 1,
         unit: 'pack',
         estimatedPrice: 3.99,
-        categoryId: categories.find(c => c.slug === 'bakery')?.id,
+        categoryId: categories.find((c) => c.slug === 'bakery')?.id,
         listId: completedList.id,
         addedById: demo.id,
         isChecked: true,
@@ -637,13 +681,13 @@ async function seedShoppingLists(users: any[], stores: any[], categories: any[])
 async function seedPantryItems(users: any[], categories: any[]) {
   console.log('🏺 Seeding pantry items...');
 
-  const alice = users.find(u => u.email === 'alice@example.com');
-  const bob = users.find(u => u.email === 'bob@example.com');
+  const alice = users.find((u) => u.email === 'alice@example.com');
+  const bob = users.find((u) => u.email === 'bob@example.com');
 
-  const pantryCategory = categories.find(c => c.slug === 'pantry-staples');
-  const produceCategory = categories.find(c => c.slug === 'produce');
-  const dairyCategory = categories.find(c => c.slug === 'dairy-eggs');
-  const frozenCategory = categories.find(c => c.slug === 'frozen-foods');
+  const pantryCategory = categories.find((c) => c.slug === 'pantry-staples');
+  const _produceCategory = categories.find((c) => c.slug === 'produce');
+  const dairyCategory = categories.find((c) => c.slug === 'dairy-eggs');
+  const frozenCategory = categories.find((c) => c.slug === 'frozen-foods');
 
   await prisma.pantryItem.createMany({
     data: [
@@ -677,7 +721,7 @@ async function seedPantryItems(users: any[], categories: any[]) {
         userId: alice.id,
         expirationDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year from now
         purchaseDate: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000),
-        purchasePrice: 6.00,
+        purchasePrice: 6.0,
       },
       {
         name: 'Yogurt',
@@ -698,7 +742,7 @@ async function seedPantryItems(users: any[], categories: any[]) {
         categoryId: frozenCategory?.id,
         userId: alice.id,
         purchaseDate: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000),
-        purchasePrice: 4.00,
+        purchasePrice: 4.0,
       },
       {
         name: 'Milk - Expiring Soon',
@@ -718,7 +762,7 @@ async function seedPantryItems(users: any[], categories: any[]) {
         quantity: 1,
         unit: 'bag',
         location: 'pantry',
-        categoryId: categories.find(c => c.slug === 'beverages')?.id,
+        categoryId: categories.find((c) => c.slug === 'beverages')?.id,
         userId: bob.id,
         purchaseDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
         purchasePrice: 12.99,
@@ -742,8 +786,8 @@ async function seedPantryItems(users: any[], categories: any[]) {
 async function seedRecipes(users: any[]) {
   console.log('📖 Seeding recipes...');
 
-  const alice = users.find(u => u.email === 'alice@example.com');
-  const demo = users.find(u => u.email === 'demo@listly.com');
+  const alice = users.find((u) => u.email === 'alice@example.com');
+  const demo = users.find((u) => u.email === 'demo@listly.com');
 
   // Alice's pasta recipe
   const pastaRecipe = await prisma.recipe.create({
@@ -848,7 +892,7 @@ async function seedRecipes(users: any[]) {
 async function seedMealPlans(users: any[]) {
   console.log('📅 Seeding meal plans...');
 
-  const alice = users.find(u => u.email === 'alice@example.com');
+  const alice = users.find((u) => u.email === 'alice@example.com');
   const recipes = await prisma.recipe.findMany();
 
   const today = new Date();
@@ -885,8 +929,8 @@ async function seedMealPlans(users: any[]) {
 async function seedEdgeCases(users: any[], categories: any[]) {
   console.log('🔧 Seeding edge case data...');
 
-  const demo = users.find(u => u.email === 'demo@listly.com');
-  const otherCategory = categories.find(c => c.slug === 'other');
+  const demo = users.find((u) => u.email === 'demo@listly.com');
+  const otherCategory = categories.find((c) => c.slug === 'other');
 
   // Edge case list
   const edgeList = await prisma.shoppingList.create({

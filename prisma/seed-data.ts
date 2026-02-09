@@ -1,6 +1,6 @@
 /**
  * Seed Data Constants
- * 
+ *
  * Reusable constants for database seeding.
  * Extracted for maintainability and consistency.
  */
