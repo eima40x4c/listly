@@ -89,9 +89,9 @@
 
 ### Seed Data (SOP-102)
 
-- [ ] Seed script created
-- [ ] Test data covers edge cases
-- [ ] Seed data is anonymized (no real PII)
+- [x] Seed script created
+- [x] Test data covers edge cases
+- [x] Seed data is anonymized (no real PII)
 
 ---
 
