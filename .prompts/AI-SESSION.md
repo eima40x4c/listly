@@ -69,11 +69,11 @@
 
 ### Phase 1: Database
 
-| SOP | Title              | Status | Output Location                     | Notes |
-| --- | ------------------ | ------ | ----------------------------------- | ----- |
-| 100 | Database Selection | ⬚      | `/docs/tech-stack.md`               |       |
-| 101 | Schema Design      | ⬚      | `/docs/database/erd.md`, migrations |       |
-| 103 | Seed Data          | ⬚      | `/seeds/` or `/fixtures/`           |       |
+| SOP | Title              | Status | Output Location                                                        | Notes                                                                         |
+| --- | ------------------ | ------ | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| 100 | Database Selection | ✅     | `/docs/database/database-decision.md`, `/docs/tech-stack.md` (updated) | Complete - PostgreSQL 16 + Supabase + Prisma with comprehensive documentation |
+| 101 | Schema Design      | ⬚      | `/docs/database/erd.md`, migrations                                    |                                                                               |
+| 103 | Seed Data          | ⬚      | `/seeds/` or `/fixtures/`                                              |                                                                               |
 
 ### Phase 2: Backend
 
@@ -134,21 +134,23 @@
 
 ### Active SOP
 
-**SOP:** SOP-100
-**Title:** Database Selection
+**SOP:** SOP-101
+**Title:** Schema Design
 **Status:** ⬚ Not Started
 
 ### Context Files to Read
 
 ```
-.sops/phase-1-database/SOP-100-database-selection.md
-/docs/tech-stack.md
+.sops/phase-1-database/SOP-101-schema-design.md
+/docs/requirements.md
+/docs/database/database-decision.md
 ```
 
 ### Expected Outputs
 
-- [ ] Database selection documentation
-- [ ] Database configuration
+- [ ] Entity-Relationship Diagram (ERD)
+- [ ] Prisma schema file
+- [ ] Initial migrations
 
 ---
 
@@ -167,29 +169,27 @@ I'm working on Listly - Smart Shopping Companion: Mobile-first PWA for smart sho
 
 The following SOPs have been completed:
 
-- Phase 0: Initialization
-  - SOP-000 (Requirements Gathering)
-  - SOP-001 (Tech Stack Selection)
-  - SOP-002 (Repository Setup)
-  - SOP-003 (Project Structure)
-  - SOP-004 (Environment Setup)
-  - SOP-005 (Design Patterns)
-  - SOP-006 (Code Style Standards)
+- Phase 0: Initialization (SOPs 000-006)
+  - Requirements Gathering, Tech Stack, Repository Setup, Project Structure
+  - Environment Setup, Design Patterns, Code Style Standards
+- Phase 1: Database
+  - SOP-100 (Database Selection): PostgreSQL 16 + Supabase + Prisma
 
 ## Current Task
 
-Execute **SOP-100** (Database Selection).
+Execute **SOP-101** (Schema Design).
 
 **Read these files:**
 
-1. `.sops/phase-1-database/SOP-100-database-selection.md` — The procedure
-2. `/docs/requirements.md` — Data requirements from user stories
-3. `/docs/tech-stack.md` — Tech stack decisions
+1. `.sops/phase-1-database/SOP-101-schema-design.md` — The procedure
+2. `/docs/requirements.md` — User stories and data requirements
+3. `/docs/database/database-decision.md` — Database selection rationale
 
 **Refer to `AI-GUIDE.md` to attend to your responsibilities and for guidance on best practices.**
 **Follow the SOP's Procedure section step by step.**
 **Create all outputs listed in the SOP's Outputs section.**
 **Update `.prompts/AI-SESSION.md` when complete.**
+**Update `.sops/templates/project-checklist.md` and check off deliverables**
 ```
 
 ---
@@ -450,6 +450,58 @@ Execute **SOP-100** (Database Selection).
 - Lint-staged ensures only changed files are linted on commit
 - Husky pre-commit hook prevents non-compliant code from being committed
 - Ready for Phase 1 (Database) — SOP-100 (Database Selection)
+
+### Session 7 — 2026-02-09
+
+**SOPs Completed:** SOP-100 (Database Selection)
+**Files Created:**
+
+- `/docs/database/database-decision.md` — Comprehensive database decision documentation (22KB)
+- Updated `/docs/tech-stack.md` — Added link to detailed database decision with key benefits
+
+**Database Selection:**
+
+- **Database:** PostgreSQL 16 (perfect fit for relational data with complex relationships)
+- **Hosting:** Supabase (free tier: 500MB, 50k MAU, built-in real-time via CDC)
+- **ORM:** Prisma 5 (type-safe queries, excellent DX, seamless migrations)
+- **Real-Time:** Supabase Realtime using PostgreSQL Change Data Capture
+- **Offline Strategy:** IndexedDB + Service Worker for offline queue
+
+**Decision Matrix Scores:**
+
+- PostgreSQL: 4.85/5 (weighted score)
+- MongoDB: 3.50/5
+- SQLite: 3.55/5
+
+**Key Rationale:**
+
+- Highly structured relational data (Users → Lists → Items → History)
+- Complex query requirements (JOINs, aggregations for price trends and analytics)
+- ACID transactions critical for budget tracking and collaboration consistency
+- Row-Level Security (RLS) for secure multi-tenant data isolation
+- Supabase provides integrated auth, storage, and real-time in one platform
+- Cost-effective: $0/month for MVP (0-500 users), $25/month growth (500-5k users)
+
+**Documentation Includes:**
+
+- Complete data requirements analysis from requirements.md
+- Decision matrix with weighted criteria (7 factors)
+- Detailed PostgreSQL, Supabase, and Prisma rationale
+- Real-time strategy using CDC (handles US-007: <2s sync requirement)
+- Offline strategy for PWA (handles US-024, US-025)
+- Cost projections for MVP, growth, and scale phases
+- Security considerations (RLS policies, connection security)
+- Performance optimization (indexing strategy, query optimization)
+- Testing strategy (unit, integration, seed data)
+- Backup and disaster recovery plan
+- Migration path if we outgrow Supabase
+- Implementation checklist
+
+**Notes:**
+
+- Database selection confirmed PostgreSQL decision from SOP-001
+- Added comprehensive 22KB documentation with implementation details
+- Ready for SOP-101 (Schema Design)
 
 ---
 

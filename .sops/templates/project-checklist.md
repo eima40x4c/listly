@@ -70,9 +70,14 @@
 
 ### Database Selection (SOP-100)
 
-- [ ] Database engine selected: ****\*\*****\_****\*\*****
-- [ ] Justification documented
-- [ ] Local database setup instructions added
+- [x] Database engine selected: **PostgreSQL 16**
+- [x] Hosting provider selected: **Supabase**
+- [x] ORM/Query builder selected: **Prisma 5**
+- [x] Justification documented in `/docs/database/database-decision.md`
+- [x] Real-time strategy documented: Supabase Realtime (PostgreSQL CDC)
+- [x] Offline strategy documented: IndexedDB + Service Worker
+- [x] Cost projections documented for MVP and scaling
+- [ ] Local database setup instructions added (pending SOP-101)
 
 ### Schema Design (SOP-101)
 
@@ -101,14 +106,14 @@
 
 ### Authentication (SOP-201)
 
-- [ ] Auth method selected: ****\*\*****\_****\*\*****
+- [ ] Auth method selected: \***\*\*\*\*\***\_\***\*\*\*\*\***
 - [ ] Token management implemented
 - [ ] Password hashing configured
 - [ ] Session/token expiry defined
 
 ### Authorization (SOP-202)
 
-- [ ] Roles defined: ****\*\*****\_****\*\*****
+- [ ] Roles defined: \***\*\*\*\*\***\_\***\*\*\*\*\***
 - [ ] Permission matrix documented
 - [ ] Route protection implemented
 
@@ -137,7 +142,7 @@
 
 ### Styling Standards (SOP-301)
 
-- [ ] CSS methodology selected: ****\*\*****\_****\*\*****
+- [ ] CSS methodology selected: \***\*\*\*\*\***\_\***\*\*\*\*\***
 - [ ] Design tokens/variables defined
 - [ ] Responsive breakpoints set
 - [ ] Accessibility basics covered (WCAG 2.1 AA)
@@ -225,7 +230,7 @@
 
 ### Deployment Strategy (SOP-601)
 
-- [ ] Deployment method selected: ****\*\*****\_****\*\*****
+- [ ] Deployment method selected: \***\*\*\*\*\***\_\***\*\*\*\*\***
 - [ ] Rollback procedure documented
 - [ ] Feature flags considered (if needed)
 
