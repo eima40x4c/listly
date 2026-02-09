@@ -77,13 +77,13 @@
 
 ### Phase 2: Backend
 
-| SOP | Title          | Status | Output Location                                    | Notes                                                                   |
-| --- | -------------- | ------ | -------------------------------------------------- | ----------------------------------------------------------------------- |
-| 200 | API Design     | ✅     | `/docs/api/openapi.yaml`, `/docs/api/endpoints.md` | Complete - Full REST API specification with 12 resources, OpenAPI 3.0.3 |
-| 201 | Authentication | ✅     | Auth module, routes, docs                          | Complete - OAuth primary (Google, Apple) + email/password fallback      |
-| 202 | Authorization  | ⬚      | `/docs/authorization.md`, middleware               |                                                                         |
-| 203 | Error Handling | ⬚      | Error handler module                               |                                                                         |
-| 204 | Validation     | ⬚      | Validation schemas                                 |                                                                         |
+| SOP | Title          | Status | Output Location                                                                                                                                                                                            | Notes                                                                                              |
+| --- | -------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| 200 | API Design     | ✅     | `/docs/api/openapi.yaml`, `/docs/api/endpoints.md`                                                                                                                                                         | Complete - Full REST API specification with 12 resources, OpenAPI 3.0.3                            |
+| 201 | Authentication | ✅     | `src/lib/db.ts`, `src/lib/auth.ts`, `src/lib/auth/*.ts`, `src/app/api/auth/**/*.ts`, `src/hooks/useAuth.ts`, `src/types/next-auth.d.ts`, `docs/authentication.md`, updated `docs/environment-variables.md` | Complete - NextAuth v5, OAuth primary (Google, Apple), email/password fallback, session protection |
+| 202 | Authorization  | ✅     | `docs/authorization.md`, `src/lib/auth/permissions.ts`, `src/lib/auth/authorize.ts`, `src/lib/auth/ownership.ts`, `src/hooks/usePermissions.ts`                                                            | Complete - Resource-based authorization with ownership and collaboration roles                     |
+| 203 | Error Handling | ⬚      | Error handler module                                                                                                                                                                                       |                                                                                                    |
+| 204 | Validation     | ⬚      | Validation schemas                                                                                                                                                                                         |                                                                                                    |
 
 ### Phase 3: Frontend
 
@@ -134,28 +134,28 @@
 
 ### Active SOP
 
-**SOP:** SOP-202
-**Title:** Authorization
+**SOP:** SOP-203
+**Title:** Error Handling
 **Status:** ⬚ Not Started
 
 ### Context Files to Read
 
 ```
-.sops/phase-2-api-backend/SOP-202-authorization.md
+.sops/phase-2-api-backend/SOP-203-error-handling.md
 /docs/requirements.md
-/docs/tech-stack.md
+/docs/api/endpoints.md
 /docs/api/openapi.yaml
-prisma/schema.prisma
-src/lib/auth.ts
+src/lib/auth/api.ts
+src/lib/auth/authorize.ts
 ```
 
 ### Expected Outputs
 
-- [ ] Authentication implementation (NextAuth.js)
-- [ ] OAuth providers configured (Google, Apple)
-- [ ] JWT token handling
-- [ ] Auth middleware
-- [ ] Updated `.env.example` with auth variables
+- [ ] Error handler utilities
+- [ ] Standard error response formats
+- [ ] Error logging configuration
+- [ ] API error middleware
+- [ ] Documentation for error handling patterns
 
 ---
 
@@ -181,18 +181,22 @@ The following SOPs have been completed:
   - Database Selection, Schema Design, Seed Data
 - Phase 2: Backend
   - (SOP-200) API Design
+  - (SOP-201) Authentication
+  - (SOP-202) Authorization
 
 ## Current Task
 
-Execute **SOP-201** (Authentication).
+Execute **SOP-203** (Error Handling).
 
 **Read these files:**
 
-1. `.sops/phase-2-backend/SOP-201-authentication.md` — The procedure
+1. `.sops/phase-2-api-backend/SOP-203-error-handling.md` — The procedure
 2. `/docs/requirements.md` — Requirements
-3. `/docs/tech-stack.md` — Tech stack decisions
+3. /docs/api/endpoints.md — API endpoint documentation
 4. `/docs/api/openapi.yaml` — API specification
-5. `prisma/schema.prisma` — Database schema
+5. `src/lib/auth/api.ts` — API protection utilities
+6. `src/lib/auth/authorize.ts` — Authorization middleware
+7. `src/lib/auth/api.ts` — API protection utilities
 
 **Refer to `AI-GUIDE.md` to attend to your responsibilities and for guidance on best practices.**
 **Follow the SOP's Procedure section step by step.**
@@ -714,38 +718,115 @@ Execute **SOP-201** (Authentication).
 - Validation, authentication, and error handling patterns documented
 - Ready for SOP-201 (Authentication)
 
-#### SOP-201: Authentication (2026-02-09)
+### Session 11 — 2026-02-09
 
-**Status:** ✅ Complete
+**SOPs Completed:** SOP-201 (Authentication)
+**Files Created:**
 
-**Outputs:**
+- `src/lib/db.ts` — Prisma client singleton with connection pooling
+- `src/lib/auth.ts` — NextAuth v5 configuration with JWT session strategy and Prisma adapter
+- `src/lib/auth/password.ts` — Password hashing and verification (bcryptjs, 12 rounds)
+- `src/lib/auth/validation.ts` — Password and email validation utilities
+- `src/lib/auth/session.ts` — Server session utilities (requireAuth, getCurrentUser, requireVerifiedEmail, isAuth)
+- `src/lib/auth/api.ts` — API route protection (withAuth, withVerifiedEmail, getCurrentUserFromRequest)
+- `src/lib/auth/SessionProvider.tsx` — Client SessionProvider component wrapper
+- `src/app/api/auth/[...nextauth]/route.ts` — NextAuth handler (GET/POST)
+- `src/app/api/auth/register/route.ts` — User registration endpoint with validation
+- `src/hooks/useAuth.ts` — Client auth hook (signInWithGoogle, signInWithApple, signInWithCredentials, signOut)
+- `src/types/next-auth.d.ts` — NextAuth type extensions (Session, User, JWT)
+- `docs/authentication.md` — Comprehensive authentication documentation (13KB)
+- Updated `docs/environment-variables.md` — Added OAuth setup instructions
+- Updated `eslint.config.js` — Added varsIgnorePattern for unused variable handling
 
-- `src/lib/db.ts` — Prisma client singleton
-- `src/lib/auth.ts` — NextAuth configuration with JWT and Prisma adapter
-- `src/lib/auth/password.ts` — Password hashing utilities (bcryptjs, 12 rounds)
-- `src/lib/auth/validation.ts` — Password and email validation
-- `src/lib/auth/session.ts` — Server-side session utilities (requireAuth, getCurrentUser, etc.)
-- `src/lib/auth/api.ts` — API route protection utilities (withAuth, withVerifiedEmail)
-- `src/lib/auth/SessionProvider.tsx` — Client SessionProvider component
-- `src/app/api/auth/[...nextauth]/route.ts` — NextAuth API route handler
-- `src/app/api/auth/register/route.ts` — User registration endpoint
-- `src/hooks/useAuth.ts` — Client-side authentication hook
-- `src/types/next-auth.d.ts` — NextAuth type extensions
-- Updated `/docs/environment-variables.md` with authentication notes
+**Authentication Implementation:**
+
+- **NextAuth v5.0.0-beta.18**: JWT session strategy with 30-day expiration, 24-hour refresh
+- **OAuth Primary**: Google and Apple providers (per requirements)
+- **Email/Password Fallback**: Credentials provider with bcrypt hashing (12 rounds)
+- **Session Strategy**: JWT tokens stored client-side, server validates on each request
+- **Provider Priority**: OAuth providers registered first, credentials last
+- **Email Linking**: allowDangerousEmailAccountLinking=true for multi-provider support
+
+**Key Features:**
+
+- OAuth sign-in events sync provider/providerId to User model
+- OAuth users automatically get emailVerified=true
+- New users (any provider) get default UserPreferences created via createUser event
+- Password validation: min 8 chars, uppercase, lowercase, number required
+- Server utilities: requireAuth(), getCurrentUser(), requireVerifiedEmail(), isAuth()
+- API middleware: withAuth(), withVerifiedEmail() for protected routes
+- Client hooks: signInWithGoogle(), signInWithApple(), signInWithCredentials()
+- Type-safe sessions with extended User interface (id, email, name, image, emailVerified)
 
 **Notes:**
 
-- NextAuth.js v5 with JWT session strategy (30-day expiration, 24h refresh)
-- **OAuth primary**: Google and Apple providers configured per requirements
-- **Email/password fallback**: Credentials provider with bcrypt (12 rounds)
-- OAuth sign-in events sync provider/providerId to User model
-- OAuth users get emailVerified=true automatically
-- New users (OAuth or credentials) get default UserPreferences created
-- Password requirements: min 8 chars, uppercase, lowercase, number
-- Protected route utilities for server components and API routes
-- Client hooks with signInWithGoogle, signInWithApple, signInWithCredentials
-- Type-safe session and JWT with custom user properties
-- Ready for SOP-202 (Authorization)
+- NextAuth v5 has breaking API changes from v4 (getServerSession → auth(), config structure)
+- Requirements specify OAuth as PRIMARY method - architecture aligned
+- OAuth providers must be listed FIRST in providers array for proper priority
+- Session callbacks extract user ID and emailVerified status into JWT and session
+- Prisma adapter handles automatic user creation and session management
+- Ready for SOP-202 (Authorization) - RBAC and permission checks
+
+### Session 12 — 2026-02-09
+
+**SOPs Completed:** SOP-202 (Authorization)
+**Files Created:**
+
+- `docs/authorization.md` — Comprehensive authorization documentation (18KB)
+- `src/lib/auth/permissions.ts` — Permission utilities and role hierarchy functions
+- `src/lib/auth/authorize.ts` — Authorization middleware for API routes
+- `src/lib/auth/ownership.ts` — Resource ownership checking utilities
+- `src/hooks/usePermissions.ts` — Client-side permission hooks for UI
+
+**Authorization Implementation:**
+
+- **Model:** Resource-based authorization (ownership + collaboration)
+- **Roles:** VIEWER, EDITOR, ADMIN, owner (pseudo-role for list owners)
+- **Scope:** No system-wide admin - all authorization is resource-specific
+- **Hierarchy:** owner > ADMIN > EDITOR > VIEWER
+
+**Key Features:**
+
+- **Permission Utilities:** 13+ functions for checking permissions (canEditList, canManageCollaborators, etc.)
+- **Authorization Middleware:** getListRole(), requireListAccess(), requireOwnership(), requireItemAccess()
+- **Ownership Checks:** Functions for pantry items, recipes, meal plans, shopping lists
+- **Database Helpers:** accessibleListsWhere(), includeUserRole() for Prisma queries
+- **Client Hooks:** useListPermissions(), useItemPermissions(), usePermissions()
+- **Error Responses:** Standard forbidden() and notFound() helpers
+
+**Permission Matrix:**
+
+- Shopping Lists: 11 actions with role-based access (view, edit, delete, collaborators, etc.)
+- List Items: 6 actions (view, add, edit, delete, check/uncheck, reorder)
+- User Resources: 5 actions (list, view, create, update, delete) - all owner-only
+- User Profile: 5 actions (view, update, delete, preferences) - all self-only
+
+**Authorization Patterns:**
+
+- **Pattern 1:** User-scoped resources (simple ownership check)
+- **Pattern 2:** List access (ownership + collaboration check)
+- **Pattern 3:** Role-based actions (require minimum role level)
+- **Pattern 4:** Item access via parent list (inherited permissions)
+
+**Documentation Includes:**
+
+- Complete authorization model overview
+- Permission matrix for all resources
+- Implementation patterns with code examples
+- Authorization utilities reference
+- API route protection patterns
+- Error response guidelines (404 for security)
+- Testing authorization guide
+- Security best practices (7 key principles)
+- Future enhancements (public lists, invitation links, audit log)
+
+**Notes:**
+
+- Authorization follows resource ownership model from schema design
+- No system-wide roles aligns with household/personal app design
+- Client hooks for UI only - server always enforces permissions
+- Security: Always return 404 (not 403) when user shouldn't know resource exists
+- Ready for SOP-203 (Error Handling)
 
 ---
 

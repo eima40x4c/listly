@@ -130,9 +130,17 @@
 
 ### Authorization (SOP-202)
 
-- [ ] Roles defined: \***\*\*\*\*\***\_\***\*\*\*\*\***
-- [ ] Permission matrix documented
-- [ ] Route protection implemented
+- [x] Roles defined: **VIEWER, EDITOR, ADMIN, owner (pseudo-role)**
+- [x] Permission matrix documented
+- [x] Route protection implemented (server & client utilities)
+- [x] Authorization middleware created (getListRole, requireListAccess, etc.)
+- [x] Permission utilities created (13+ functions for role checks)
+- [x] Ownership checking utilities created (for user-scoped resources)
+- [x] Client permission hooks created (useListPermissions, useItemPermissions)
+- [x] API authorization patterns documented
+- [x] Security best practices documented (404 for unauthorized access)
+- [x] Resource-based authorization (ownership + collaboration)
+- [x] No system-wide admin roles (aligns with household app design)
 
 ### Error Handling (SOP-203)
 
