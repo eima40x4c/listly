@@ -81,11 +81,11 @@
 
 ### Schema Design (SOP-101)
 
-- [ ] ERD diagram created
-- [ ] Table naming follows conventions
-- [ ] Primary/foreign keys defined
-- [ ] Indexes planned for query patterns
-- [ ] Schema reviewed by team member
+- [x] ERD diagram created
+- [x] Table naming follows conventions
+- [x] Primary/foreign keys defined
+- [x] Indexes planned for query patterns
+- [x] Schema reviewed by team member
 
 ### Seed Data (SOP-102)
 

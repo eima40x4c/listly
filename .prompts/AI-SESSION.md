@@ -72,7 +72,7 @@
 | SOP | Title              | Status | Output Location                                                        | Notes                                                                         |
 | --- | ------------------ | ------ | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
 | 100 | Database Selection | ✅     | `/docs/database/database-decision.md`, `/docs/tech-stack.md` (updated) | Complete - PostgreSQL 16 + Supabase + Prisma with comprehensive documentation |
-| 101 | Schema Design      | ⬚      | `/docs/database/erd.md`, migrations                                    |                                                                               |
+| 101 | Schema Design      | ✅     | `prisma/schema.prisma`, `/docs/database/schema.md`                     | Complete - Full schema with 12 tables, ER diagram, indexes, and documentation |
 | 103 | Seed Data          | ⬚      | `/seeds/` or `/fixtures/`                                              |                                                                               |
 
 ### Phase 2: Backend
@@ -134,23 +134,25 @@
 
 ### Active SOP
 
-**SOP:** SOP-101
-**Title:** Schema Design
+**SOP:** SOP-102
+**Title:** Seed Data
 **Status:** ⬚ Not Started
 
 ### Context Files to Read
 
 ```
-.sops/phase-1-database/SOP-101-schema-design.md
+.sops/phase-1-database/SOP-102-seed-data.md
+prisma/schema.prisma
 /docs/requirements.md
-/docs/database/database-decision.md
 ```
 
 ### Expected Outputs
 
-- [ ] Entity-Relationship Diagram (ERD)
-- [ ] Prisma schema file
-- [ ] Initial migrations
+- [ ] `prisma/seed.ts` — Seed script
+- [ ] `prisma/seed-data.ts` — Seed constants (optional)
+- [ ] `/docs/database/seed-data.md` — Seed documentation
+- [ ] Seed command configured in package.json
+- [ ] Test fixtures
 
 ---
 
@@ -177,13 +179,13 @@ The following SOPs have been completed:
 
 ## Current Task
 
-Execute **SOP-101** (Schema Design).
+Execute **SOP-102** (Seed Data).
 
 **Read these files:**
 
-1. `.sops/phase-1-database/SOP-101-schema-design.md` — The procedure
-2. `/docs/requirements.md` — User stories and data requirements
-3. `/docs/database/database-decision.md` — Database selection rationale
+1. `.sops/phase-1-database/SOP-102-seed-data.md` — The procedure
+2. `prisma/schema.prisma` — Database schema
+3. `/docs/requirements.md` — Data requirements
 
 **Refer to `AI-GUIDE.md` to attend to your responsibilities and for guidance on best practices.**
 **Follow the SOP's Procedure section step by step.**
@@ -502,6 +504,70 @@ Execute **SOP-101** (Schema Design).
 - Database selection confirmed PostgreSQL decision from SOP-001
 - Added comprehensive 22KB documentation with implementation details
 - Ready for SOP-101 (Schema Design)
+
+### Session 8 — 2026-02-09
+
+**SOPs Completed:** SOP-101 (Schema Design)
+**Files Created:**
+
+- `prisma/schema.prisma` — Complete Prisma schema with 12 tables and 5 enums
+- `/docs/database/schema.md` — Comprehensive schema documentation (37KB)
+
+**Database Schema:**
+
+- **12 Tables:** users, user_preferences, shopping_lists, list_items, list_collaborators, categories, stores, store_categories, user_favorite_stores, item_history, pantry_items, recipes, recipe_ingredients, meal_plans
+- **5 Enums:** AuthProvider, ListStatus, CollaboratorRole, ItemAction, MealType
+- **Key Features:** Third Normal Form (3NF), CUID primary keys, proper foreign keys with CASCADE/SET NULL, strategic indexes for query optimization
+
+**Entity Relationships:**
+
+- User-centric: Users own lists, pantry items, recipes, meal plans
+- Collaboration: Many-to-many via ListCollaborator with role-based permissions
+- Categorization: Items and pantry items categorized, stores have custom category mappings
+- Historical tracking: ItemHistory denormalizes item_name for price tracking
+- Meal planning: Recipes with ingredients, meal plans link to recipes
+
+**Documentation Includes:**
+
+- Complete ER diagram in Mermaid format (all 12 tables with relationships)
+- Detailed table specifications (all columns with types, constraints, descriptions)
+- All indexes with purpose explanations
+- Relationship diagrams and explanations
+- Normalization level (3NF) with rationale
+- Referential integrity rules (CASCADE/SET NULL strategies)
+- Common query patterns with SQL examples
+- Performance considerations (read/write optimization, scalability)
+- Data retention and archival policies
+- Security considerations (RLS, sensitive data handling)
+- Future enhancement roadmap
+
+**Strategic Indexes:**
+
+- User lookups: email, (provider, provider_id)
+- List operations: owner_id, status, created_at
+- Item sorting: (list_id, sort_order)
+- Price history: (store_id, item_name, created_at) for trend analysis
+- Pantry management: expiration_date, barcode, location
+- Meal planning: (user_id, date) for calendar queries
+- Location features: (latitude, longitude) for store proximity
+
+**Normalization & Integrity:**
+
+- All tables in 3NF (no partial or transitive dependencies)
+- Denormalization exception: item_history.item_name for historical data preservation
+- CASCADE deletes for owned data (user deletion cascades to all user data)
+- SET NULL for optional relationships (store deletion preserves lists)
+
+**Notes:**
+
+- Schema supports all MVP features from requirements (US-001 through US-026)
+- Real-time collaboration supported via Supabase CDC (change data capture)
+- Offline-first compatible (all data can be synced via Prisma)
+- Price tracking and budget features fully supported via item_history
+- Pantry inventory with expiration tracking ready for Phase 2
+- Meal planning with recipe integration ready for Phase 3
+- 37KB comprehensive documentation with examples
+- Ready for SOP-102 (Seed Data) or Phase 2 (Backend)
 
 ---
 
