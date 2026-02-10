@@ -783,15 +783,15 @@ RESEND_API_KEY="..."
 SENTRY_DSN="..."
 
 # Commands
-npm install              # Install dependencies
-npx prisma generate      # Generate Prisma client
-npx prisma db push       # Create database schema (dev)
-npx prisma db seed       # Seed database (optional)
-npm run dev              # Start development server
-npm run build            # Production build
-npm run start            # Production server
-npm run lint             # Run ESLint
-npm run format           # Run Prettier
+pnpm install             # Install dependencies
+pnpm db:generate         # Generate Prisma client
+pnpm db:push             # Create database schema (dev)
+pnpm db:seed             # Seed database (optional)
+pnpm dev                 # Start development server
+pnpm build               # Production build
+pnpm start               # Production server
+pnpm lint                # Run ESLint
+pnpm format              # Run Prettier
 ```
 
 ### CI/CD Pipeline (GitHub Actions)
@@ -815,22 +815,25 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Run linter
-        run: npm run lint
+        run: pnpm lint
 
       - name: Type check
-        run: npx tsc --noEmit
+        run: pnpm type-check
 
       - name: Run tests
-        run: npm test
+        run: pnpm test
 
       - name: Build
-        run: npm run build
+        run: pnpm build
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25

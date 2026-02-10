@@ -59,9 +59,6 @@ Errors from business rule violations.
 
 | Error Code             | HTTP Status | Description                            | Example Scenario                         |
 | ---------------------- | ----------- | -------------------------------------- | ---------------------------------------- |
-| `INSUFFICIENT_STOCK`   | 422         | Not enough product stock available     | Ordering more items than in stock        |
-| `PAYMENT_FAILED`       | 422         | Payment processing failed              | Credit card declined                     |
-| `ORDER_CANCELLED`      | 422         | Cannot modify cancelled order          | Editing order after cancellation         |
 | `ITEM_ALREADY_CHECKED` | 409         | Item is already marked as checked      | Checking off item that's already checked |
 | `LIST_NOT_EMPTY`       | 422         | Cannot delete list that contains items | Attempting to delete list with items     |
 

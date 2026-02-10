@@ -67,24 +67,6 @@ export const ErrorCodes = {
   EMAIL_EXISTS: 'EMAIL_EXISTS',
 
   /**
-   * Insufficient stock to fulfill order.
-   * HTTP 422
-   */
-  INSUFFICIENT_STOCK: 'INSUFFICIENT_STOCK',
-
-  /**
-   * Payment processing failed.
-   * HTTP 422
-   */
-  PAYMENT_FAILED: 'PAYMENT_FAILED',
-
-  /**
-   * Cannot perform operation on cancelled order.
-   * HTTP 422
-   */
-  ORDER_CANCELLED: 'ORDER_CANCELLED',
-
-  /**
    * Item has already been checked/completed.
    * HTTP 409
    */

@@ -5,6 +5,15 @@
  * like pantry items, recipes, and meal plans. These resources are always owned by
  * a single user and are never shared.
  *
+ * NOTE: For shopping list access (which involves both ownership AND collaboration),
+ * use the functions in `@/lib/auth/authorize` instead:
+ * - `getListRole()` — Get a user's role for a list (owner or collaborator role)
+ * - `canAccessList()` — Check if user has any access to a list
+ * - `requireListAccess()` — Require access or return error response
+ * - `getItemAccess()` — Check access to a list item via parent list
+ * - `requireItemAccess()` — Require item access or return error response
+ * - `isResourceOwner()` — Generic single-resource ownership check
+ *
  * @module lib/auth/ownership
  */
 
@@ -72,70 +81,6 @@ export async function isMealPlanOwner(
   });
 
   return mealPlan?.userId === userId;
-}
-
-/**
- * Check if a user can access a shopping list.
- * This includes both ownership and collaboration.
- *
- * @param userId - User ID
- * @param listId - Shopping list ID
- * @returns True if user is owner or collaborator
- */
-export async function canAccessShoppingList(
-  userId: string,
-  listId: string
-): Promise<boolean> {
-  const list = await prisma.shoppingList.findFirst({
-    where: {
-      id: listId,
-      OR: [{ ownerId: userId }, { collaborators: { some: { userId } } }],
-    },
-  });
-
-  return list !== null;
-}
-
-/**
- * Check if a user is the owner of a shopping list.
- *
- * @param userId - User ID
- * @param listId - Shopping list ID
- * @returns True if user is the list owner
- */
-export async function isListOwner(
-  userId: string,
-  listId: string
-): Promise<boolean> {
-  const list = await prisma.shoppingList.findUnique({
-    where: { id: listId },
-    select: { ownerId: true },
-  });
-
-  return list?.ownerId === userId;
-}
-
-/**
- * Check if a user can access a list item (via parent list access).
- *
- * @param userId - User ID
- * @param itemId - List item ID
- * @returns True if user can access the item's parent list
- */
-export async function canAccessListItem(
-  userId: string,
-  itemId: string
-): Promise<boolean> {
-  const item = await prisma.listItem.findFirst({
-    where: {
-      id: itemId,
-      list: {
-        OR: [{ ownerId: userId }, { collaborators: { some: { userId } } }],
-      },
-    },
-  });
-
-  return item !== null;
 }
 
 /**

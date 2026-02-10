@@ -1,59 +1,40 @@
 /**
  * Authentication Validation Utilities
  *
- * Provides password strength validation and other auth-related validation rules.
+ * Provides password strength scoring for UI feedback.
+ *
+ * NOTE: Password and email format validation is handled by Zod schemas in
+ * `@/lib/validation/common` (password, email) and `@/lib/validation/schemas/user`
+ * (registerSchema, loginSchema, changePasswordSchema). Use those schemas for
+ * all server-side and form validation. This module only provides the password
+ * strength scorer for UI display purposes.
  *
  * @module lib/auth/validation
  */
 
 /**
- * Password requirements:
- * - Minimum 8 characters
- * - At least one uppercase letter
- * - At least one lowercase letter
- * - At least one number
- * - Optional: Special characters allowed but not required
- */
-export const PASSWORD_REGEX =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/;
-
-/**
- * Email validation regex (basic format check)
- */
-export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-/**
- * Validate password meets security requirements.
+ * Get password strength score (0-4) for UI display.
  *
- * @param password - Password to validate
- * @returns true if password meets requirements
+ * This is NOT a validation function — use the Zod `password` schema from
+ * `@/lib/validation/common` for actual validation.
  *
- * @example
- * ```ts
- * if (!validatePassword('weak')) {
- *   throw new Error('Password does not meet requirements');
- * }
- * ```
- */
-export function validatePassword(password: string): boolean {
-  return PASSWORD_REGEX.test(password);
-}
-
-/**
- * Validate email format.
- *
- * @param email - Email to validate
- * @returns true if email format is valid
- */
-export function validateEmail(email: string): boolean {
-  return EMAIL_REGEX.test(email);
-}
-
-/**
- * Get password strength score (0-4).
+ * Scoring:
+ * - 0: Very weak (< 8 characters)
+ * - 1: Weak (8+ characters)
+ * - 2: Fair (12+ characters or mixed case)
+ * - 3: Good (mixed case + numbers)
+ * - 4: Strong (mixed case + numbers + special characters)
  *
  * @param password - Password to score
  * @returns Score from 0 (very weak) to 4 (very strong)
+ *
+ * @example
+ * ```ts
+ * import { getPasswordStrength } from '@/lib/auth/validation';
+ *
+ * const score = getPasswordStrength(passwordInput);
+ * // Display strength meter in UI
+ * ```
  */
 export function getPasswordStrength(password: string): number {
   let score = 0;
