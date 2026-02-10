@@ -36,12 +36,12 @@ Environments:
 
 ### 2. Environment Variable Categories
 
-| Category | Example | Sensitivity | Source |
-|----------|---------|-------------|--------|
-| **Public** | `NEXT_PUBLIC_APP_NAME` | None | Git |
-| **Build-time** | `NODE_ENV` | None | CI/CD |
-| **Runtime** | `DATABASE_URL` | High | Secrets manager |
-| **Feature flags** | `ENABLE_NEW_FEATURE` | Low | Config service |
+| Category          | Example                | Sensitivity | Source          |
+| ----------------- | ---------------------- | ----------- | --------------- |
+| **Public**        | `NEXT_PUBLIC_APP_NAME` | None        | Git             |
+| **Build-time**    | `NODE_ENV`             | None        | CI/CD           |
+| **Runtime**       | `DATABASE_URL`         | High        | Secrets manager |
+| **Feature flags** | `ENABLE_NEW_FEATURE`   | Low         | Config service  |
 
 ### 3. Environment Files Structure
 
@@ -122,7 +122,9 @@ import { z } from 'zod';
 
 const envSchema = z.object({
   // App
-  NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+  NODE_ENV: z
+    .enum(['development', 'test', 'production'])
+    .default('development'),
   NEXT_PUBLIC_APP_NAME: z.string().min(1),
   NEXT_PUBLIC_APP_URL: z.string().url(),
 
@@ -225,7 +227,9 @@ import { SSMClient, GetParametersCommand } from '@aws-sdk/client-ssm';
 
 const client = new SSMClient({ region: 'us-east-1' });
 
-async function loadSecrets(environment: string): Promise<Record<string, string>> {
+async function loadSecrets(
+  environment: string
+): Promise<Record<string, string>> {
   const parameterNames = [
     `/myapp/${environment}/database-url`,
     `/myapp/${environment}/nextauth-secret`,
@@ -317,7 +321,8 @@ import { env } from '@/lib/env';
 
 const createPrismaClient = () => {
   return new PrismaClient({
-    log: env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    log:
+      env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
     datasources: {
       db: {
         url: env.DATABASE_URL,
@@ -415,28 +420,28 @@ Create `docs/environments.md`:
 
 ## Overview
 
-| Environment | URL | Database | Features |
-|-------------|-----|----------|----------|
-| Development | localhost:3000 | Local PostgreSQL | All enabled |
-| Staging | staging.example.com | Staging DB | All enabled |
-| Production | example.com | Production DB | Feature flags |
+| Environment | URL                 | Database         | Features      |
+| ----------- | ------------------- | ---------------- | ------------- |
+| Development | localhost:3000      | Local PostgreSQL | All enabled   |
+| Staging     | staging.example.com | Staging DB       | All enabled   |
+| Production  | example.com         | Production DB    | Feature flags |
 
 ## Environment Variables by Environment
 
-| Variable | Development | Staging | Production |
-|----------|-------------|---------|------------|
-| `NODE_ENV` | development | production | production |
-| `DATABASE_URL` | localhost | staging-db | prod-db |
-| `ENABLE_ANALYTICS` | false | true | true |
-| `LOG_LEVEL` | debug | info | warn |
+| Variable           | Development | Staging    | Production |
+| ------------------ | ----------- | ---------- | ---------- |
+| `NODE_ENV`         | development | production | production |
+| `DATABASE_URL`     | localhost   | staging-db | prod-db    |
+| `ENABLE_ANALYTICS` | false       | true       | true       |
+| `LOG_LEVEL`        | debug       | info       | warn       |
 
 ## Secret Rotation Schedule
 
-| Secret | Rotation | Last Rotated |
-|--------|----------|--------------|
-| `NEXTAUTH_SECRET` | Yearly | 2024-01-01 |
-| `DATABASE_URL` | On breach | N/A |
-| `API_KEYS` | Quarterly | 2024-03-01 |
+| Secret            | Rotation  | Last Rotated |
+| ----------------- | --------- | ------------ |
+| `NEXTAUTH_SECRET` | Yearly    | 2024-01-01   |
+| `DATABASE_URL`    | On breach | N/A          |
+| `API_KEYS`        | Quarterly | 2024-03-01   |
 ```
 
 ---
@@ -494,10 +499,10 @@ Execute SOP-600 (Environment Configuration):
 
 ## Security Best Practices
 
-| Do | Don't |
-|----|-------|
-| Store secrets in secret manager | Commit secrets to Git |
-| Validate all env vars at startup | Assume vars exist |
-| Use different secrets per env | Share secrets across envs |
-| Rotate secrets regularly | Keep secrets forever |
-| Audit secret access | Ignore access logs |
+| Do                               | Don't                     |
+| -------------------------------- | ------------------------- |
+| Store secrets in secret manager  | Commit secrets to Git     |
+| Validate all env vars at startup | Assume vars exist         |
+| Use different secrets per env    | Share secrets across envs |
+| Rotate secrets regularly         | Keep secrets forever      |
+| Audit secret access              | Ignore access logs        |

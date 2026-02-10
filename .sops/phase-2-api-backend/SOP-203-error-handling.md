@@ -29,14 +29,15 @@ All errors should follow a consistent format:
 
 ```typescript
 interface ErrorResponse {
-  error: string;       // Error code (machine-readable)
-  message: string;     // User-friendly message
-  details?: unknown;   // Additional context (validation errors, etc.)
-  requestId?: string;  // For debugging/support
+  error: string; // Error code (machine-readable)
+  message: string; // User-friendly message
+  details?: unknown; // Additional context (validation errors, etc.)
+  requestId?: string; // For debugging/support
 }
 ```
 
 **Example:**
+
 ```json
 {
   "error": "VALIDATION_ERROR",
@@ -383,7 +384,7 @@ export const logger = {
 
 Add to `/docs/api/errors.md`:
 
-```markdown
+````markdown
 # API Error Codes
 
 ## Error Response Format
@@ -398,33 +399,34 @@ All errors follow this format:
   "requestId": "req_abc123"
 }
 ```
+````
 
 ## Client Errors (4xx)
 
-| Code | Status | Description |
-|------|--------|-------------|
-| `VALIDATION_ERROR` | 400 | Invalid request data |
-| `UNAUTHORIZED` | 401 | Authentication required |
-| `FORBIDDEN` | 403 | Insufficient permissions |
-| `NOT_FOUND` | 404 | Resource not found |
-| `CONFLICT` | 409 | Resource already exists |
-| `RATE_LIMITED` | 429 | Too many requests |
+| Code               | Status | Description              |
+| ------------------ | ------ | ------------------------ |
+| `VALIDATION_ERROR` | 400    | Invalid request data     |
+| `UNAUTHORIZED`     | 401    | Authentication required  |
+| `FORBIDDEN`        | 403    | Insufficient permissions |
+| `NOT_FOUND`        | 404    | Resource not found       |
+| `CONFLICT`         | 409    | Resource already exists  |
+| `RATE_LIMITED`     | 429    | Too many requests        |
 
 ## Business Errors
 
-| Code | Status | Description |
-|------|--------|-------------|
-| `INSUFFICIENT_STOCK` | 422 | Not enough product stock |
-| `PAYMENT_FAILED` | 422 | Payment processing failed |
-| `ORDER_CANCELLED` | 422 | Cannot modify cancelled order |
+| Code                 | Status | Description                   |
+| -------------------- | ------ | ----------------------------- |
+| `INSUFFICIENT_STOCK` | 422    | Not enough product stock      |
+| `PAYMENT_FAILED`     | 422    | Payment processing failed     |
+| `ORDER_CANCELLED`    | 422    | Cannot modify cancelled order |
 
 ## Server Errors (5xx)
 
-| Code | Status | Description |
-|------|--------|-------------|
-| `INTERNAL_ERROR` | 500 | Unexpected server error |
-| `DATABASE_ERROR` | 500 | Database operation failed |
-| `EXTERNAL_SERVICE_ERROR` | 502 | Third-party service failed |
+| Code                     | Status | Description                |
+| ------------------------ | ------ | -------------------------- |
+| `INTERNAL_ERROR`         | 500    | Unexpected server error    |
+| `DATABASE_ERROR`         | 500    | Database operation failed  |
+| `EXTERNAL_SERVICE_ERROR` | 502    | Third-party service failed |
 
 ## Handling Errors
 
@@ -446,6 +448,7 @@ Validation errors include a `details` array:
   ]
 }
 ```
+
 ```
 
 ---
@@ -468,13 +471,16 @@ Validation errors include a `details` array:
 ## AI Agent Prompt Template
 
 ```
+
 Implement error handling for this project.
 
 Read:
+
 - `/docs/api/endpoints.md` for API structure
 - Existing API routes in src/app/api/
 
 Execute SOP-203 (Error Handling):
+
 1. Define error response format
 2. Create error code constants
 3. Create custom error classes
@@ -482,6 +488,7 @@ Execute SOP-203 (Error Handling):
 5. Create request wrapper with error handling
 6. Create logger utility
 7. Document error codes
+
 ```
 
 ---
@@ -513,3 +520,4 @@ Execute SOP-203 (Error Handling):
 | Log full errors server-side | Log passwords or tokens |
 | Use request IDs for debugging | Expose internal system details |
 | Document expected errors | Return database error messages |
+```

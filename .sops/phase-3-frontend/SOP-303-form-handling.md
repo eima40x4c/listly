@@ -317,6 +317,7 @@ export {
 ```
 
 Install Radix:
+
 ```bash
 pnpm add @radix-ui/react-select
 ```
@@ -330,10 +331,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type UseFormProps, type FieldValues } from 'react-hook-form';
 import type { ZodSchema } from 'zod';
 
-export function useZodForm<TSchema extends ZodSchema, TFieldValues extends FieldValues = z.infer<TSchema>>(
-  schema: TSchema,
-  options?: Omit<UseFormProps<TFieldValues>, 'resolver'>
-) {
+export function useZodForm<
+  TSchema extends ZodSchema,
+  TFieldValues extends FieldValues = z.infer<TSchema>,
+>(schema: TSchema, options?: Omit<UseFormProps<TFieldValues>, 'resolver'>) {
   return useForm<TFieldValues>({
     resolver: zodResolver(schema),
     ...options,
@@ -698,7 +699,7 @@ export async function submitContactForm(
 
   return {
     success: true,
-    message: 'Thanks for your message! We\'ll be in touch.',
+    message: "Thanks for your message! We'll be in touch.",
   };
 }
 ```
@@ -729,7 +730,7 @@ export function ContactForm() {
 
   if (state.success) {
     return (
-      <div className="text-center p-8">
+      <div className="p-8 text-center">
         <p className="text-green-600">{state.message}</p>
       </div>
     );
@@ -743,7 +744,7 @@ export function ContactForm() {
         </label>
         <Input id="name" name="name" required />
         {state.errors?.name && (
-          <p className="text-sm text-destructive mt-1">
+          <p className="text-destructive mt-1 text-sm">
             {state.errors.name[0]}
           </p>
         )}
@@ -755,7 +756,7 @@ export function ContactForm() {
         </label>
         <Input id="email" name="email" type="email" required />
         {state.errors?.email && (
-          <p className="text-sm text-destructive mt-1">
+          <p className="text-destructive mt-1 text-sm">
             {state.errors.email[0]}
           </p>
         )}
@@ -768,11 +769,11 @@ export function ContactForm() {
         <textarea
           id="message"
           name="message"
-          className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+          className="border-input bg-background flex min-h-[120px] w-full rounded-md border px-3 py-2 text-sm"
           required
         />
         {state.errors?.message && (
-          <p className="text-sm text-destructive mt-1">
+          <p className="text-destructive mt-1 text-sm">
             {state.errors.message[0]}
           </p>
         )}

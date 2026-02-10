@@ -29,6 +29,7 @@ Establish code review standards and checklists to ensure consistent quality, cat
 #### PR Title Format
 
 Follow conventional commits:
+
 ```
 type(scope): brief description
 
@@ -64,9 +65,10 @@ Create `.github/PULL_REQUEST_TEMPLATE.md`:
 ## Changes Made
 
 <!-- List the main changes -->
-- 
-- 
-- 
+
+-
+-
+-
 
 ## Screenshots (if applicable)
 
@@ -167,6 +169,7 @@ Create `.github/PULL_REQUEST_TEMPLATE.md`:
 #### Giving Feedback
 
 **Use comment prefixes:**
+
 ```markdown
 **nit:** Optional suggestion, minor style preference
 **suggestion:** Recommended change, not blocking
@@ -177,30 +180,39 @@ Create `.github/PULL_REQUEST_TEMPLATE.md`:
 
 **Examples of good feedback:**
 
-```markdown
+````markdown
 # Good: Specific and actionable
+
 **issue:** This could throw if `user` is null. Consider adding a null check:
+
 ```js
 if (!user) throw new NotFoundError('User not found');
 ```
+````
 
 # Good: Explains the why
+
 **suggestion:** Using `Promise.all` here would run these queries in parallel,
 reducing response time from ~200ms to ~100ms.
 
 # Good: Offers alternatives
-**question:** Is there a reason we're not using the existing `formatDate` 
+
+**question:** Is there a reason we're not using the existing `formatDate`
 utility? It handles timezone conversion which might be needed here.
 
 # Bad: Vague
+
 "This could be better"
 
 # Bad: Opinion without reasoning
+
 "I would have done this differently"
 
 # Bad: Harsh
+
 "Why would you ever do it this way?"
-```
+
+````
 
 ### 4. Author Guidelines
 
@@ -217,7 +229,7 @@ utility? It handles timezone conversion which might be needed here.
 - [ ] Description explains what and why
 - [ ] Linked related issues
 - [ ] Added reviewers
-```
+````
 
 #### Responding to Feedback
 
@@ -228,20 +240,25 @@ utility? It handles timezone conversion which might be needed here.
 - Don't take feedback personally
 
 **Response examples:**
+
 ```markdown
 # Acknowledging and fixing
+
 "Good catch! Fixed in abc123."
 
 # Explaining your reasoning
-"I considered that, but chose this approach because [reason]. 
+
+"I considered that, but chose this approach because [reason].
 Happy to discuss if you still have concerns."
 
 # Asking for clarification
-"I'm not sure I understand. Could you elaborate on 
+
+"I'm not sure I understand. Could you elaborate on
 what you mean by 'simplify this'?"
 
 # Deferring with a plan
-"Agreed this needs refactoring. I'll create a follow-up issue 
+
+"Agreed this needs refactoring. I'll create a follow-up issue
 to address this properly: #456"
 ```
 
@@ -380,14 +397,15 @@ jobs:
 
 ### 9. Review Turnaround Guidelines
 
-| PR Size | Expected Review Time |
-|---------|---------------------|
-| Tiny (<50 lines) | Same day |
-| Small (<100 lines) | Within 1 day |
-| Medium (100-300 lines) | Within 2 days |
-| Large (300+ lines) | Discuss splitting |
+| PR Size                | Expected Review Time |
+| ---------------------- | -------------------- |
+| Tiny (<50 lines)       | Same day             |
+| Small (<100 lines)     | Within 1 day         |
+| Medium (100-300 lines) | Within 2 days        |
+| Large (300+ lines)     | Discuss splitting    |
 
 **Tips for fast reviews:**
+
 - Keep PRs small and focused
 - Write clear descriptions
 - Pre-address obvious questions

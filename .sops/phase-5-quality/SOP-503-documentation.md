@@ -26,20 +26,20 @@ Establish documentation standards to ensure code, APIs, and processes are well-d
 
 ### 1. Documentation Types
 
-| Type | Location | Purpose | Audience |
-|------|----------|---------|----------|
-| **README** | `/README.md` | Project overview, quick start | All developers |
-| **API Docs** | `/docs/api/` or generated | Endpoint reference | API consumers |
-| **Architecture** | `/docs/architecture/` | System design, decisions | Senior devs |
-| **Guides** | `/docs/guides/` | How-to tutorials | All developers |
-| **Code Comments** | Inline | Complex logic explanation | Contributors |
-| **JSDoc/TSDoc** | Inline | Function/type documentation | Contributors |
-| **CONTRIBUTING** | `/CONTRIBUTING.md` | How to contribute | Contributors |
-| **CHANGELOG** | `/CHANGELOG.md` | Version history | All |
+| Type              | Location                  | Purpose                       | Audience       |
+| ----------------- | ------------------------- | ----------------------------- | -------------- |
+| **README**        | `/README.md`              | Project overview, quick start | All developers |
+| **API Docs**      | `/docs/api/` or generated | Endpoint reference            | API consumers  |
+| **Architecture**  | `/docs/architecture/`     | System design, decisions      | Senior devs    |
+| **Guides**        | `/docs/guides/`           | How-to tutorials              | All developers |
+| **Code Comments** | Inline                    | Complex logic explanation     | Contributors   |
+| **JSDoc/TSDoc**   | Inline                    | Function/type documentation   | Contributors   |
+| **CONTRIBUTING**  | `/CONTRIBUTING.md`        | How to contribute             | Contributors   |
+| **CHANGELOG**     | `/CHANGELOG.md`           | Version history               | All            |
 
 ### 2. README Template
 
-```markdown
+````markdown
 # Project Name
 
 Brief description of what this project does.
@@ -86,16 +86,17 @@ pnpm db:seed
 # Start development server
 pnpm dev
 ```
+````
 
 Open [http://localhost:3000](http://localhost:3000)
 
 ### Environment Variables
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `DATABASE_URL` | PostgreSQL connection string | Yes |
-| `NEXTAUTH_SECRET` | Auth encryption secret | Yes |
-| `NEXTAUTH_URL` | App URL | Yes |
+| Variable          | Description                  | Required |
+| ----------------- | ---------------------------- | -------- |
+| `DATABASE_URL`    | PostgreSQL connection string | Yes      |
+| `NEXTAUTH_SECRET` | Auth encryption secret       | Yes      |
+| `NEXTAUTH_URL`    | App URL                      | Yes      |
 
 ## Development
 
@@ -136,7 +137,8 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 ## License
 
 MIT License - see [LICENSE](./LICENSE)
-```
+
+````
 
 ### 3. TSDoc for Functions and Types
 
@@ -177,7 +179,7 @@ export interface RelativeTimeOptions {
   /** Style of output: 'long' | 'short' | 'narrow' (default: 'long') */
   style?: Intl.RelativeTimeFormatStyle;
 }
-```
+````
 
 ```typescript
 // src/types/user.ts
@@ -369,6 +371,7 @@ Accepted
 
 We need to choose a routing approach for our Next.js application.
 Options considered:
+
 1. Pages Router (traditional)
 2. App Router (new, React Server Components)
 
@@ -379,17 +382,20 @@ We will use the Next.js App Router with React Server Components.
 ## Consequences
 
 ### Positive
+
 - Better performance through server-side rendering by default
 - Simplified data fetching with async components
 - Built-in layouts and nested routing
 - Future-proof as the recommended approach
 
 ### Negative
+
 - Learning curve for team members used to Pages Router
 - Some third-party libraries may not yet support RSC
 - Need to understand client/server component boundaries
 
 ### Neutral
+
 - Different mental model for data fetching
 - New file naming conventions (page.tsx, layout.tsx)
 
@@ -421,13 +427,16 @@ What is the change that we're proposing and/or doing?
 What becomes easier or more difficult because of this change?
 
 ### Positive
-- 
+
+-
 
 ### Negative
-- 
+
+-
 
 ### Neutral
-- 
+
+-
 
 ## Related
 
@@ -436,7 +445,7 @@ What becomes easier or more difficult because of this change?
 
 ### 6. How-To Guides
 
-```markdown
+````markdown
 <!-- docs/guides/adding-new-feature.md -->
 
 # How to Add a New Feature
@@ -464,8 +473,10 @@ model Product {
   createdAt   DateTime @default(now())
 }
 ```
+````
 
 Run migration:
+
 ```bash
 pnpm prisma migrate dev --name add-products
 ```
@@ -493,7 +504,8 @@ Create tests in `src/components/features/products/__tests__/`:
 - [ ] Components created
 - [ ] Tests passing
 - [ ] Documentation updated
-```
+
+````
 
 ### 7. CONTRIBUTING Template
 
@@ -529,12 +541,14 @@ See [README.md](./README.md#getting-started) for setup instructions.
 
 We use [Conventional Commits](https://conventionalcommits.org/):
 
-```
+````
+
 type(scope): description
 
 feat(auth): add password reset
 fix(cart): correct total calculation
 docs(readme): update installation
+
 ```
 
 ## Pull Request Process
@@ -568,11 +582,13 @@ Be respectful and inclusive. See [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
 ```
 
 Install TypeDoc:
+
 ```bash
 pnpm add -D typedoc
 ```
 
 Create `typedoc.json`:
+
 ```json
 {
   "entryPoints": ["src/lib"],
@@ -593,18 +609,21 @@ Create `typedoc.json`:
 ## Documentation Completeness Checklist
 
 ### Essential (Must Have)
+
 - [ ] README with setup instructions
 - [ ] Environment variables documented
 - [ ] API endpoints documented
 - [ ] CONTRIBUTING guide
 
 ### Important (Should Have)
+
 - [ ] Architecture overview
 - [ ] Key ADRs documented
 - [ ] Deployment guide
 - [ ] Troubleshooting guide
 
 ### Nice to Have
+
 - [ ] Video walkthroughs
 - [ ] Onboarding guide
 - [ ] FAQ section
@@ -668,11 +687,11 @@ Execute SOP-503 (Documentation):
 
 ## Documentation Principles
 
-| Principle | Description |
-|-----------|-------------|
-| **Keep it Updated** | Outdated docs are worse than no docs |
-| **Write for Newcomers** | Assume no prior knowledge |
-| **Show Examples** | Code examples > prose |
-| **Be Concise** | Respect reader's time |
-| **Link Don't Repeat** | Reference existing docs |
-| **Version Control** | Docs live with code |
+| Principle               | Description                          |
+| ----------------------- | ------------------------------------ |
+| **Keep it Updated**     | Outdated docs are worse than no docs |
+| **Write for Newcomers** | Assume no prior knowledge            |
+| **Show Examples**       | Code examples > prose                |
+| **Be Concise**          | Respect reader's time                |
+| **Link Don't Repeat**   | Reference existing docs              |
+| **Version Control**     | Docs live with code                  |

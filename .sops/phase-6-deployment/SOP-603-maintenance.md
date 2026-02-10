@@ -26,15 +26,15 @@ Establish procedures for ongoing maintenance, handling incidents, and keeping th
 
 ### 1. Maintenance Schedule
 
-| Task | Frequency | Owner |
-|------|-----------|-------|
-| Dependency updates | Weekly | Dev team |
-| Security patches | Immediate | Dev team |
-| Database backups | Daily (automated) | DevOps |
-| Log rotation | Weekly (automated) | DevOps |
-| Performance review | Monthly | Tech lead |
-| Security audit | Quarterly | Security team |
-| Disaster recovery test | Quarterly | DevOps |
+| Task                   | Frequency          | Owner         |
+| ---------------------- | ------------------ | ------------- |
+| Dependency updates     | Weekly             | Dev team      |
+| Security patches       | Immediate          | Dev team      |
+| Database backups       | Daily (automated)  | DevOps        |
+| Log rotation           | Weekly (automated) | DevOps        |
+| Performance review     | Monthly            | Tech lead     |
+| Security audit         | Quarterly          | Security team |
+| Disaster recovery test | Quarterly          | DevOps        |
 
 ### 2. Dependency Update Process
 
@@ -71,21 +71,21 @@ updates:
     schedule:
       interval: weekly
       day: monday
-      time: "09:00"
+      time: '09:00'
     open-pull-requests-limit: 10
     groups:
       production-dependencies:
         patterns:
-          - "*"
+          - '*'
         exclude-patterns:
-          - "@types/*"
-          - "eslint*"
-          - "prettier*"
+          - '@types/*'
+          - 'eslint*'
+          - 'prettier*'
       development-dependencies:
         patterns:
-          - "@types/*"
-          - "eslint*"
-          - "prettier*"
+          - '@types/*'
+          - 'eslint*'
+          - 'prettier*'
     labels:
       - dependencies
       - automated
@@ -98,12 +98,12 @@ updates:
 
 ### Severity Levels
 
-| Severity | Response Time | Examples |
-|----------|---------------|----------|
-| Critical | < 4 hours | RCE, auth bypass, data breach |
-| High | < 24 hours | XSS, CSRF, sensitive data exposure |
-| Medium | < 1 week | DoS, information disclosure |
-| Low | Next release | Minor issues, best practice violations |
+| Severity | Response Time | Examples                               |
+| -------- | ------------- | -------------------------------------- |
+| Critical | < 4 hours     | RCE, auth bypass, data breach          |
+| High     | < 24 hours    | XSS, CSRF, sensitive data exposure     |
+| Medium   | < 1 week      | DoS, information disclosure            |
+| Low      | Next release  | Minor issues, best practice violations |
 
 ### Steps
 
@@ -131,13 +131,10 @@ async function backupDatabase() {
 
   // Create backup
   await new Promise((resolve, reject) => {
-    exec(
-      `pg_dump ${process.env.DATABASE_URL} > /tmp/${filename}`,
-      (error) => {
-        if (error) reject(error);
-        else resolve(null);
-      }
-    );
+    exec(`pg_dump ${process.env.DATABASE_URL} > /tmp/${filename}`, (error) => {
+      if (error) reject(error);
+      else resolve(null);
+    });
   });
 
   // Upload to S3
@@ -165,7 +162,7 @@ name: Database Backup
 
 on:
   schedule:
-    - cron: '0 2 * * *'  # Daily at 2 AM UTC
+    - cron: '0 2 * * *' # Daily at 2 AM UTC
   workflow_dispatch:
 
 jobs:
@@ -173,15 +170,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
+
       - name: Install dependencies
         run: pnpm install
-        
+
       - name: Run backup
         run: pnpm tsx scripts/backup-database.ts
         env:
@@ -198,36 +195,43 @@ jobs:
 ## Incident Response Workflow
 
 ### 1. Detection
+
 - Alert triggers from monitoring
 - User report received
 - Team member notices issue
 
 ### 2. Triage (5 minutes)
+
 - Confirm the issue is real
 - Assess severity (P1-P4)
 - Assign incident commander
 
 ### 3. Communication (10 minutes)
+
 - Create incident channel (#incident-YYYY-MM-DD)
 - Post initial status update
 - Update status page if P1/P2
 
 ### 4. Investigation
+
 - Gather logs and metrics
 - Identify affected systems
 - Determine root cause
 
 ### 5. Mitigation
+
 - Apply fix or rollback
 - Verify resolution
 - Monitor for recurrence
 
 ### 6. Resolution
+
 - Confirm issue resolved
 - Update status page
 - Close incident channel
 
 ### 7. Post-Mortem (within 48 hours)
+
 - Document timeline
 - Identify root cause
 - Create action items
@@ -237,31 +241,35 @@ jobs:
 ### 6. Incident Severity Matrix
 
 ```markdown
-| Priority | Description | Response | Resolution |
-|----------|-------------|----------|------------|
-| **P1** | Total outage, data loss | 15 min | 4 hours |
-| **P2** | Major feature broken, security | 30 min | 8 hours |
-| **P3** | Minor feature broken | 4 hours | 24 hours |
-| **P4** | Cosmetic, minor bugs | Next day | Next sprint |
+| Priority | Description                    | Response | Resolution  |
+| -------- | ------------------------------ | -------- | ----------- |
+| **P1**   | Total outage, data loss        | 15 min   | 4 hours     |
+| **P2**   | Major feature broken, security | 30 min   | 8 hours     |
+| **P3**   | Minor feature broken           | 4 hours  | 24 hours    |
+| **P4**   | Cosmetic, minor bugs           | Next day | Next sprint |
 
 ### P1 Examples
+
 - Application completely down
 - Database corruption
 - Security breach
 - Payment processing failure
 
 ### P2 Examples
+
 - Authentication broken
 - Major API endpoints failing
 - Significant performance degradation
 - Data synchronization issues
 
 ### P3 Examples
+
 - Single feature not working
 - Slow page loads
 - Minor UI bugs affecting workflow
 
 ### P4 Examples
+
 - Typos
 - Minor styling issues
 - Non-critical enhancements
@@ -269,16 +277,18 @@ jobs:
 
 ### 7. Rollback Procedure
 
-```markdown
+````markdown
 ## Rollback Steps
 
 ### Vercel Rollback
+
 1. Go to Vercel Dashboard → Deployments
 2. Find last working deployment
 3. Click "..." → "Promote to Production"
 4. Verify rollback successful
 
 ### Manual Rollback
+
 ```bash
 # Find previous working commit
 git log --oneline -10
@@ -295,8 +305,10 @@ git push origin hotfix/rollback
 # Deploy hotfix branch
 # Then investigate and fix forward
 ```
+````
 
 ### Database Rollback
+
 ```bash
 # Restore from backup
 pg_restore -d $DATABASE_URL backup-YYYY-MM-DD.sql
@@ -304,7 +316,8 @@ pg_restore -d $DATABASE_URL backup-YYYY-MM-DD.sql
 # Or rollback migration
 pnpm prisma migrate resolve --rolled-back <migration-name>
 ```
-```
+
+````
 
 ### 8. Post-Mortem Template
 
@@ -351,12 +364,12 @@ pnpm prisma migrate resolve --rolled-back <migration-name>
 ## Lessons Learned
 
 ### What went well
-- 
-- 
+-
+-
 
 ### What could be improved
-- 
-- 
+-
+-
 
 ## Action Items
 
@@ -364,19 +377,21 @@ pnpm prisma migrate resolve --rolled-back <migration-name>
 |--------|-------|----------|--------|
 | Add monitoring for X | @person | YYYY-MM-DD | Open |
 | Update runbook for Y | @person | YYYY-MM-DD | Open |
-```
+````
 
 ### 9. Runbook Template
 
-```markdown
+````markdown
 <!-- docs/runbooks/high-error-rate.md -->
 
 # Runbook: High Error Rate
 
 ## Trigger
+
 Error rate exceeds 5% over 5 minutes
 
 ## Impact
+
 Users may experience failures when using the application
 
 ## Quick Diagnosis
@@ -391,28 +406,34 @@ vercel inspect <deployment-id>
 # Check database
 pnpm prisma db execute --preview-feature --stdin <<< "SELECT count(*) FROM pg_stat_activity"
 ```
+````
 
 ## Common Causes
 
 ### 1. Recent Deployment Issue
+
 **Symptoms:** Errors started immediately after deploy
 **Fix:** Rollback to previous deployment
 
 ### 2. Database Connection Issues
+
 **Symptoms:** "Connection timeout" errors
 **Fix:** Check connection pool, restart if needed
 
 ### 3. External API Failure
+
 **Symptoms:** Errors in specific features using external API
 **Fix:** Enable fallback mode, contact provider
 
 ## Escalation
 
 If unresolved after 30 minutes:
+
 1. Page secondary on-call
 2. Consider status page update
 3. Notify stakeholders
-```
+
+````
 
 ### 10. Maintenance Checklist
 
@@ -447,7 +468,7 @@ Create `/docs/maintenance/weekly-checklist.md`:
 - [ ] Disaster recovery test
 - [ ] Documentation review
 - [ ] SOP review and updates
-```
+````
 
 ---
 
@@ -506,11 +527,11 @@ Execute SOP-603 (Maintenance):
 
 ## On-Call Best Practices
 
-| Do | Don't |
-|----|-------|
-| Acknowledge alerts promptly | Ignore or snooze repeatedly |
-| Document as you investigate | Fix without documenting |
-| Escalate when stuck | Struggle alone for hours |
-| Focus on mitigation first | Spend time on root cause during outage |
-| Communicate proactively | Go silent during incidents |
-| Take care of yourself | Skip breaks during long incidents |
+| Do                          | Don't                                  |
+| --------------------------- | -------------------------------------- |
+| Acknowledge alerts promptly | Ignore or snooze repeatedly            |
+| Document as you investigate | Fix without documenting                |
+| Escalate when stuck         | Struggle alone for hours               |
+| Focus on mitigation first   | Spend time on root cause during outage |
+| Communicate proactively     | Go silent during incidents             |
+| Take care of yourself       | Skip breaks during long incidents      |

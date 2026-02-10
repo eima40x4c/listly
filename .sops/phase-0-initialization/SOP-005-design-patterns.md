@@ -26,28 +26,29 @@ Select and document appropriate architectural and code-level design patterns for
 
 ### 1. Architectural Pattern Selection
 
-| Pattern | Best For | Complexity | Team Size |
-|---------|----------|------------|-----------|
-| **Monolith** | MVPs, small teams, simple domains | Low | 1-5 |
-| **Modular Monolith** | Growing apps, clear domains | Medium | 3-10 |
-| **Microservices** | Large scale, multiple teams | High | 10+ |
-| **Serverless** | Event-driven, variable load | Medium | Any |
+| Pattern              | Best For                          | Complexity | Team Size |
+| -------------------- | --------------------------------- | ---------- | --------- |
+| **Monolith**         | MVPs, small teams, simple domains | Low        | 1-5       |
+| **Modular Monolith** | Growing apps, clear domains       | Medium     | 3-10      |
+| **Microservices**    | Large scale, multiple teams       | High       | 10+       |
+| **Serverless**       | Event-driven, variable load       | Medium     | Any       |
 
 #### Decision Matrix
 
-| Factor | Weight | Monolith | Modular | Microservices |
-|--------|--------|----------|---------|---------------|
-| Team size < 5 | 20% | 5 | 4 | 2 |
-| Time to market | 25% | 5 | 4 | 2 |
-| Scalability needs | 20% | 2 | 3 | 5 |
-| Domain complexity | 20% | 3 | 4 | 5 |
-| DevOps maturity | 15% | 5 | 4 | 2 |
+| Factor            | Weight | Monolith | Modular | Microservices |
+| ----------------- | ------ | -------- | ------- | ------------- |
+| Team size < 5     | 20%    | 5        | 4       | 2             |
+| Time to market    | 25%    | 5        | 4       | 2             |
+| Scalability needs | 20%    | 2        | 3       | 5             |
+| Domain complexity | 20%    | 3        | 4       | 5             |
+| DevOps maturity   | 15%    | 5        | 4       | 2             |
 
 **Recommendation:** Start with Monolith or Modular Monolith for most projects.
 
 ### 2. Application Layer Patterns
 
 #### MVC (Model-View-Controller)
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    MVC Pattern                          │
@@ -64,6 +65,7 @@ Best for: Traditional web apps, REST APIs
 ```
 
 #### Clean Architecture
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                  Clean Architecture                     │
@@ -89,6 +91,7 @@ Best for: Complex business logic, long-lived applications
 ```
 
 #### Feature-Based (Recommended for Next.js)
+
 ```
 src/
 ├── features/
@@ -220,7 +223,9 @@ class SlackNotification implements Notification {
   }
 }
 
-export function createNotification(type: 'email' | 'push' | 'slack'): Notification {
+export function createNotification(
+  type: 'email' | 'push' | 'slack'
+): Notification {
   switch (type) {
     case 'email':
       return new EmailNotification();
@@ -274,10 +279,10 @@ class PaymentProcessor {
 // src/features/users/containers/UserListContainer.tsx
 export function UserListContainer() {
   const { data, isLoading, error } = useUsers();
-  
+
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage error={error} />;
-  
+
   return <UserList users={data} />;
 }
 
@@ -352,6 +357,7 @@ Create `/docs/architecture/patterns.md`:
 **Selected:** Modular Monolith with Feature-Based Organization
 
 **Rationale:**
+
 - Team size: 3 developers
 - Need for quick iteration
 - Clear domain boundaries
@@ -359,34 +365,36 @@ Create `/docs/architecture/patterns.md`:
 
 ## Code Patterns Used
 
-| Pattern | Where Used | Purpose |
-|---------|------------|---------|
-| Repository | Data access | Abstract database operations |
-| Service | Business logic | Encapsulate domain logic |
-| Factory | Object creation | Flexible instantiation |
-| Strategy | Payments, notifications | Swappable implementations |
+| Pattern    | Where Used              | Purpose                      |
+| ---------- | ----------------------- | ---------------------------- |
+| Repository | Data access             | Abstract database operations |
+| Service    | Business logic          | Encapsulate domain logic     |
+| Factory    | Object creation         | Flexible instantiation       |
+| Strategy   | Payments, notifications | Swappable implementations    |
 
 ## React Patterns
 
-| Pattern | Where Used | Purpose |
-|---------|------------|---------|
-| Container/Presenter | Feature components | Separate logic from UI |
-| Compound Components | UI library | Flexible component APIs |
-| Custom Hooks | Shared logic | Reusable stateful logic |
+| Pattern             | Where Used         | Purpose                 |
+| ------------------- | ------------------ | ----------------------- |
+| Container/Presenter | Feature components | Separate logic from UI  |
+| Compound Components | UI library         | Flexible component APIs |
+| Custom Hooks        | Shared logic       | Reusable stateful logic |
 
 ## File Organization
+```
+
+src/
+├── app/ # Next.js App Router
+├── components/ # Shared UI components
+├── features/ # Feature modules
+├── lib/ # Core utilities
+│ ├── repositories/
+│ ├── services/
+│ └── utils/
+└── types/ # Shared types
 
 ```
-src/
-├── app/           # Next.js App Router
-├── components/    # Shared UI components
-├── features/      # Feature modules
-├── lib/           # Core utilities
-│   ├── repositories/
-│   ├── services/
-│   └── utils/
-└── types/         # Shared types
-```
+
 ```
 
 ---

@@ -74,7 +74,10 @@ export default [
     },
     rules: {
       // TypeScript
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_' },
+      ],
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/consistent-type-imports': 'error',
@@ -140,20 +143,20 @@ pnpm-lock.yaml
 
 ### 4. TypeScript Naming Conventions
 
-| Type | Convention | Example |
-|------|------------|---------|
-| **Variables** | camelCase | `userName`, `isLoading` |
-| **Constants** | SCREAMING_SNAKE_CASE | `MAX_RETRIES`, `API_URL` |
-| **Functions** | camelCase, verb prefix | `getUserById`, `handleSubmit` |
-| **Classes** | PascalCase | `UserService`, `ApiClient` |
-| **Interfaces** | PascalCase (no I prefix) | `User`, `ApiResponse` |
-| **Types** | PascalCase | `UserId`, `ButtonVariant` |
-| **Enums** | PascalCase | `UserRole`, `OrderStatus` |
-| **Components** | PascalCase | `UserCard`, `NavBar` |
-| **Hooks** | camelCase, use prefix | `useAuth`, `useUsers` |
-| **Files** | kebab-case or PascalCase* | See below |
+| Type           | Convention                 | Example                       |
+| -------------- | -------------------------- | ----------------------------- |
+| **Variables**  | camelCase                  | `userName`, `isLoading`       |
+| **Constants**  | SCREAMING_SNAKE_CASE       | `MAX_RETRIES`, `API_URL`      |
+| **Functions**  | camelCase, verb prefix     | `getUserById`, `handleSubmit` |
+| **Classes**    | PascalCase                 | `UserService`, `ApiClient`    |
+| **Interfaces** | PascalCase (no I prefix)   | `User`, `ApiResponse`         |
+| **Types**      | PascalCase                 | `UserId`, `ButtonVariant`     |
+| **Enums**      | PascalCase                 | `UserRole`, `OrderStatus`     |
+| **Components** | PascalCase                 | `UserCard`, `NavBar`          |
+| **Hooks**      | camelCase, use prefix      | `useAuth`, `useUsers`         |
+| **Files**      | kebab-case or PascalCase\* | See below                     |
 
-*Files: Components use PascalCase (`Button.tsx`), utilities use kebab-case (`date-utils.ts`).
+\*Files: Components use PascalCase (`Button.tsx`), utilities use kebab-case (`date-utils.ts`).
 
 ### 5. File Naming Conventions
 
@@ -294,16 +297,16 @@ export function formatRelativeTime(date: Date): string {
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "never"  // Let eslint handle imports
+    "source.organizeImports": "never", // Let eslint handle imports
   },
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "typescript.suggest.autoImports": true,
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
 }
 ```
 
@@ -314,8 +317,8 @@ export function formatRelativeTime(date: Date): string {
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
     "bradlc.vscode-tailwindcss",
-    "prisma.prisma"
-  ]
+    "prisma.prisma",
+  ],
 }
 ```
 

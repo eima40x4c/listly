@@ -548,11 +548,11 @@ Execute SOP-500 (Unit Testing):
 
 ## Coverage Guidelines
 
-| Code Type | Target Coverage | Priority |
-|-----------|-----------------|----------|
-| Utilities | 90%+ | High |
-| Business logic | 80%+ | High |
-| Hooks | 80%+ | High |
-| Components | 70%+ | Medium |
-| API routes | Via integration | Medium |
-| Config files | Skip | Low |
+| Code Type      | Target Coverage | Priority |
+| -------------- | --------------- | -------- |
+| Utilities      | 90%+            | High     |
+| Business logic | 80%+            | High     |
+| Hooks          | 80%+            | High     |
+| Components     | 70%+            | Medium   |
+| API routes     | Via integration | Medium   |
+| Config files   | Skip            | Low      |

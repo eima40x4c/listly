@@ -52,16 +52,16 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/) for clear
 
 ### Types
 
-| Type | Description | Example |
-|------|-------------|---------|
-| `feat` | New feature | `feat(lists): add voice input for items` |
-| `fix` | Bug fix | `fix(auth): resolve OAuth redirect issue` |
-| `docs` | Documentation only | `docs(api): add endpoint examples` |
-| `style` | Code formatting, no logic change | `style(ui): fix button spacing` |
-| `refactor` | Code change without new feature or fix | `refactor(db): simplify query logic` |
-| `test` | Adding or updating tests | `test(lists): add unit tests for sorting` |
-| `chore` | Maintenance tasks | `chore(deps): upgrade Next.js to 14.1` |
-| `perf` | Performance improvements | `perf(api): optimize database queries` |
+| Type       | Description                            | Example                                   |
+| ---------- | -------------------------------------- | ----------------------------------------- |
+| `feat`     | New feature                            | `feat(lists): add voice input for items`  |
+| `fix`      | Bug fix                                | `fix(auth): resolve OAuth redirect issue` |
+| `docs`     | Documentation only                     | `docs(api): add endpoint examples`        |
+| `style`    | Code formatting, no logic change       | `style(ui): fix button spacing`           |
+| `refactor` | Code change without new feature or fix | `refactor(db): simplify query logic`      |
+| `test`     | Adding or updating tests               | `test(lists): add unit tests for sorting` |
+| `chore`    | Maintenance tasks                      | `chore(deps): upgrade Next.js to 14.1`    |
+| `perf`     | Performance improvements               | `perf(api): optimize database queries`    |
 
 ### Examples
 
@@ -77,6 +77,7 @@ test(auth): add OAuth flow tests
 ### Scope
 
 The scope should indicate which part of the codebase is affected:
+
 - `lists` — Shopping list features
 - `pantry` — Pantry inventory
 - `auth` — Authentication
@@ -89,6 +90,7 @@ The scope should indicate which part of the codebase is affected:
 ## 🔍 Pull Request Process
 
 1. **Ensure all tests pass** locally:
+
    ```bash
    pnpm test
    pnpm lint

@@ -8,18 +8,19 @@ Listly is a Progressive Web App (PWA) designed to revolutionize grocery shopping
 
 ## Stakeholders
 
-| Role | Name | Contact | Involvement Level |
-|------|------|---------|-------------------|
-| Project Sponsor | Product Owner | - | Decision maker |
-| Product Owner | Product Owner | - | Requirements authority |
-| End Users | Households, Families, Individual Shoppers | - | Feedback & validation |
-| Technical Lead | AI Agent | - | Feasibility review |
+| Role            | Name                                      | Contact | Involvement Level      |
+| --------------- | ----------------------------------------- | ------- | ---------------------- |
+| Project Sponsor | Product Owner                             | -       | Decision maker         |
+| Product Owner   | Product Owner                             | -       | Requirements authority |
+| End Users       | Households, Families, Individual Shoppers | -       | Feedback & validation  |
+| Technical Lead  | AI Agent                                  | -       | Feasibility review     |
 
 ---
 
 ## Problem Statement
 
 **Who:** Households, families, and individual shoppers who struggle with:
+
 - Disorganized shopping lists leading to forgotten items
 - Inefficient store navigation (backtracking through aisles)
 - Budget overruns and lack of price visibility
@@ -33,15 +34,15 @@ Listly is a Progressive Web App (PWA) designed to revolutionize grocery shopping
 
 ## Goals & Success Metrics
 
-| Goal | Success Metric |
-|------|----------------|
-| Reduce forgotten items | < 5% of items marked as "forgot" post-shopping |
-| Improve shopping efficiency | 25% reduction in average shopping time |
-| Prevent food waste | Track and reduce expired items by 40% |
-| Enable collaboration | 80% of multi-user households sync lists daily |
-| Budget awareness | Users stay within 10% of planned budget |
-| Offline reliability | 99% of core features work without internet |
-| User adoption | PWA install rate > 60% of active users |
+| Goal                        | Success Metric                                 |
+| --------------------------- | ---------------------------------------------- |
+| Reduce forgotten items      | < 5% of items marked as "forgot" post-shopping |
+| Improve shopping efficiency | 25% reduction in average shopping time         |
+| Prevent food waste          | Track and reduce expired items by 40%          |
+| Enable collaboration        | 80% of multi-user households sync lists daily  |
+| Budget awareness            | Users stay within 10% of planned budget        |
+| Offline reliability         | 99% of core features work without internet     |
+| User adoption               | PWA install rate > 60% of active users         |
 
 ---
 
@@ -228,59 +229,59 @@ Listly is a Progressive Web App (PWA) designed to revolutionize grocery shopping
 
 ### Performance
 
-| Requirement | Target |
-|-------------|--------|
-| Initial load time (3G) | < 3 seconds |
-| Time to interactive | < 5 seconds |
-| List render (100 items) | < 100ms |
-| Search response | < 200ms |
-| Real-time sync latency | < 2 seconds |
-| Offline operation | Full functionality for core features |
+| Requirement             | Target                               |
+| ----------------------- | ------------------------------------ |
+| Initial load time (3G)  | < 3 seconds                          |
+| Time to interactive     | < 5 seconds                          |
+| List render (100 items) | < 100ms                              |
+| Search response         | < 200ms                              |
+| Real-time sync latency  | < 2 seconds                          |
+| Offline operation       | Full functionality for core features |
 
 ### Security
 
-| Requirement | Implementation |
-|-------------|----------------|
-| Authentication | OAuth (Google, Apple) primary + Email/password fallback |
-| Authorization | Role-based (owner, editor, viewer for shared lists) |
-| Data encryption | HTTPS in transit, encrypted at rest |
-| Session management | JWT with refresh tokens, 24h expiry |
-| Privacy | GDPR/CCPA compliant, data export/deletion available |
-| Location data | Processed locally where possible, minimal server storage |
+| Requirement        | Implementation                                           |
+| ------------------ | -------------------------------------------------------- |
+| Authentication     | OAuth (Google, Apple) primary + Email/password fallback  |
+| Authorization      | Role-based (owner, editor, viewer for shared lists)      |
+| Data encryption    | HTTPS in transit, encrypted at rest                      |
+| Session management | JWT with refresh tokens, 24h expiry                      |
+| Privacy            | GDPR/CCPA compliant, data export/deletion available      |
+| Location data      | Processed locally where possible, minimal server storage |
 
 ### Scalability
 
-| Metric | Initial Target | Scale Target |
-|--------|----------------|--------------|
-| Concurrent users | 50 | 500 |
-| Lists per user | 50 | 200 |
-| Items per list | 500 | 1,000 |
-| Price history records | 10,000/user | 100,000/user |
-| Real-time connections | 50 | 500 |
+| Metric                | Initial Target | Scale Target |
+| --------------------- | -------------- | ------------ |
+| Concurrent users      | 50             | 500          |
+| Lists per user        | 50             | 200          |
+| Items per list        | 500            | 1,000        |
+| Price history records | 10,000/user    | 100,000/user |
+| Real-time connections | 50             | 500          |
 
 **Note:** Initial deployment targets friends and family usage (~50 concurrent users). Architecture should support future growth but optimize for small-scale efficiency first.
 
 ### Accessibility
 
-| Requirement | Standard |
-|-------------|----------|
-| WCAG compliance | Level AA |
+| Requirement           | Standard                            |
+| --------------------- | ----------------------------------- |
+| WCAG compliance       | Level AA                            |
 | Screen reader support | Full support for VoiceOver/TalkBack |
-| Color contrast | Minimum 4.5:1 ratio |
-| Touch targets | Minimum 44x44px |
-| Keyboard navigation | Full support |
-| Reduced motion | Respect `prefers-reduced-motion` |
+| Color contrast        | Minimum 4.5:1 ratio                 |
+| Touch targets         | Minimum 44x44px                     |
+| Keyboard navigation   | Full support                        |
+| Reduced motion        | Respect `prefers-reduced-motion`    |
 
 ### Platform Support
 
-| Platform | Support Level |
-|----------|---------------|
-| iOS Safari | Primary (PWA install) |
-| Android Chrome | Primary (PWA install) |
-| Desktop Chrome/Firefox/Edge | Secondary |
-| Desktop Safari | Secondary |
-| Minimum iOS version | iOS 14+ |
-| Minimum Android version | Android 8.0+ |
+| Platform                    | Support Level         |
+| --------------------------- | --------------------- |
+| iOS Safari                  | Primary (PWA install) |
+| Android Chrome              | Primary (PWA install) |
+| Desktop Chrome/Firefox/Edge | Secondary             |
+| Desktop Safari              | Secondary             |
+| Minimum iOS version         | iOS 14+               |
+| Minimum Android version     | Android 8.0+          |
 
 ---
 
@@ -288,50 +289,50 @@ Listly is a Progressive Web App (PWA) designed to revolutionize grocery shopping
 
 ### Included (Must Have) — Phase 1
 
-| Feature | Description |
-|---------|-------------|
-| List CRUD | Create, read, update, delete shopping lists |
-| Item management | Add, edit, check off, delete items |
-| Auto-categorization | Basic aisle/category assignment |
+| Feature             | Description                                          |
+| ------------------- | ---------------------------------------------------- |
+| List CRUD           | Create, read, update, delete shopping lists          |
+| Item management     | Add, edit, check off, delete items                   |
+| Auto-categorization | Basic aisle/category assignment                      |
 | User authentication | Social login (Google, Apple) + email/password option |
-| List sharing | Share lists with other users |
-| Real-time sync | See updates from collaborators |
-| Offline support | Service worker caching, queue offline changes |
-| PWA install | Installable on iOS and Android |
-| Basic budget | Set budget per list, track as you shop |
-| Mobile-first UI | Responsive, touch-friendly interface |
+| List sharing        | Share lists with other users                         |
+| Real-time sync      | See updates from collaborators                       |
+| Offline support     | Service worker caching, queue offline changes        |
+| PWA install         | Installable on iOS and Android                       |
+| Basic budget        | Set budget per list, track as you shop               |
+| Mobile-first UI     | Responsive, touch-friendly interface                 |
 
 ### Deferred (Should Have) — Phase 2
 
-| Feature | Description |
-|---------|-------------|
-| Voice input | Speech-to-text for adding items |
-| Price history | Record and display price trends |
-| Pantry inventory | Track what you have at home |
-| Expiration tracking | Alert for expiring items |
-| Barcode scanning | Scan to add/identify products |
-| Store customization | Custom aisle orders per store |
+| Feature             | Description                     |
+| ------------------- | ------------------------------- |
+| Voice input         | Speech-to-text for adding items |
+| Price history       | Record and display price trends |
+| Pantry inventory    | Track what you have at home     |
+| Expiration tracking | Alert for expiring items        |
+| Barcode scanning    | Scan to add/identify products   |
+| Store customization | Custom aisle orders per store   |
 
 ### Deferred (Could Have) — Phase 3
 
-| Feature | Description |
-|---------|-------------|
-| AI suggestions | Purchase pattern predictions |
-| Deal alerts | Price drop notifications |
-| Meal planning | Weekly meal calendar |
+| Feature            | Description                           |
+| ------------------ | ------------------------------------- |
+| AI suggestions     | Purchase pattern predictions          |
+| Deal alerts        | Price drop notifications              |
+| Meal planning      | Weekly meal calendar                  |
 | Recipe integration | Save recipes, generate shopping lists |
-| Recipe import | Parse recipes from URLs |
-| Spending analytics | Charts and trends |
+| Recipe import      | Parse recipes from URLs               |
+| Spending analytics | Charts and trends                     |
 
 ### Deferred (Won't Have) — Future
 
-| Feature | Reason |
-|---------|--------|
-| Location reminders | Privacy complexity, Phase 4+ |
-| Multi-language | Focus on English initially |
+| Feature            | Reason                        |
+| ------------------ | ----------------------------- |
+| Location reminders | Privacy complexity, Phase 4+  |
+| Multi-language     | Focus on English initially    |
 | Store partnerships | Requires business development |
-| Price scraping | Legal/TOS complexities |
-| Social features | Out of initial scope |
+| Price scraping     | Legal/TOS complexities        |
+| Social features    | Out of initial scope          |
 
 ---
 
@@ -339,23 +340,23 @@ Listly is a Progressive Web App (PWA) designed to revolutionize grocery shopping
 
 ### Constraints
 
-| Constraint | Impact |
-|------------|--------|
-| PWA limitations on iOS | Limited background sync, no true push notifications |
-| Browser storage limits | IndexedDB quotas vary by browser |
-| Offline-first complexity | Requires careful conflict resolution design |
-| Camera access (PWA) | May have limitations on some browsers |
-| No native app initially | Some features require workarounds |
+| Constraint               | Impact                                              |
+| ------------------------ | --------------------------------------------------- |
+| PWA limitations on iOS   | Limited background sync, no true push notifications |
+| Browser storage limits   | IndexedDB quotas vary by browser                    |
+| Offline-first complexity | Requires careful conflict resolution design         |
+| Camera access (PWA)      | May have limitations on some browsers               |
+| No native app initially  | Some features require workarounds                   |
 
 ### Assumptions
 
-| Assumption | Risk if Wrong |
-|------------|---------------|
-| Users have smartphones with modern browsers | Older devices won't work |
-| Users are comfortable with web apps | May expect App Store install |
-| Internet connectivity at home for sync | Data could become stale |
-| Users will manually enter prices initially | Price history builds slowly |
-| Household size 1-6 for collaboration | May need to adjust permissions model |
+| Assumption                                  | Risk if Wrong                        |
+| ------------------------------------------- | ------------------------------------ |
+| Users have smartphones with modern browsers | Older devices won't work             |
+| Users are comfortable with web apps         | May expect App Store install         |
+| Internet connectivity at home for sync      | Data could become stale              |
+| Users will manually enter prices initially  | Price history builds slowly          |
+| Household size 1-6 for collaboration        | May need to adjust permissions model |
 
 ---
 
@@ -372,16 +373,16 @@ Listly is a Progressive Web App (PWA) designed to revolutionize grocery shopping
 
 ## Approval
 
-| Role | Name | Date | Status |
-|------|------|------|--------|
-| Product Owner | Product Owner | 2026-02-08 | ✅ |
-| Technical Lead | AI Agent | 2026-02-07 | ✅ |
+| Role           | Name          | Date       | Status |
+| -------------- | ------------- | ---------- | ------ |
+| Product Owner  | Product Owner | 2026-02-08 | ✅     |
+| Technical Lead | AI Agent      | 2026-02-07 | ✅     |
 
 ---
 
 ## Document History
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | 2026-02-07 | AI Agent | Initial requirements document |
-| 1.1 | 2026-02-08 | Product Owner | Updated scalability targets (50 concurrent users), answered auth (social primary) and monetization (free with ads) questions, approved requirements |
+| Version | Date       | Author        | Changes                                                                                                                                             |
+| ------- | ---------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.0     | 2026-02-07 | AI Agent      | Initial requirements document                                                                                                                       |
+| 1.1     | 2026-02-08 | Product Owner | Updated scalability targets (50 concurrent users), answered auth (social primary) and monetization (free with ads) questions, approved requirements |

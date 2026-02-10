@@ -28,14 +28,14 @@ Select the most appropriate database technology based on project requirements, d
 
 Answer these questions:
 
-| Question | Impact on Choice |
-|----------|------------------|
-| What's the data structure? | Structured → SQL, Flexible → NoSQL |
-| How much data expected? | Volume affects scaling strategy |
-| Read vs write heavy? | Read → optimize indexes, Write → consider sharding |
-| Need ACID transactions? | Yes → SQL, Maybe → Depends |
-| What relationships exist? | Complex → SQL, Simple → Either |
-| Need real-time features? | Yes → Consider Firebase/Supabase |
+| Question                   | Impact on Choice                                   |
+| -------------------------- | -------------------------------------------------- |
+| What's the data structure? | Structured → SQL, Flexible → NoSQL                 |
+| How much data expected?    | Volume affects scaling strategy                    |
+| Read vs write heavy?       | Read → optimize indexes, Write → consider sharding |
+| Need ACID transactions?    | Yes → SQL, Maybe → Depends                         |
+| What relationships exist?  | Complex → SQL, Simple → Either                     |
+| Need real-time features?   | Yes → Consider Firebase/Supabase                   |
 
 ### 2. Database Type Comparison
 
@@ -43,13 +43,14 @@ Answer these questions:
 
 **Best for:** Structured data, complex relationships, transactions
 
-| Database | Best For | Hosting Options |
-|----------|----------|-----------------|
+| Database       | Best For                           | Hosting Options                  |
+| -------------- | ---------------------------------- | -------------------------------- |
 | **PostgreSQL** | Most applications, complex queries | Supabase, Railway, Neon, AWS RDS |
-| **MySQL** | Traditional web apps, WordPress | PlanetScale, Railway, AWS RDS |
-| **SQLite** | Local/embedded, small apps | File-based (local) |
+| **MySQL**      | Traditional web apps, WordPress    | PlanetScale, Railway, AWS RDS    |
+| **SQLite**     | Local/embedded, small apps         | File-based (local)               |
 
 **Choose SQL when:**
+
 - ✅ Data has clear structure and relationships
 - ✅ Need JOINs across multiple tables
 - ✅ ACID compliance is required
@@ -59,12 +60,13 @@ Answer these questions:
 
 **Best for:** Flexible schemas, hierarchical data
 
-| Database | Best For | Hosting Options |
-|----------|----------|-----------------|
-| **MongoDB** | Flexible documents, rapid iteration | MongoDB Atlas (free tier) |
-| **Firebase Firestore** | Real-time apps, mobile | Firebase (free tier) |
+| Database               | Best For                            | Hosting Options           |
+| ---------------------- | ----------------------------------- | ------------------------- |
+| **MongoDB**            | Flexible documents, rapid iteration | MongoDB Atlas (free tier) |
+| **Firebase Firestore** | Real-time apps, mobile              | Firebase (free tier)      |
 
 **Choose Document DB when:**
+
 - ✅ Schema changes frequently
 - ✅ Data is hierarchical/nested
 - ✅ Need horizontal scaling
@@ -74,48 +76,49 @@ Answer these questions:
 
 **Best for:** Caching, sessions, simple lookups
 
-| Database | Best For |
-|----------|----------|
-| **Redis** | Caching, sessions, real-time features |
-| **DynamoDB** | Serverless, high-scale key-value |
+| Database     | Best For                              |
+| ------------ | ------------------------------------- |
+| **Redis**    | Caching, sessions, real-time features |
+| **DynamoDB** | Serverless, high-scale key-value      |
 
 ### 3. Decision Matrix
 
 Rate each option (1-5) based on project needs:
 
-| Criteria | Weight | PostgreSQL | MongoDB | SQLite |
-|----------|--------|------------|---------|--------|
-| Data structure fit | 25% | ? | ? | ? |
-| Query complexity support | 20% | ? | ? | ? |
-| Scaling requirements | 15% | ? | ? | ? |
-| Team expertise | 15% | ? | ? | ? |
-| Hosting cost | 10% | ? | ? | ? |
-| Ecosystem (ORM/tools) | 10% | ? | ? | ? |
-| Time to implement | 5% | ? | ? | ? |
-| **Weighted Score** | 100% | ? | ? | ? |
+| Criteria                 | Weight | PostgreSQL | MongoDB | SQLite |
+| ------------------------ | ------ | ---------- | ------- | ------ |
+| Data structure fit       | 25%    | ?          | ?       | ?      |
+| Query complexity support | 20%    | ?          | ?       | ?      |
+| Scaling requirements     | 15%    | ?          | ?       | ?      |
+| Team expertise           | 15%    | ?          | ?       | ?      |
+| Hosting cost             | 10%    | ?          | ?       | ?      |
+| Ecosystem (ORM/tools)    | 10%    | ?          | ?       | ?      |
+| Time to implement        | 5%     | ?          | ?       | ?      |
+| **Weighted Score**       | 100%   | ?          | ?       | ?      |
 
 ### 4. Common Recommendations
 
-| Project Type | Recommended DB | Hosting | ORM/Driver |
-|--------------|----------------|---------|------------|
-| **SaaS / Web App** | PostgreSQL | Supabase, Neon | Prisma |
-| **MVP / Prototype** | SQLite → PostgreSQL | Local → Cloud | Prisma |
-| **Mobile App** | Firebase Firestore | Firebase | SDK |
-| **Content-heavy Site** | PostgreSQL | Supabase | Prisma |
-| **Real-time App** | Supabase (Postgres) | Supabase | Supabase Client |
-| **High-write Analytics** | ClickHouse, TimescaleDB | Managed | Native |
-| **E-commerce** | PostgreSQL | Railway, RDS | Prisma |
+| Project Type             | Recommended DB          | Hosting        | ORM/Driver      |
+| ------------------------ | ----------------------- | -------------- | --------------- |
+| **SaaS / Web App**       | PostgreSQL              | Supabase, Neon | Prisma          |
+| **MVP / Prototype**      | SQLite → PostgreSQL     | Local → Cloud  | Prisma          |
+| **Mobile App**           | Firebase Firestore      | Firebase       | SDK             |
+| **Content-heavy Site**   | PostgreSQL              | Supabase       | Prisma          |
+| **Real-time App**        | Supabase (Postgres)     | Supabase       | Supabase Client |
+| **High-write Analytics** | ClickHouse, TimescaleDB | Managed        | Native          |
+| **E-commerce**           | PostgreSQL              | Railway, RDS   | Prisma          |
 
 ### 5. ORM/Query Builder Selection
 
-| Stack | Recommended | Alternative |
-|-------|-------------|-------------|
-| **Node.js/TypeScript** | Prisma | Drizzle, TypeORM |
-| **Python** | SQLAlchemy | Prisma (Beta), Tortoise |
-| **Go** | GORM | sqlx, ent |
-| **Rust** | Diesel | SeaORM, sqlx |
+| Stack                  | Recommended | Alternative             |
+| ---------------------- | ----------- | ----------------------- |
+| **Node.js/TypeScript** | Prisma      | Drizzle, TypeORM        |
+| **Python**             | SQLAlchemy  | Prisma (Beta), Tortoise |
+| **Go**                 | GORM        | sqlx, ent               |
+| **Rust**               | Diesel      | SeaORM, sqlx            |
 
 **Prisma Benefits:**
+
 - Type-safe queries
 - Auto-generated client
 - Easy migrations
@@ -125,23 +128,23 @@ Rate each option (1-5) based on project needs:
 
 #### Managed vs Self-hosted
 
-| Managed (Recommended) | Self-hosted |
-|-----------------------|-------------|
-| Automatic backups | Full control |
-| Scaling handled | Lower cost at scale |
-| Security updates | Complex setup |
-| Less DevOps work | Team expertise needed |
+| Managed (Recommended) | Self-hosted           |
+| --------------------- | --------------------- |
+| Automatic backups     | Full control          |
+| Scaling handled       | Lower cost at scale   |
+| Security updates      | Complex setup         |
+| Less DevOps work      | Team expertise needed |
 
 #### Free Tier Options
 
-| Provider | Free Tier | Notes |
-|----------|-----------|-------|
-| **Supabase** | 500MB, 2 projects | Full PostgreSQL + Auth + Storage |
-| **Neon** | 0.5GB | Serverless PostgreSQL |
-| **Railway** | $5/month credit | PostgreSQL, MySQL, Redis |
-| **PlanetScale** | 5GB, 1B reads | Serverless MySQL |
-| **MongoDB Atlas** | 512MB | MongoDB |
-| **Firebase** | 1GB Firestore | Real-time DB + Auth |
+| Provider          | Free Tier         | Notes                            |
+| ----------------- | ----------------- | -------------------------------- |
+| **Supabase**      | 500MB, 2 projects | Full PostgreSQL + Auth + Storage |
+| **Neon**          | 0.5GB             | Serverless PostgreSQL            |
+| **Railway**       | $5/month credit   | PostgreSQL, MySQL, Redis         |
+| **PlanetScale**   | 5GB, 1B reads     | Serverless MySQL                 |
+| **MongoDB Atlas** | 512MB             | MongoDB                          |
+| **Firebase**      | 1GB Firestore     | Real-time DB + Auth              |
 
 ### 7. Document Decision
 
@@ -154,12 +157,12 @@ Create `/docs/database/database-decision.md`:
 
 ### Requirements Analysis
 
-| Requirement | Rating | Notes |
-|-------------|--------|-------|
-| Structured data | High | User accounts, orders, products |
-| Relationships | High | Users → Orders → Products |
-| Transactions | Medium | Checkout process |
-| Scaling | Low | Starting small, <10K users |
+| Requirement     | Rating | Notes                           |
+| --------------- | ------ | ------------------------------- |
+| Structured data | High   | User accounts, orders, products |
+| Relationships   | High   | Users → Orders → Products       |
+| Transactions    | Medium | Checkout process                |
+| Scaling         | Low    | Starting small, <10K users      |
 
 ### Why PostgreSQL
 
@@ -184,11 +187,11 @@ Create `/docs/database/database-decision.md`:
 
 ### Alternatives Considered
 
-| Option | Rejected Because |
-|--------|------------------|
-| MongoDB | Data is clearly relational |
-| SQLite | Need remote database for team |
-| Raw SQL | Prisma provides better DX |
+| Option  | Rejected Because              |
+| ------- | ----------------------------- |
+| MongoDB | Data is clearly relational    |
+| SQLite  | Need remote database for team |
+| Raw SQL | Prisma provides better DX     |
 ```
 
 ---

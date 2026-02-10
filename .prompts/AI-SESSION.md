@@ -83,7 +83,7 @@
 | 201 | Authentication | ✅     | `src/lib/db.ts`, `src/lib/auth.ts`, `src/lib/auth/*.ts`, `src/app/api/auth/**/*.ts`, `src/hooks/useAuth.ts`, `src/types/next-auth.d.ts`, `docs/authentication.md`, updated `docs/environment-variables.md` | Complete - NextAuth v5, OAuth primary (Google, Apple), email/password fallback, session protection  |
 | 202 | Authorization  | ✅     | `docs/authorization.md`, `src/lib/auth/permissions.ts`, `src/lib/auth/authorize.ts`, `src/lib/auth/ownership.ts`, `src/hooks/usePermissions.ts`                                                            | Complete - Resource-based authorization with ownership and collaboration roles                      |
 | 203 | Error Handling | ✅     | `src/lib/errors/codes.ts`, `src/lib/errors/AppError.ts`, `src/lib/errors/handler.ts`, `src/lib/api/withErrorHandling.ts`, `src/lib/logger.ts`, `docs/api/errors.md`                                        | Complete - Consistent error handling with custom error classes, request IDs, and comprehensive docs |
-| 204 | Validation     | ⬚      | Validation schemas                                                                                                                                                                                         |                                                                                                     |
+| 204 | Validation     | ✅     | `src/lib/validation/*.ts`, `src/lib/validation/schemas/*.ts`                                                                                                                                               | Complete - Zod validation with 9 resource schemas, common schemas, pagination, and utilities        |
 
 ### Phase 3: Frontend
 
@@ -134,19 +134,17 @@
 
 ### Active SOP
 
-**SOP:** SOP-204
-**Title:** Validation
+**SOP:** SOP-300
+**Title:** Component Architecture
 **Status:** ⬚ Not Started
 
 ### Context Files to Read
 
 ```
-.sops/phase-2-api-backend/SOP-204-validation.md
+.sops/phase-3-frontend/SOP-300-component-architecture.md
 /docs/requirements.md
-/docs/api/endpoints.md
-/docs/api/openapi.yaml
-src/lib/errors/AppError.ts
-src/lib/errors/handler.ts
+/docs/architecture/patterns.md
+src/components/
 ```
 
 ### Expected Outputs
@@ -188,11 +186,11 @@ Execute **SOP-204** (Validation).
 
 1. `.sops/phase-2-api-backend/SOP-203-error-handling.md` — The procedure
 2. `/docs/requirements.md` — Requirements
-3. /docs/api/endpoints.md — API endpoint documentation
-4. `/docs/api/openapi.yaml` — API specification
-5. `src/lib/auth/api.ts` — API protection utilities
-6. `src/lib/auth/authorize.ts` — Authorization middleware
-7. `src/lib/auth/api.ts` — API protection utilities
+3. `/docs/tech-stack.md` — Tech stack details for framework
+4. /docs/api/endpoints.md — API endpoint documentation
+5. `/docs/api/openapi.yaml` — API specification
+6. `src/lib/auth/api.ts` — API protection utilities
+7. `src/lib/auth/authorize.ts` — Authorization middleware
 
 **Refer to `AI-GUIDE.md` to attend to your responsibilities and for guidance on best practices.**
 **Follow the SOP's Procedure section step by step.**
@@ -898,9 +896,47 @@ export const GET = withErrorHandling(async (request) => {
 - ESLint configured to allow console statements in logger only
 - Ready for SOP-204 (Validation)
 
+### Session 14 — 2026-02-10
+
+**SOPs Completed:** SOP-204 (Validation)
+**Validation Implementation:**
+
+- **Library:** Zod (v3.25.76, already installed)
+- **Common Schemas:** 15+ reusable schemas (id, email, password, name, slug, price, quantity, url, date, boolean, hexColor, latitude, longitude, etc.)
+- **Resource Schemas:** 9 complete resource schema files covering all API endpoints
+- **Type Safety:** Automatic TypeScript type inference from Zod schemas
+- **Sanitization:** Built-in string trimming, case normalization, type coercion
+- **Error Format:** Consistent validation er
+
+**Resource Schemas:**
+
+- **User:** register, login, update profile, update preferences, change password
+- **Shopping List:** create, update, query (status/store/template/search), duplicate
+- **List Item:** create, update, bulk check, reorder, add from template, query (category/checked/search)
+- **Collaborator:** add by email, add by ID, update role, respond to invitation
+- **Category:** create, update, query (default/search), reorder
+- **Store:** create, update, query (chain/location/search), store category mappings, reorder categories
+- **Pantry Item:** create, update, query (category/location/consumed/expiring/barcode/search), bulk consume
+- **Recipe:** create, update, query (cuisine/difficulty/time/public/search), generate shopping list, ingredients
+- **Meal Plan:** create, update, query (date range/meal type/completed), generate shopping list, bulk create
+
+**Type Safety Features:**
+
+- All schemas export inferred TypeScript types
+- Validation results are type-safe (ValidationResult<T> | ValidationFailure)
+- Auto-complete support for validated data
+
+**Notes:**
+
+- Zod was already installed in dependencies
+- All validation schemas aligned with Prisma schema and OpenAPI spec
+- Type coercion for query parameters (strings → numbers, booleans)
+- Field-level validation with specific error messages
+- Complex validations (date ranges, conditional fields, refinements)
+
 ---
 
-## 🔗 Quick Reference
+You ## 🔗 Quick Reference
 
 ### Directory Structure
 

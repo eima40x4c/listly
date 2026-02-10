@@ -33,12 +33,12 @@ pnpm db:reset
 
 All test accounts use the same password for development convenience.
 
-| Email | Password | Purpose | Features Enabled |
-|-------|----------|---------|------------------|
-| admin@listly.com | password123 | Admin/development account | All features |
-| alice@example.com | password123 | Primary test user | Active lists, collaboration, location reminders ON |
-| bob@example.com | password123 | Secondary test user | Shared lists, dark theme |
-| demo@listly.com | password123 | Demo/presentation account | Completed lists, templates |
+| Email             | Password    | Purpose                   | Features Enabled                                   |
+| ----------------- | ----------- | ------------------------- | -------------------------------------------------- |
+| admin@listly.com  | password123 | Admin/development account | All features                                       |
+| alice@example.com | password123 | Primary test user         | Active lists, collaboration, location reminders ON |
+| bob@example.com   | password123 | Secondary test user       | Shared lists, dark theme                           |
+| demo@listly.com   | password123 | Demo/presentation account | Completed lists, templates                         |
 
 **Security Note:** These are development-only credentials. Never use these in production!
 
@@ -46,18 +46,18 @@ All test accounts use the same password for development convenience.
 
 ## Data Quantities
 
-| Entity | Count | Notes |
-|--------|-------|-------|
-| **Users** | 4 | Mix of active users with different preferences |
-| **Categories** | 13 | Standard grocery categories (produce, dairy, etc.) |
-| **Stores** | 4 | San Francisco area stores with real-ish coordinates |
-| **Shopping Lists** | 6+ | Active, completed, archived, template, shared, empty |
-| **List Items** | 30+ | Various states: checked, unchecked, with/without prices |
-| **Pantry Items** | 8+ | Including items expiring soon for testing alerts |
-| **Recipes** | 2 | Simple recipes with ingredients |
-| **Meal Plans** | 3 | Upcoming meal plans for Alice |
-| **Store Categories** | 10 | Aisle mappings for Whole Foods |
-| **List Collaborators** | 1 | Bob as editor on Alice's shared list |
+| Entity                 | Count | Notes                                                   |
+| ---------------------- | ----- | ------------------------------------------------------- |
+| **Users**              | 4     | Mix of active users with different preferences          |
+| **Categories**         | 13    | Standard grocery categories (produce, dairy, etc.)      |
+| **Stores**             | 4     | San Francisco area stores with real-ish coordinates     |
+| **Shopping Lists**     | 6+    | Active, completed, archived, template, shared, empty    |
+| **List Items**         | 30+   | Various states: checked, unchecked, with/without prices |
+| **Pantry Items**       | 8+    | Including items expiring soon for testing alerts        |
+| **Recipes**            | 2     | Simple recipes with ingredients                         |
+| **Meal Plans**         | 3     | Upcoming meal plans for Alice                           |
+| **Store Categories**   | 10    | Aisle mappings for Whole Foods                          |
+| **List Collaborators** | 1     | Bob as editor on Alice's shared list                    |
 
 ---
 
@@ -146,6 +146,7 @@ Four test stores in the San Francisco area:
 Sample pantry inventory for Alice and Bob:
 
 **Alice's Pantry:**
+
 - All-Purpose Flour (pantry location)
 - White Rice (pantry)
 - Canned Tomatoes (pantry, expires in 1 year)
@@ -154,6 +155,7 @@ Sample pantry inventory for Alice and Bob:
 - **Milk - Expiring Soon** (fridge, expires in 2 days) ⚠️ **Triggers expiration warning**
 
 **Bob's Pantry:**
+
 - Coffee Beans (pantry)
 - Olive Oil (pantry)
 
@@ -224,6 +226,7 @@ Edit [prisma/seed.ts](../../prisma/seed.ts) to adjust:
 ### Add More Data
 
 1. **Add more users:**
+
    ```typescript
    // In seedUsers() function
    {
@@ -236,6 +239,7 @@ Edit [prisma/seed.ts](../../prisma/seed.ts) to adjust:
    ```
 
 2. **Add more categories:**
+
    ```typescript
    // In seedCategories() function
    {
@@ -344,6 +348,7 @@ pnpm db:studio
 **Cause:** Running seed multiple times without clearing.
 
 **Solution:**
+
 ```bash
 # Use db:reset to clear and re-seed
 pnpm db:reset
@@ -354,6 +359,7 @@ pnpm db:reset
 **Cause:** PostgreSQL not running.
 
 **Solution:**
+
 ```bash
 # Start Docker services
 pnpm docker:up
@@ -366,6 +372,7 @@ pnpm docker:up
 **Cause:** Missing dependencies or Prisma client not generated.
 
 **Solution:**
+
 ```bash
 # Install dependencies
 pnpm install
@@ -379,6 +386,7 @@ pnpm db:generate
 **Cause:** Seed script error that wasn't caught.
 
 **Solution:**
+
 - Check console output for warnings
 - Run seed directly to see detailed errors:
   ```bash

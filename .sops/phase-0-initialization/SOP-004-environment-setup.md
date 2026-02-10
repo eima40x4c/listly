@@ -28,13 +28,13 @@ Establish a consistent, secure, and reproducible development environment configu
 
 Categorize variables by purpose:
 
-| Category | Examples |
-|----------|----------|
-| **Database** | `DATABASE_URL`, `DB_HOST`, `DB_PASSWORD` |
-| **Authentication** | `JWT_SECRET`, `OAUTH_CLIENT_ID`, `SESSION_SECRET` |
-| **Third-party APIs** | `STRIPE_SECRET_KEY`, `SENDGRID_API_KEY` |
-| **Application** | `NODE_ENV`, `APP_URL`, `PORT` |
-| **Feature Flags** | `ENABLE_FEATURE_X`, `DEBUG_MODE` |
+| Category             | Examples                                          |
+| -------------------- | ------------------------------------------------- |
+| **Database**         | `DATABASE_URL`, `DB_HOST`, `DB_PASSWORD`          |
+| **Authentication**   | `JWT_SECRET`, `OAUTH_CLIENT_ID`, `SESSION_SECRET` |
+| **Third-party APIs** | `STRIPE_SECRET_KEY`, `SENDGRID_API_KEY`           |
+| **Application**      | `NODE_ENV`, `APP_URL`, `PORT`                     |
+| **Feature Flags**    | `ENABLE_FEATURE_X`, `DEBUG_MODE`                  |
 
 ### 2. Create .env.example
 
@@ -88,23 +88,23 @@ DEBUG=false
 
 Create `/docs/environment-variables.md`:
 
-```markdown
+````markdown
 # Environment Variables
 
 ## Required Variables
 
-| Variable | Description | Example | Required |
-|----------|-------------|---------|----------|
-| `DATABASE_URL` | PostgreSQL connection string | `postgresql://...` | ✅ |
-| `NEXTAUTH_SECRET` | Session encryption key | Random 32-char string | ✅ |
-| `NEXTAUTH_URL` | Application base URL | `http://localhost:3000` | ✅ |
+| Variable          | Description                  | Example                 | Required |
+| ----------------- | ---------------------------- | ----------------------- | -------- |
+| `DATABASE_URL`    | PostgreSQL connection string | `postgresql://...`      | ✅       |
+| `NEXTAUTH_SECRET` | Session encryption key       | Random 32-char string   | ✅       |
+| `NEXTAUTH_URL`    | Application base URL         | `http://localhost:3000` | ✅       |
 
 ## Optional Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `PORT` | Server port | `3000` |
-| `DEBUG` | Enable debug logging | `false` |
+| Variable | Description          | Default |
+| -------- | -------------------- | ------- |
+| `PORT`   | Server port          | `3000`  |
+| `DEBUG`  | Enable debug logging | `false` |
 
 ## Generating Secrets
 
@@ -115,14 +115,16 @@ openssl rand -base64 32
 # Generate a UUID
 uuidgen
 ```
+````
 
 ## Environment-Specific Values
 
-| Variable | Development | Staging | Production |
-|----------|-------------|---------|------------|
-| `NODE_ENV` | `development` | `staging` | `production` |
-| `APP_URL` | `http://localhost:3000` | `https://staging.app.com` | `https://app.com` |
-```
+| Variable   | Development             | Staging                   | Production        |
+| ---------- | ----------------------- | ------------------------- | ----------------- |
+| `NODE_ENV` | `development`           | `staging`                 | `production`      |
+| `APP_URL`  | `http://localhost:3000` | `https://staging.app.com` | `https://app.com` |
+
+````
 
 ### 4. Set Up Local Development Database
 
@@ -157,11 +159,12 @@ services:
 
 volumes:
   postgres_data:
-```
+````
 
 **Option B: Cloud Development Database**
 
 Use services like:
+
 - Supabase (free tier)
 - Railway (free tier)
 - PlanetScale (free tier)
@@ -270,7 +273,7 @@ Create `.vscode/extensions.json` (recommended extensions):
 
 Add to `README.md` or create `docs/development-setup.md`:
 
-```markdown
+````markdown
 # Development Setup
 
 ## Prerequisites
@@ -293,26 +296,31 @@ pnpm setup
 # Start development server
 pnpm dev
 ```
+````
 
 ## Manual Setup
 
 1. **Install dependencies:**
+
    ```bash
    pnpm install
    ```
 
 2. **Set up environment:**
+
    ```bash
    cp .env.example .env
    # Edit .env with your settings
    ```
 
 3. **Start database:**
+
    ```bash
    docker-compose up -d postgres
    ```
 
 4. **Run migrations:**
+
    ```bash
    pnpm db:migrate
    ```
@@ -325,17 +333,22 @@ pnpm dev
 ## Common Issues
 
 ### Database connection refused
+
 Ensure Docker is running and the container is up:
+
 ```bash
 docker-compose ps
 docker-compose up -d postgres
 ```
 
 ### Port already in use
+
 Change the port in `.env`:
+
 ```
 PORT=3001
 ```
+
 ```
 
 ---
@@ -356,16 +369,19 @@ PORT=3001
 ## AI Agent Prompt Template
 
 ```
+
 Set up the development environment for this project.
 
 Read `/docs/tech-stack.md` for technology context.
 
 Execute SOP-004 (Environment Setup):
+
 1. Create .env.example with all required variables
 2. Create docker-compose.yml for local database
 3. Add setup scripts to package.json
 4. Create VS Code settings
 5. Document setup in /docs/development-setup.md
+
 ```
 
 ---
@@ -397,3 +413,4 @@ Execute SOP-004 (Environment Setup):
 | Generate unique secrets per environment | Reuse secrets across environments |
 | Document how to generate secrets | Share secrets in chat/email |
 | Use secret managers in production | Store production secrets in code |
+```

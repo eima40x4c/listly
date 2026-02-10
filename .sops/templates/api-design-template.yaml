@@ -170,11 +170,11 @@ components:
         createdAt:
           type: string
           format: date-time
-          example: "2026-01-28T10:30:00Z"
+          example: '2026-01-28T10:30:00Z'
         updatedAt:
           type: string
           format: date-time
-          example: "2026-01-28T10:30:00Z"
+          example: '2026-01-28T10:30:00Z'
 
     # Example: Create User Request
     CreateUserRequest:
@@ -248,7 +248,7 @@ components:
     QuerySort:
       name: sort
       in: query
-      description: "Sort field and direction (e.g., createdAt:desc)"
+      description: 'Sort field and direction (e.g., createdAt:desc)'
       schema:
         type: string
         example: createdAt:desc
@@ -262,7 +262,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           example:
             success: false
             error:
@@ -277,7 +277,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           example:
             success: false
             error:
@@ -289,7 +289,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           example:
             success: false
             error:
@@ -301,7 +301,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           example:
             success: false
             error:
@@ -313,7 +313,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           example:
             success: false
             error:
@@ -335,7 +335,7 @@ paths:
       tags:
         - System
       responses:
-        "200":
+        '200':
           description: Service is healthy
           content:
             application/json:
@@ -366,21 +366,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateUserRequest"
+              $ref: '#/components/schemas/CreateUserRequest'
       responses:
-        "201":
+        '201':
           description: User created successfully
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/SuccessResponse"
+                  - $ref: '#/components/schemas/SuccessResponse'
                   - type: object
                     properties:
                       data:
-                        $ref: "#/components/schemas/User"
-        "400":
-          $ref: "#/components/responses/BadRequest"
+                        $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
 
   /auth/login:
     post:
@@ -405,7 +405,7 @@ paths:
                   type: string
                   format: password
       responses:
-        "200":
+        '200':
           description: Login successful
           content:
             application/json:
@@ -425,9 +425,9 @@ paths:
                         type: integer
                         example: 3600
                       user:
-                        $ref: "#/components/schemas/User"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
+                        $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
 
   # --------------------------------------------------------------------------
   # Example CRUD Endpoints - Users (Adapt for your resources)
@@ -441,30 +441,30 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - $ref: "#/components/parameters/QueryPage"
-        - $ref: "#/components/parameters/QueryLimit"
-        - $ref: "#/components/parameters/QuerySort"
+        - $ref: '#/components/parameters/QueryPage'
+        - $ref: '#/components/parameters/QueryLimit'
+        - $ref: '#/components/parameters/QuerySort'
         - name: search
           in: query
           description: Search by name or email
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: List of users
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/SuccessResponse"
+                  - $ref: '#/components/schemas/SuccessResponse'
                   - type: object
                     properties:
                       data:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
+                          $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
 
   /users/{id}:
     get:
@@ -475,23 +475,23 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - $ref: "#/components/parameters/PathId"
+        - $ref: '#/components/parameters/PathId'
       responses:
-        "200":
+        '200':
           description: User details
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/SuccessResponse"
+                  - $ref: '#/components/schemas/SuccessResponse'
                   - type: object
                     properties:
                       data:
-                        $ref: "#/components/schemas/User"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
+                        $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
     patch:
       summary: Update user
@@ -501,31 +501,31 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - $ref: "#/components/parameters/PathId"
+        - $ref: '#/components/parameters/PathId'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateUserRequest"
+              $ref: '#/components/schemas/UpdateUserRequest'
       responses:
-        "200":
+        '200':
           description: User updated
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/SuccessResponse"
+                  - $ref: '#/components/schemas/SuccessResponse'
                   - type: object
                     properties:
                       data:
-                        $ref: "#/components/schemas/User"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
+                        $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
     delete:
       summary: Delete user
@@ -535,16 +535,16 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - $ref: "#/components/parameters/PathId"
+        - $ref: '#/components/parameters/PathId'
       responses:
-        "204":
+        '204':
           description: User deleted successfully
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
 # ============================================================================
 # TAGS - Organize your endpoints

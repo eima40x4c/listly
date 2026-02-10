@@ -10,17 +10,18 @@
 
 The AI agent is responsible for **managing the entire session lifecycle**:
 
-| Responsibility | When | What to Update |
-|----------------|------|----------------|
-| **Initialize session** | First prompt | Fill Project Overview, Goals from user description |
-| **Track progress** | After each SOP | Update Progress Tracker status and outputs |
-| **Update checklist** | After each SOP | Check off completed items in `.sops/templates/project-checklist.md` |
-| **Commit changes** | After each SOP | Git commit with conventional message (see Version Control) |
-| **Maintain context** | After each SOP | Update Current Session, Session Prompt Template |
-| **Log sessions** | End of session | Add entry to Session Log |
-| **Resume context** | New session | Read AI-SESSION.md, continue from last SOP |
+| Responsibility         | When           | What to Update                                                      |
+| ---------------------- | -------------- | ------------------------------------------------------------------- |
+| **Initialize session** | First prompt   | Fill Project Overview, Goals from user description                  |
+| **Track progress**     | After each SOP | Update Progress Tracker status and outputs                          |
+| **Update checklist**   | After each SOP | Check off completed items in `.sops/templates/project-checklist.md` |
+| **Commit changes**     | After each SOP | Git commit with conventional message (see Version Control)          |
+| **Maintain context**   | After each SOP | Update Current Session, Session Prompt Template                     |
+| **Log sessions**       | End of session | Add entry to Session Log                                            |
+| **Resume context**     | New session    | Read AI-SESSION.md, continue from last SOP                          |
 
 **The human only provides:**
+
 - Initial project name and description
 - Answers to clarifying questions
 - Approval/feedback on outputs
@@ -33,12 +34,12 @@ The AI agent is responsible for committing changes at appropriate checkpoints:
 
 ### When to Commit
 
-| Trigger | Commit Type | Message Pattern | Example |
-|---------|-------------|-----------------|---------|
-| **After completing an SOP** | Final | `feat(sop-XXX): {description}` | `feat(sop-101): add database schema` |
-| **Significant progress within large SOP** | Intermediate | `wip(sop-XXX): {description}` | `wip(sop-200): add user endpoints` |
-| **Bug fix during development** | Fix | `fix: {description}` | `fix: correct validation logic` |
-| **Documentation updates** | Docs | `docs: {description}` | `docs: update API reference` |
+| Trigger                                   | Commit Type  | Message Pattern                | Example                              |
+| ----------------------------------------- | ------------ | ------------------------------ | ------------------------------------ |
+| **After completing an SOP**               | Final        | `feat(sop-XXX): {description}` | `feat(sop-101): add database schema` |
+| **Significant progress within large SOP** | Intermediate | `wip(sop-XXX): {description}`  | `wip(sop-200): add user endpoints`   |
+| **Bug fix during development**            | Fix          | `fix: {description}`           | `fix: correct validation logic`      |
+| **Documentation updates**                 | Docs         | `docs: {description}`          | `docs: update API reference`         |
 
 ### Key Rules
 
@@ -57,7 +58,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 [optional body]
 ```
 
-**Types:** `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `wip`  
+**Types:** `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `wip`
 **Scope:** Usually the SOP number (e.g., `sop-101`) or component name
 
 ---
@@ -96,14 +97,21 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 ```markdown
 # SOP-XXX: Title
 
-## Purpose           ← Why this SOP exists
-## Scope             ← What it covers / doesn't cover
-## Prerequisites     ← What must be done first (other SOPs, tools)
-## Procedure         ← Step-by-step instructions (AI follows this)
-## Review Checklist  ← Verification items
-## AI Agent Prompt   ← (Optional) Pre-written prompt template
-## Outputs           ← What files/artifacts this SOP produces
-## Related SOPs      ← Cross-references
+## Purpose ← Why this SOP exists
+
+## Scope ← What it covers / doesn't cover
+
+## Prerequisites ← What must be done first (other SOPs, tools)
+
+## Procedure ← Step-by-step instructions (AI follows this)
+
+## Review Checklist ← Verification items
+
+## AI Agent Prompt ← (Optional) Pre-written prompt template
+
+## Outputs ← What files/artifacts this SOP produces
+
+## Related SOPs ← Cross-references
 ```
 
 ### The AI Agent Should
@@ -133,6 +141,7 @@ cp -r /path/to/sops-repo/.sops .
 ```
 
 Resulting structure:
+
 ```
 my-new-project/
 ├── .prompts/
@@ -158,6 +167,7 @@ Then begin with SOP-000 (Requirements Gathering).
 ```
 
 **The AI will automatically:**
+
 1. Fill in the Project Overview in `AI-SESSION.md`
 2. Extract goals from your description
 3. Read SOP-000 and guide you through requirements gathering
@@ -202,6 +212,7 @@ Read `.prompts/AI-SESSION.md` and proceed with the next incomplete SOP.
 
 ```markdown
 Execute these SOPs in order:
+
 1. SOP-002 (Repository Setup)
 2. SOP-003 (Project Structure)
 3. SOP-004 (Environment Setup)
@@ -213,17 +224,21 @@ Update `.prompts/AI-SESSION.md` after each one.
 
 ```markdown
 ## Context
+
 Project: {name} at `{path}`
 Just completed: SOP-{XXX}
 
 ## Task
+
 Verify the outputs against SOP-{XXX}'s Review Checklist.
 
 Read:
+
 - `.sops/phase-X/{SOP-file}.md` (the checklist section)
 - {files that were created}
 
 Report:
+
 - ✅ Items that pass
 - ❌ Items that need attention
 - Recommended fixes
@@ -235,6 +250,7 @@ Report:
 I'm resuming work on this project.
 
 Read `.prompts/AI-SESSION.md` and summarize:
+
 - What's been completed
 - What's next
 - Any noted issues
@@ -286,31 +302,31 @@ SOP-006 (Code Style) ◄── reads tech stack
 
 ### For Effective AI Sessions
 
-| Do | Don't |
-|----|-------|
-| Reference SOP files by path | Copy-paste SOP content into prompts |
-| Let AI read prerequisite outputs | Summarize previous work yourself |
-| Use the session tracker | Rely on chat memory across sessions |
-| Verify outputs match SOP specs | Assume AI followed everything |
-| Update tracker after each SOP | Forget to record progress |
+| Do                               | Don't                               |
+| -------------------------------- | ----------------------------------- |
+| Reference SOP files by path      | Copy-paste SOP content into prompts |
+| Let AI read prerequisite outputs | Summarize previous work yourself    |
+| Use the session tracker          | Rely on chat memory across sessions |
+| Verify outputs match SOP specs   | Assume AI followed everything       |
+| Update tracker after each SOP    | Forget to record progress           |
 
 ### For SOP Maintenance
 
-| Do | Don't |
-|----|-------|
-| Keep Outputs section accurate | Let outputs become outdated |
-| Update Prerequisites when adding SOPs | Create orphan SOPs |
-| Include concrete examples in SOPs | Be vague about expectations |
-| Version control your SOPs | Make undocumented changes |
+| Do                                    | Don't                       |
+| ------------------------------------- | --------------------------- |
+| Keep Outputs section accurate         | Let outputs become outdated |
+| Update Prerequisites when adding SOPs | Create orphan SOPs          |
+| Include concrete examples in SOPs     | Be vague about expectations |
+| Version control your SOPs             | Make undocumented changes   |
 
 ### For Multi-Session Projects
 
-| Do | Don't |
-|----|-------|
-| Start with "read the session file" | Assume context carries over |
-| Record session logs | Lose track of what was done |
-| Note deviations and why | Silently ignore SOP requirements |
-| Checkpoint after each phase | Do too much in one session |
+| Do                                 | Don't                            |
+| ---------------------------------- | -------------------------------- |
+| Start with "read the session file" | Assume context carries over      |
+| Record session logs                | Lose track of what was done      |
+| Note deviations and why            | Silently ignore SOP requirements |
+| Checkpoint after each phase        | Do too much in one session       |
 
 ---
 
@@ -322,15 +338,15 @@ Consider adding a front-matter block to SOPs:
 
 ```markdown
 ---
-sop_id: "SOP-101"
+sop_id: 'SOP-101'
 phase: 1
-title: "Schema Design"
+title: 'Schema Design'
 prerequisites:
-  - sop: "SOP-100"
-    output: "/docs/tech-stack.md"
+  - sop: 'SOP-100'
+    output: '/docs/tech-stack.md'
 outputs:
-  - "/docs/database/erd.md"
-  - "/migrations/001_initial.sql"
+  - '/docs/database/erd.md'
+  - '/migrations/001_initial.sql'
 estimated_tokens: 2000
 ---
 ```
@@ -343,20 +359,25 @@ Write procedures as numbered steps with clear actions:
 ## Procedure
 
 ### 1. Read Prerequisites
+
 - Read `/docs/requirements.md` for data entities
 - Read `/docs/tech-stack.md` for database choice
 
 ### 2. Identify Entities
+
 - List all nouns from requirements that need persistence
 - Group related entities
 
 ### 3. Design Tables
+
 For each entity:
+
 - Create table with snake_case name (plural)
 - Add required columns: id, created_at, updated_at
 - Define relationships (foreign keys)
 
 ### 4. Create Outputs
+
 - Write ERD in Mermaid format to `/docs/database/erd.md`
 - Generate SQL migration to `/migrations/001_initial.sql`
 ```
@@ -373,10 +394,12 @@ After an AI completes an SOP, verify with:
 Check if the outputs from SOP-{XXX} meet requirements:
 
 Read:
+
 - `.sops/phase-X/{SOP-file}.md` (focus on Review Checklist and Outputs)
 - {generated files}
 
 For each checklist item, report:
+
 - ✅ Requirement met (with evidence)
 - ❌ Requirement not met (with specific gap)
 
@@ -440,12 +463,12 @@ Suggest fixes for any failures.
 
 ### Key Files
 
-| File | Purpose |
-|------|---------|
-| `.prompts/AI-GUIDE.md` | This guide |
+| File                     | Purpose                             |
+| ------------------------ | ----------------------------------- |
+| `.prompts/AI-GUIDE.md`   | This guide                          |
 | `.prompts/AI-SESSION.md` | Active session tracker (AI-managed) |
-| `.sops/README.md` | SOP index and overview |
-| `.sops/templates/` | Reusable project templates |
+| `.sops/README.md`        | SOP index and overview              |
+| `.sops/templates/`       | Reusable project templates          |
 
 ### Starting Prompt (Copy This)
 

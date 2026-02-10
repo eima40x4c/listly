@@ -36,6 +36,7 @@ Relationships: Customer places Order, Order contains Products
 ```
 
 **Entity Identification Questions:**
+
 - What things does the app manage?
 - What does the user interact with?
 - What needs to be stored and retrieved?
@@ -44,21 +45,21 @@ Relationships: Customer places Order, Order contains Products
 
 For each entity, list attributes:
 
-| Entity | Attributes |
-|--------|------------|
-| User | id, email, name, password_hash, created_at |
-| Product | id, name, description, price, stock, category_id |
-| Order | id, user_id, status, total, created_at |
-| OrderItem | id, order_id, product_id, quantity, price |
+| Entity    | Attributes                                       |
+| --------- | ------------------------------------------------ |
+| User      | id, email, name, password_hash, created_at       |
+| Product   | id, name, description, price, stock, category_id |
+| Order     | id, user_id, status, total, created_at           |
+| OrderItem | id, order_id, product_id, quantity, price        |
 
 ### 3. Identify Relationships
 
-| Relationship | Type | Description |
-|--------------|------|-------------|
-| User → Orders | One-to-Many | A user can have many orders |
-| Order → OrderItems | One-to-Many | An order has many items |
+| Relationship         | Type        | Description                      |
+| -------------------- | ----------- | -------------------------------- |
+| User → Orders        | One-to-Many | A user can have many orders      |
+| Order → OrderItems   | One-to-Many | An order has many items          |
 | Product → OrderItems | One-to-Many | A product appears in many orders |
-| Product → Category | Many-to-One | Products belong to a category |
+| Product → Category   | Many-to-One | Products belong to a category    |
 
 ### 4. Create ER Diagram
 
@@ -115,6 +116,7 @@ erDiagram
 ### 5. Apply Normalization Rules
 
 **First Normal Form (1NF):**
+
 - No repeating groups
 - Each cell contains a single value
 
@@ -122,10 +124,12 @@ erDiagram
 ✅ Good: Separate OrderItems table
 
 **Second Normal Form (2NF):**
+
 - 1NF + No partial dependencies
 - All non-key columns depend on the entire primary key
 
 **Third Normal Form (3NF):**
+
 - 2NF + No transitive dependencies
 - Non-key columns don't depend on other non-key columns
 
@@ -134,14 +138,14 @@ erDiagram
 
 ### 6. Define Constraints
 
-| Constraint Type | Usage | Example |
-|----------------|-------|---------|
-| **Primary Key** | Unique identifier | `id` on every table |
+| Constraint Type | Usage                 | Example                        |
+| --------------- | --------------------- | ------------------------------ |
+| **Primary Key** | Unique identifier     | `id` on every table            |
 | **Foreign Key** | Referential integrity | `user_id REFERENCES users(id)` |
-| **Unique** | Prevent duplicates | `email` in users |
-| **Not Null** | Required fields | `name`, `email` |
-| **Check** | Value validation | `price > 0` |
-| **Default** | Auto-fill values | `created_at DEFAULT NOW()` |
+| **Unique**      | Prevent duplicates    | `email` in users               |
+| **Not Null**    | Required fields       | `name`, `email`                |
+| **Check**       | Value validation      | `price > 0`                    |
+| **Default**     | Auto-fill values      | `created_at DEFAULT NOW()`     |
 
 ### 7. Write Prisma Schema
 
@@ -267,6 +271,7 @@ model OrderItem {
 ### 8. Common Schema Patterns
 
 #### Soft Deletes
+
 ```prisma
 model Post {
   id        String    @id @default(cuid())
@@ -276,6 +281,7 @@ model Post {
 ```
 
 #### Polymorphic Relations
+
 ```prisma
 model Comment {
   id            String  @id @default(cuid())
@@ -286,6 +292,7 @@ model Comment {
 ```
 
 #### Self-referential (Tree)
+
 ```prisma
 model Category {
   id       String     @id @default(cuid())
@@ -297,6 +304,7 @@ model Category {
 ```
 
 #### Many-to-Many with Extra Fields
+
 ```prisma
 model User {
   id          String       @id @default(cuid())
@@ -324,6 +332,7 @@ model Membership {
 ### 9. Add Strategic Indexes
 
 Index columns used in:
+
 - WHERE clauses
 - JOIN conditions
 - ORDER BY clauses
@@ -357,26 +366,28 @@ This document describes the database schema for [Project Name].
 ## Tables
 
 ### users
-| Column | Type | Constraints | Description |
-|--------|------|-------------|-------------|
-| id | CUID | PK | Unique identifier |
-| email | VARCHAR | UNIQUE, NOT NULL | User email |
-| name | VARCHAR | NOT NULL | Display name |
-| password_hash | VARCHAR | NOT NULL | Hashed password |
-| role | ENUM | NOT NULL, DEFAULT 'USER' | User role |
-| created_at | TIMESTAMP | NOT NULL, DEFAULT NOW | Creation time |
-| updated_at | TIMESTAMP | NOT NULL | Last update time |
+
+| Column        | Type      | Constraints              | Description       |
+| ------------- | --------- | ------------------------ | ----------------- |
+| id            | CUID      | PK                       | Unique identifier |
+| email         | VARCHAR   | UNIQUE, NOT NULL         | User email        |
+| name          | VARCHAR   | NOT NULL                 | Display name      |
+| password_hash | VARCHAR   | NOT NULL                 | Hashed password   |
+| role          | ENUM      | NOT NULL, DEFAULT 'USER' | User role         |
+| created_at    | TIMESTAMP | NOT NULL, DEFAULT NOW    | Creation time     |
+| updated_at    | TIMESTAMP | NOT NULL                 | Last update time  |
 
 ### products
+
 [Continue for each table...]
 
 ## Indexes
 
-| Table | Index | Columns | Purpose |
-|-------|-------|---------|---------|
+| Table    | Index                 | Columns     | Purpose            |
+| -------- | --------------------- | ----------- | ------------------ |
 | products | idx_products_category | category_id | Filter by category |
-| orders | idx_orders_user | user_id | User's orders |
-| orders | idx_orders_status | status | Filter by status |
+| orders   | idx_orders_user       | user_id     | User's orders      |
+| orders   | idx_orders_status     | status      | Filter by status   |
 ```
 
 ---

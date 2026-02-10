@@ -28,12 +28,12 @@ Establish a consistent, scalable component architecture that promotes reusabilit
 
 Organize components by their role:
 
-| Category | Purpose | Example |
-|----------|---------|---------|
-| **UI Components** | Generic, reusable building blocks | Button, Input, Card, Modal |
-| **Layout Components** | Page structure and positioning | Header, Footer, Sidebar, Container |
-| **Feature Components** | Business logic components | ProductCard, UserProfile, OrderList |
-| **Page Components** | Route-level containers | HomePage, ProductPage, CheckoutPage |
+| Category               | Purpose                           | Example                             |
+| ---------------------- | --------------------------------- | ----------------------------------- |
+| **UI Components**      | Generic, reusable building blocks | Button, Input, Card, Modal          |
+| **Layout Components**  | Page structure and positioning    | Header, Footer, Sidebar, Container  |
+| **Feature Components** | Business logic components         | ProductCard, UserProfile, OrderList |
+| **Page Components**    | Route-level containers            | HomePage, ProductPage, CheckoutPage |
 
 ### 2. Folder Structure
 
@@ -92,6 +92,7 @@ export type { ButtonProps } from './Button';
 ### 4. Component Design Principles
 
 #### Single Responsibility
+
 Each component does one thing well.
 
 ```tsx
@@ -114,6 +115,7 @@ function UserCard({ user, onEdit }) {
 ```
 
 #### Composition Over Props
+
 Prefer composable children over many props.
 
 ```tsx
@@ -420,6 +422,7 @@ export { Modal } from './Modal';
 ```
 
 **Usage:**
+
 ```typescript
 import { Button, Card, Input } from '@/components/ui';
 ```
@@ -437,12 +440,12 @@ This project uses a component-based architecture with React.
 
 ## Component Categories
 
-| Category | Location | Purpose |
-|----------|----------|---------|
-| UI | `components/ui/` | Reusable building blocks |
-| Layout | `components/layout/` | Page structure |
-| Forms | `components/forms/` | Form inputs and fields |
-| Features | `components/features/` | Business logic |
+| Category | Location               | Purpose                  |
+| -------- | ---------------------- | ------------------------ |
+| UI       | `components/ui/`       | Reusable building blocks |
+| Layout   | `components/layout/`   | Page structure           |
+| Forms    | `components/forms/`    | Form inputs and fields   |
+| Features | `components/features/` | Business logic           |
 
 ## Creating Components
 
@@ -513,4 +516,4 @@ Execute SOP-300 (Component Architecture):
 - **SOP-003:** Project Structure (folder organization)
 - **SOP-301:** Styling Standards (component styling)
 - **SOP-303:** Form Handling (form components)
-- **SOP-304:** Progressive Web App (mobile UI components) *(optional)*
+- **SOP-304:** Progressive Web App (mobile UI components) _(optional)_

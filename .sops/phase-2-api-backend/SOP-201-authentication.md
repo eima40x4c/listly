@@ -26,23 +26,25 @@ Implement secure user authentication to verify identity before granting access t
 
 ### 1. Choose Authentication Strategy
 
-| Strategy | Best For | Considerations |
-|----------|----------|----------------|
-| **Session-based** | Traditional web apps | Requires session storage |
-| **JWT** | APIs, SPAs, mobile | Token management, expiration |
-| **NextAuth/Auth.js** | Next.js apps | Built-in providers, sessions |
+| Strategy             | Best For             | Considerations               |
+| -------------------- | -------------------- | ---------------------------- |
+| **Session-based**    | Traditional web apps | Requires session storage     |
+| **JWT**              | APIs, SPAs, mobile   | Token management, expiration |
+| **NextAuth/Auth.js** | Next.js apps         | Built-in providers, sessions |
 
 **Recommendation:** Use NextAuth.js for Next.js apps; JWT for pure APIs.
 
 ### 2. Install Dependencies
 
 **Next.js with NextAuth:**
+
 ```bash
 pnpm add next-auth @auth/prisma-adapter bcryptjs
 pnpm add -D @types/bcryptjs
 ```
 
 **Express with JWT:**
+
 ```bash
 pnpm add jsonwebtoken bcryptjs
 pnpm add -D @types/jsonwebtoken @types/bcryptjs
@@ -72,6 +74,7 @@ export async function verifyPassword(
 ```
 
 **Password Requirements:**
+
 - Minimum 8 characters
 - At least one uppercase letter
 - At least one lowercase letter
@@ -81,7 +84,8 @@ export async function verifyPassword(
 ```typescript
 // src/lib/auth/validation.ts
 
-export const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/;
+export const PASSWORD_REGEX =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/;
 
 export function validatePassword(password: string): boolean {
   return PASSWORD_REGEX.test(password);
@@ -479,11 +483,11 @@ Execute SOP-201 (Authentication):
 
 ## Security Reminders
 
-| Do | Don't |
-|----|-------|
-| Hash passwords with bcrypt (12+ rounds) | Store plain text passwords |
-| Use secure session secrets | Use weak/predictable secrets |
-| Set appropriate session expiration | Use infinite sessions |
-| Validate password strength | Allow weak passwords |
-| Use HTTPS in production | Send credentials over HTTP |
-| Rate limit login attempts | Allow unlimited attempts |
+| Do                                      | Don't                        |
+| --------------------------------------- | ---------------------------- |
+| Hash passwords with bcrypt (12+ rounds) | Store plain text passwords   |
+| Use secure session secrets              | Use weak/predictable secrets |
+| Set appropriate session expiration      | Use infinite sessions        |
+| Validate password strength              | Allow weak passwords         |
+| Use HTTPS in production                 | Send credentials over HTTP   |
+| Rate limit login attempts               | Allow unlimited attempts     |

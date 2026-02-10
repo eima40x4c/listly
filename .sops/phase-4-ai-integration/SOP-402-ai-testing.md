@@ -26,13 +26,13 @@ Establish testing strategies for AI-powered features to ensure quality, consiste
 
 ### 1. Understand AI Testing Challenges
 
-| Challenge | Implication |
-|-----------|-------------|
-| **Non-determinism** | Same input can produce different outputs |
-| **Quality is subjective** | Hard to define "correct" answer |
-| **Latency variation** | Response times vary significantly |
-| **Cost per test** | API calls cost money |
-| **Model changes** | Provider updates can change behavior |
+| Challenge                 | Implication                              |
+| ------------------------- | ---------------------------------------- |
+| **Non-determinism**       | Same input can produce different outputs |
+| **Quality is subjective** | Hard to define "correct" answer          |
+| **Latency variation**     | Response times vary significantly        |
+| **Cost per test**         | API calls cost money                     |
+| **Model changes**         | Provider updates can change behavior     |
 
 ### 2. Testing Strategy Overview
 
@@ -143,7 +143,10 @@ describe('generateCompletion', () => {
 ```typescript
 // tests/ai/prompts.test.ts
 
-import { productDescriptionPrompt, classifyIntentPrompt } from '@/lib/ai/prompts';
+import {
+  productDescriptionPrompt,
+  classifyIntentPrompt,
+} from '@/lib/ai/prompts';
 
 describe('Prompt Templates', () => {
   describe('productDescriptionPrompt', () => {
@@ -371,8 +374,7 @@ export const chatResponses = {
       {
         message: {
           role: 'assistant',
-          content:
-            'The Widget Pro is our best-selling product. It features...',
+          content: 'The Widget Pro is our best-selling product. It features...',
         },
         finish_reason: 'stop',
       },
@@ -412,16 +414,12 @@ export function calculateCost(
 
   const rate = pricing[model] || pricing['gpt-4-turbo'];
   return (
-    (promptTokens / 1000) * rate.input +
-    (completionTokens / 1000) * rate.output
+    (promptTokens / 1000) * rate.input + (completionTokens / 1000) * rate.output
   );
 }
 
 // Log metrics for analysis
-export function logAIMetrics(
-  operation: string,
-  metrics: AIMetrics
-): void {
+export function logAIMetrics(operation: string, metrics: AIMetrics): void {
   console.log(
     JSON.stringify({
       type: 'ai_metrics',
@@ -439,6 +437,7 @@ export function logAIMetrics(
 ## AI Feature Test Checklist
 
 ### Unit Tests (Run on every commit)
+
 - [ ] Prompt templates construct correctly
 - [ ] Input validation works
 - [ ] Output parsing handles edge cases
@@ -447,17 +446,20 @@ export function logAIMetrics(
 - [ ] Token counting is accurate
 
 ### Integration Tests (Run weekly/on major changes)
+
 - [ ] API connection works
 - [ ] Streaming responses parse correctly
 - [ ] Structured outputs match schemas
 - [ ] Rate limiting is handled gracefully
 
 ### Evaluation Sets (Run on prompt changes)
+
 - [ ] Sentiment analysis accuracy >= 90%
 - [ ] Intent classification accuracy >= 85%
 - [ ] Product descriptions meet quality criteria
 
 ### Manual Review (Quarterly)
+
 - [ ] Sample outputs reviewed by humans
 - [ ] Edge cases checked
 - [ ] Hallucination frequency assessed
@@ -519,10 +521,10 @@ Execute SOP-402 (AI Testing):
 
 ## Testing Cost Management
 
-| Strategy | Implementation |
-|----------|----------------|
-| **Mock by default** | All unit tests use mocks |
-| **Skip integration** | Use `.skip()` or env flag |
-| **Batch evals** | Run evals in batches, not per-test |
-| **Cache responses** | Store and replay API responses |
+| Strategy               | Implementation                         |
+| ---------------------- | -------------------------------------- |
+| **Mock by default**    | All unit tests use mocks               |
+| **Skip integration**   | Use `.skip()` or env flag              |
+| **Batch evals**        | Run evals in batches, not per-test     |
+| **Cache responses**    | Store and replay API responses         |
 | **Use cheaper models** | Test with GPT-3.5, validate with GPT-4 |

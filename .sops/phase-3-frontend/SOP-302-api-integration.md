@@ -26,12 +26,12 @@ Establish consistent patterns for fetching, caching, and managing server data in
 
 ### 1. Choose Data Fetching Strategy
 
-| Strategy | Best For | Framework |
-|----------|----------|-----------|
-| **Server Components** | Static/SSR data | Next.js App Router |
-| **TanStack Query** | Complex client-side | React, Next.js |
-| **SWR** | Simple caching | React, Next.js |
-| **fetch in useEffect** | Simple cases | Any React |
+| Strategy               | Best For            | Framework          |
+| ---------------------- | ------------------- | ------------------ |
+| **Server Components**  | Static/SSR data     | Next.js App Router |
+| **TanStack Query**     | Complex client-side | React, Next.js     |
+| **SWR**                | Simple caching      | React, Next.js     |
+| **fetch in useEffect** | Simple cases        | Any React          |
 
 **Recommendation:** Use Server Components for initial load + TanStack Query for client-side mutations and refetching.
 
@@ -99,18 +99,21 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
 ```
 
 Add to layout:
+
 ```tsx
 // src/app/layout.tsx
 
 import { QueryProvider } from '@/components/providers/QueryProvider';
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body>
-        <QueryProvider>
-          {children}
-        </QueryProvider>
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );
@@ -170,7 +173,11 @@ export const api = {
     return handleResponse<T>(response);
   },
 
-  async post<T>(endpoint: string, data?: unknown, options?: RequestInit): Promise<T> {
+  async post<T>(
+    endpoint: string,
+    data?: unknown,
+    options?: RequestInit
+  ): Promise<T> {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'POST',
       headers: {
@@ -183,7 +190,11 @@ export const api = {
     return handleResponse<T>(response);
   },
 
-  async patch<T>(endpoint: string, data?: unknown, options?: RequestInit): Promise<T> {
+  async patch<T>(
+    endpoint: string,
+    data?: unknown,
+    options?: RequestInit
+  ): Promise<T> {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'PATCH',
       headers: {
@@ -359,7 +370,7 @@ export function ProductList({ category }: ProductListProps) {
   if (!data?.data.length) return <p>No products found.</p>;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-4">
       {data.data.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
@@ -392,13 +403,13 @@ export function AddToCartButton({ productId }: AddToCartButtonProps) {
     onMutate: async () => {
       // Cancel outgoing refetches
       await queryClient.cancelQueries({ queryKey: ['cart'] });
-      
+
       // Snapshot previous value
       const previousCart = queryClient.getQueryData(['cart']);
-      
+
       // Optimistically update
       // queryClient.setQueryData(['cart'], (old) => {...});
-      
+
       return { previousCart };
     },
     onError: (err, _, context) => {
@@ -460,13 +471,18 @@ export const getProduct = cache(async (id: string) => {
 ```
 
 Usage in Server Component:
+
 ```tsx
 // src/app/products/[id]/page.tsx
 
 import { getProduct } from '@/lib/api/server';
 import { notFound } from 'next/navigation';
 
-export default async function ProductPage({ params }: { params: { id: string } }) {
+export default async function ProductPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const product = await getProduct(params.id);
 
   if (!product) notFound();
@@ -486,14 +502,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
 // src/components/ui/LoadingSkeleton.tsx
 
 export function Skeleton({ className }: { className?: string }) {
-  return (
-    <div
-      className={cn(
-        'animate-pulse rounded-md bg-muted',
-        className
-      )}
-    />
-  );
+  return <div className={cn('bg-muted animate-pulse rounded-md', className)} />;
 }
 
 // Usage
@@ -528,8 +537,8 @@ export function ErrorMessage({ error, retry }: ErrorMessageProps) {
 
   return (
     <div className="flex flex-col items-center justify-center p-8 text-center">
-      <AlertCircle className="h-12 w-12 text-destructive mb-4" />
-      <h3 className="font-semibold mb-2">Error</h3>
+      <AlertCircle className="text-destructive mb-4 h-12 w-12" />
+      <h3 className="mb-2 font-semibold">Error</h3>
       <p className="text-muted-foreground mb-4">{message}</p>
       {retry && (
         <Button onClick={retry} variant="outline">
@@ -594,4 +603,4 @@ Execute SOP-302 (API Integration):
 - **SOP-200:** API Design (endpoint contracts)
 - **SOP-300:** Component Architecture (component patterns)
 - **SOP-203:** Error Handling (API error format)
-- **SOP-304:** Progressive Web App (offline caching) *(optional)*
+- **SOP-304:** Progressive Web App (offline caching) _(optional)_

@@ -97,7 +97,7 @@ const config: Config = {
           '0%': { transform: 'translateY(10px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
-        'spin': {
+        spin: {
           '0%': { transform: 'rotate(0deg)' },
           '100%': { transform: 'rotate(360deg)' },
         },
@@ -105,14 +105,11 @@ const config: Config = {
       animation: {
         'fade-in': 'fade-in 0.2s ease-out',
         'slide-in': 'slide-in 0.3s ease-out',
-        'spin': 'spin 1s linear infinite',
+        spin: 'spin 1s linear infinite',
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-  ],
+  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
 };
 
 export default config;
@@ -197,6 +194,7 @@ export function cn(...inputs: ClassValue[]) {
 ```
 
 Install dependencies:
+
 ```bash
 pnpm add clsx tailwind-merge
 ```
@@ -218,9 +216,12 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
-        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-        outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+        secondary:
+          'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        destructive:
+          'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+        outline:
+          'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
       },
@@ -240,6 +241,7 @@ export const buttonVariants = cva(
 ```
 
 Install cva:
+
 ```bash
 pnpm add class-variance-authority
 ```
@@ -248,16 +250,17 @@ pnpm add class-variance-authority
 
 **Breakpoints (Tailwind defaults):**
 
-| Prefix | Min Width | Device |
-|--------|-----------|--------|
-| (none) | 0px | Mobile (default) |
-| `sm:` | 640px | Large mobile |
-| `md:` | 768px | Tablet |
-| `lg:` | 1024px | Laptop |
-| `xl:` | 1280px | Desktop |
-| `2xl:` | 1536px | Large desktop |
+| Prefix | Min Width | Device           |
+| ------ | --------- | ---------------- |
+| (none) | 0px       | Mobile (default) |
+| `sm:`  | 640px     | Large mobile     |
+| `md:`  | 768px     | Tablet           |
+| `lg:`  | 1024px    | Laptop           |
+| `xl:`  | 1280px    | Desktop          |
+| `2xl:` | 1536px    | Large desktop    |
 
 **Mobile-first approach:**
+
 ```tsx
 // ✅ Good: Mobile-first
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -267,6 +270,7 @@ pnpm add class-variance-authority
 ```
 
 **Responsive container:**
+
 ```tsx
 // src/components/layout/Container/Container.tsx
 
@@ -277,10 +281,9 @@ interface ContainerProps {
 
 export function Container({ children, className }: ContainerProps) {
   return (
-    <div className={cn(
-      'mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8',
-      className
-    )}>
+    <div
+      className={cn('mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8', className)}
+    >
       {children}
     </div>
   );
@@ -291,15 +294,15 @@ export function Container({ children, className }: ContainerProps) {
 
 Use consistent spacing:
 
-| Class | Size | Usage |
-|-------|------|-------|
-| `space-y-1`, `gap-1` | 0.25rem (4px) | Tight grouping |
-| `space-y-2`, `gap-2` | 0.5rem (8px) | Related items |
-| `space-y-4`, `gap-4` | 1rem (16px) | Section spacing |
+| Class                | Size          | Usage             |
+| -------------------- | ------------- | ----------------- |
+| `space-y-1`, `gap-1` | 0.25rem (4px) | Tight grouping    |
+| `space-y-2`, `gap-2` | 0.5rem (8px)  | Related items     |
+| `space-y-4`, `gap-4` | 1rem (16px)   | Section spacing   |
 | `space-y-6`, `gap-6` | 1.5rem (24px) | Component spacing |
-| `space-y-8`, `gap-8` | 2rem (32px) | Section breaks |
-| `py-12`, `my-12` | 3rem (48px) | Major sections |
-| `py-16`, `my-16` | 4rem (64px) | Page sections |
+| `space-y-8`, `gap-8` | 2rem (32px)   | Section breaks    |
+| `py-12`, `my-12`     | 3rem (48px)   | Major sections    |
+| `py-16`, `my-16`     | 4rem (64px)   | Page sections     |
 
 ### 8. Typography Standards
 
@@ -308,17 +311,18 @@ Use consistent spacing:
 
 @layer components {
   .prose-custom {
-    @apply prose prose-slate max-w-none
-      prose-headings:font-bold
-      prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-      prose-img:rounded-lg
-      prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded
-      dark:prose-invert;
+    @apply prose prose-slate prose-headings:font-bold
+      prose-a:text-primary
+      prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg
+      prose-code:bg-muted
+      prose-code:px-1 prose-code:py-0.5 prose-code:rounded dark:prose-invert
+      max-w-none;
   }
 }
 ```
 
 **Text sizes:**
+
 ```tsx
 <h1 className="text-4xl font-bold tracking-tight">Page Title</h1>
 <h2 className="text-3xl font-semibold">Section Title</h2>
@@ -347,7 +351,11 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
 
 import { ThemeProvider } from '@/components/ThemeProvider';
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
@@ -392,30 +400,33 @@ export function ThemeToggle() {
 ```
 
 Install next-themes:
+
 ```bash
 pnpm add next-themes
 ```
 
 ### 10. Accessibility in Styling
 
-| Requirement | Implementation |
-|-------------|----------------|
-| **Focus visible** | `focus-visible:ring-2 focus-visible:ring-ring` |
-| **Color contrast** | Use foreground/background pairs |
-| **Screen reader** | `sr-only` for hidden labels |
-| **Reduced motion** | `motion-reduce:transition-none` |
-| **Touch targets** | Minimum 44x44px for buttons |
+| Requirement        | Implementation                                 |
+| ------------------ | ---------------------------------------------- |
+| **Focus visible**  | `focus-visible:ring-2 focus-visible:ring-ring` |
+| **Color contrast** | Use foreground/background pairs                |
+| **Screen reader**  | `sr-only` for hidden labels                    |
+| **Reduced motion** | `motion-reduce:transition-none`                |
+| **Touch targets**  | Minimum 44x44px for buttons                    |
 
 ```tsx
 // Accessible button example
-<button className="
-  h-11 px-4
+<button
+  className="
+  focus-visible:ring-ring h-11
+  px-4
   focus-visible:outline-none
   focus-visible:ring-2
-  focus-visible:ring-ring
   focus-visible:ring-offset-2
   motion-reduce:transition-none
-">
+"
+>
   Click me
 </button>
 ```
@@ -473,4 +484,4 @@ Execute SOP-301 (Styling Standards):
 - **SOP-300:** Component Architecture (component structure)
 - **SOP-006:** Code Style Standards (formatting)
 - **SOP-303:** Form Handling (form styling)
-- **SOP-304:** Progressive Web App (mobile-first styling) *(optional)*
+- **SOP-304:** Progressive Web App (mobile-first styling) _(optional)_

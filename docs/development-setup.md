@@ -166,12 +166,12 @@ Access tools at:
 
 ### Development
 
-| Script          | Description                              |
-| --------------- | ---------------------------------------- |
-| `pnpm dev`      | Start development server with hot reload |
-| `pnpm build`    | Build production bundle                  |
-| `pnpm start`    | Start production server (after build)    |
-| `pnpm dev:setup`| Run automated environment setup          |
+| Script           | Description                              |
+| ---------------- | ---------------------------------------- |
+| `pnpm dev`       | Start development server with hot reload |
+| `pnpm build`     | Build production bundle                  |
+| `pnpm start`     | Start production server (after build)    |
+| `pnpm dev:setup` | Run automated environment setup          |
 
 ### Code Quality
 

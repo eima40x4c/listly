@@ -28,30 +28,33 @@ Establish a systematic approach for collecting, documenting, and validating proj
 
 Create a stakeholder map:
 
-| Role | Name | Contact | Involvement Level |
-|------|------|---------|-------------------|
-| Project Sponsor | | | Decision maker |
-| Product Owner | | | Requirements authority |
-| End Users | | | Feedback & validation |
-| Technical Lead | | | Feasibility review |
-| Other | | | As needed |
+| Role            | Name | Contact | Involvement Level      |
+| --------------- | ---- | ------- | ---------------------- |
+| Project Sponsor |      |         | Decision maker         |
+| Product Owner   |      |         | Requirements authority |
+| End Users       |      |         | Feedback & validation  |
+| Technical Lead  |      |         | Feasibility review     |
+| Other           |      |         | As needed              |
 
 ### 2. Conduct Discovery Sessions
 
 For each stakeholder group, gather:
 
 **Business Context:**
+
 - What problem are we solving?
 - Who are the target users?
 - What does success look like?
 - What are the constraints (budget, timeline, technology)?
 
 **Functional Requirements:**
+
 - What must the system DO?
 - What are the core features?
 - What are nice-to-have features?
 
 **Non-Functional Requirements:**
+
 - Performance expectations (response time, concurrent users)
 - Security requirements (authentication, data protection)
 - Scalability needs (expected growth)
@@ -68,6 +71,7 @@ So that [benefit/reason].
 ```
 
 **Example:**
+
 ```
 As a team member,
 I want to create tasks and assign them to colleagues,
@@ -85,6 +89,7 @@ Then [expected result].
 ```
 
 **Example:**
+
 ```
 Given I am logged in as a team member,
 When I click "Create Task" and fill in the required fields,
@@ -95,12 +100,12 @@ Then the task appears in the project's task list and the assignee is notified.
 
 Use MoSCoW prioritization:
 
-| Priority | Meaning | Description |
-|----------|---------|-------------|
-| **Must** | Essential | Project fails without this |
-| **Should** | Important | High value but not critical |
-| **Could** | Desirable | Nice to have if time permits |
-| **Won't** | Excluded | Out of scope for this release |
+| Priority   | Meaning   | Description                   |
+| ---------- | --------- | ----------------------------- |
+| **Must**   | Essential | Project fails without this    |
+| **Should** | Important | High value but not critical   |
+| **Could**  | Desirable | Nice to have if time permits  |
+| **Won't**  | Excluded  | Out of scope for this release |
 
 ### 6. Define MVP Scope
 
@@ -110,14 +115,17 @@ Document the Minimum Viable Product:
 ## MVP Definition
 
 ### Included (Must Have)
+
 - Feature 1: [description]
 - Feature 2: [description]
 
 ### Deferred (Post-MVP)
+
 - Feature 3: [description] → Phase 2
 - Feature 4: [description] → Future consideration
 
 ### Out of Scope
+
 - Feature 5: [reason for exclusion]
 ```
 
@@ -129,48 +137,59 @@ Compile all gathered information into `/docs/requirements.md`:
 # Project Requirements: {Project Name}
 
 ## Overview
+
 {Brief project description}
 
 ## Stakeholders
+
 {Stakeholder table from Step 1}
 
 ## Problem Statement
+
 {What problem are we solving and for whom}
 
 ## Goals & Success Metrics
+
 - Goal 1: {measurable outcome}
 - Goal 2: {measurable outcome}
 
 ## User Stories
 
 ### Epic 1: {Name}
+
 - US-001: As a..., I want..., So that...
   - AC: Given..., When..., Then...
 - US-002: ...
 
 ### Epic 2: {Name}
+
 - US-003: ...
 
 ## Non-Functional Requirements
+
 - Performance: {expectations}
 - Security: {requirements}
 - Scalability: {needs}
 
 ## MVP Scope
+
 {From Step 6}
 
 ## Constraints & Assumptions
+
 - Constraint: {description}
 - Assumption: {description}
 
 ## Open Questions
+
 - [ ] {Question needing resolution}
 
 ## Approval
-| Role | Name | Date | Signature |
-|------|------|------|-----------|
-| Product Owner | | | |
-| Technical Lead | | | |
+
+| Role           | Name | Date | Signature |
+| -------------- | ---- | ---- | --------- |
+| Product Owner  |      |      |           |
+| Technical Lead |      |      |           |
 ```
 
 ### 8. Validate Requirements
@@ -231,10 +250,10 @@ Ask me clarifying questions to fill in the details.
 
 ## Tips for Effective Requirements Gathering
 
-| Do | Don't |
-|----|-------|
-| Ask "why" to understand motivation | Assume you know what users need |
-| Document constraints early | Promise features without validation |
-| Get written sign-off | Rely on verbal agreements |
-| Keep requirements testable | Write vague, unmeasurable goals |
-| Revisit and refine iteratively | Treat requirements as frozen |
+| Do                                 | Don't                               |
+| ---------------------------------- | ----------------------------------- |
+| Ask "why" to understand motivation | Assume you know what users need     |
+| Document constraints early         | Promise features without validation |
+| Get written sign-off               | Rely on verbal agreements           |
+| Keep requirements testable         | Write vague, unmeasurable goals     |
+| Revisit and refine iteratively     | Treat requirements as frozen        |

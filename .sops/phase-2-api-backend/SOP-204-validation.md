@@ -99,7 +99,9 @@ export const paginationSchema = z.object({
 export type PaginationParams = z.infer<typeof paginationSchema>;
 
 // Helper to extract pagination from URL search params
-export function parsePagination(searchParams: URLSearchParams): PaginationParams {
+export function parsePagination(
+  searchParams: URLSearchParams
+): PaginationParams {
   return paginationSchema.parse({
     page: searchParams.get('page') ?? undefined,
     limit: searchParams.get('limit') ?? undefined,
@@ -491,10 +493,12 @@ export const dateRangeSchema = z
 // File upload validation
 export const fileSchema = z.object({
   name: z.string(),
-  type: z.string().refine(
-    (type) => ['image/jpeg', 'image/png', 'image/webp'].includes(type),
-    { message: 'Only JPEG, PNG, and WebP images are allowed' }
-  ),
+  type: z
+    .string()
+    .refine(
+      (type) => ['image/jpeg', 'image/png', 'image/webp'].includes(type),
+      { message: 'Only JPEG, PNG, and WebP images are allowed' }
+    ),
   size: z.number().max(5 * 1024 * 1024, 'File must be less than 5MB'),
 });
 ```
@@ -570,10 +574,10 @@ Execute SOP-204 (Validation):
 
 ## Best Practices
 
-| Do | Don't |
-|----|-------|
-| Validate early at API boundary | Trust client-side validation |
-| Use type coercion for query params | Assume correct types |
-| Sanitize strings (trim, lowercase) | Allow leading/trailing whitespace |
-| Provide specific error messages | Return generic "invalid" messages |
-| Infer TypeScript types from schemas | Duplicate type definitions |
+| Do                                  | Don't                             |
+| ----------------------------------- | --------------------------------- |
+| Validate early at API boundary      | Trust client-side validation      |
+| Use type coercion for query params  | Assume correct types              |
+| Sanitize strings (trim, lowercase)  | Allow leading/trailing whitespace |
+| Provide specific error messages     | Return generic "invalid" messages |
+| Infer TypeScript types from schemas | Duplicate type definitions        |

@@ -26,18 +26,19 @@ Establish monitoring and alerting infrastructure to detect issues early, underst
 
 ### 1. Monitoring Stack Overview
 
-| Component | Purpose | Tool Options |
-|-----------|---------|--------------|
-| **Error Tracking** | Catch and aggregate errors | Sentry, Bugsnag |
-| **APM** | Performance monitoring | Vercel Analytics, Datadog |
-| **Logging** | Centralized logs | Axiom, Logtail, CloudWatch |
-| **Uptime** | Availability checks | Better Uptime, Checkly |
-| **Metrics** | Custom metrics | Prometheus, Datadog |
-| **Alerting** | Notifications | PagerDuty, Slack, Email |
+| Component          | Purpose                    | Tool Options               |
+| ------------------ | -------------------------- | -------------------------- |
+| **Error Tracking** | Catch and aggregate errors | Sentry, Bugsnag            |
+| **APM**            | Performance monitoring     | Vercel Analytics, Datadog  |
+| **Logging**        | Centralized logs           | Axiom, Logtail, CloudWatch |
+| **Uptime**         | Availability checks        | Better Uptime, Checkly     |
+| **Metrics**        | Custom metrics             | Prometheus, Datadog        |
+| **Alerting**       | Notifications              | PagerDuty, Slack, Email    |
 
 ### 2. Error Tracking with Sentry
 
 Install Sentry:
+
 ```bash
 pnpm add @sentry/nextjs
 npx @sentry/wizard@latest -i nextjs
@@ -52,17 +53,17 @@ import * as Sentry from '@sentry/nextjs';
 
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
-  
+
   // Performance monitoring
   tracesSampleRate: 0.1, // 10% of transactions
-  
+
   // Session replay
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
-  
+
   // Environment
   environment: process.env.NODE_ENV,
-  
+
   // Filter errors
   beforeSend(event) {
     // Don't send errors from local development
@@ -71,7 +72,7 @@ Sentry.init({
     }
     return event;
   },
-  
+
   // Ignore common non-actionable errors
   ignoreErrors: [
     'ResizeObserver loop limit exceeded',
@@ -128,7 +129,7 @@ export function captureError(error: Error, context?: ErrorContext): void {
     if (context?.metadata) {
       scope.setContext('metadata', context.metadata);
     }
-    
+
     Sentry.captureException(error);
   });
 }
@@ -179,7 +180,11 @@ class Logger {
     this.environment = process.env.NODE_ENV || 'development';
   }
 
-  private log(level: LogLevel, message: string, meta?: Record<string, unknown>) {
+  private log(
+    level: LogLevel,
+    message: string,
+    meta?: Record<string, unknown>
+  ) {
     const entry: LogEntry = {
       level,
       message,
@@ -194,7 +199,10 @@ class Logger {
       console[level](JSON.stringify(entry));
     } else {
       // In development, use readable format
-      console[level](`[${entry.timestamp}] ${level.toUpperCase()}: ${message}`, meta);
+      console[level](
+        `[${entry.timestamp}] ${level.toUpperCase()}: ${message}`,
+        meta
+      );
     }
   }
 
@@ -280,7 +288,7 @@ export function measureAsync<T>(
       return await fn();
     } finally {
       const duration = performance.now() - start;
-      
+
       // Log slow operations
       if (duration > 1000) {
         console.warn(
@@ -297,9 +305,7 @@ export function measureAsync<T>(
 }
 
 // Usage
-const users = await measureAsync('fetchUsers', () => 
-  prisma.user.findMany()
-);
+const users = await measureAsync('fetchUsers', () => prisma.user.findMany());
 ```
 
 ### 7. Health Check Endpoint
@@ -463,30 +469,34 @@ Create `/docs/monitoring/alerts.md`:
 
 ## Alert Channels
 
-| Channel | Use Case |
-|---------|----------|
-| Slack #alerts | All alerts |
-| Email | Critical only |
-| PagerDuty | P1 incidents |
+| Channel       | Use Case      |
+| ------------- | ------------- |
+| Slack #alerts | All alerts    |
+| Email         | Critical only |
+| PagerDuty     | P1 incidents  |
 
 ## Alert Rules
 
 ### Error Rate
+
 - **Condition:** Error rate > 5% over 5 minutes
 - **Severity:** Critical
 - **Action:** Page on-call
 
 ### Response Time
+
 - **Condition:** p95 latency > 3s over 5 minutes
 - **Severity:** Warning
 - **Action:** Slack notification
 
 ### Uptime
+
 - **Condition:** Health check fails 3x consecutive
 - **Severity:** Critical
 - **Action:** Page on-call + status page update
 
 ### Database
+
 - **Condition:** Connection pool > 80%
 - **Severity:** Warning
 - **Action:** Slack notification
@@ -506,23 +516,27 @@ Create `/docs/monitoring/alerts.md`:
 ## Key Metrics to Display
 
 ### Overview
+
 - [ ] Request rate (requests/minute)
 - [ ] Error rate (%)
 - [ ] Average response time
 - [ ] Active users
 
 ### Performance
+
 - [ ] p50, p95, p99 latency
 - [ ] Slow queries
 - [ ] Cache hit rate
 
 ### Infrastructure
+
 - [ ] CPU usage
 - [ ] Memory usage
 - [ ] Database connections
 - [ ] Disk usage
 
 ### Business
+
 - [ ] Sign-ups
 - [ ] Conversions
 - [ ] Revenue (if applicable)
@@ -604,9 +618,9 @@ Execute SOP-602 (Monitoring):
 
 ## Monitoring Maturity Levels
 
-| Level | Capabilities |
-|-------|--------------|
-| **Basic** | Error tracking, uptime monitoring |
-| **Standard** | + Logging, health checks, basic alerts |
-| **Advanced** | + APM, custom metrics, dashboards |
-| **Expert** | + Distributed tracing, SLOs, automation |
+| Level        | Capabilities                            |
+| ------------ | --------------------------------------- |
+| **Basic**    | Error tracking, uptime monitoring       |
+| **Standard** | + Logging, health checks, basic alerts  |
+| **Advanced** | + APM, custom metrics, dashboards       |
+| **Expert**   | + Distributed tracing, SLOs, automation |

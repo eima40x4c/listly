@@ -41,6 +41,7 @@ git branch -M main
 Based on tech stack from SOP-001, create appropriate `.gitignore`:
 
 **For Node.js/TypeScript projects:**
+
 ```gitignore
 # Dependencies
 node_modules/
@@ -83,6 +84,7 @@ coverage/
 ```
 
 **For Python projects:**
+
 ```gitignore
 # Virtual environments
 venv/
@@ -121,6 +123,7 @@ htmlcov/
 Choose and document a branching model:
 
 **Recommended: GitHub Flow (Simple)**
+
 ```
 main (production-ready)
   └── feature/xxx (short-lived feature branches)
@@ -129,6 +132,7 @@ main (production-ready)
 ```
 
 **Alternative: Git Flow (Complex projects)**
+
 ```
 main (production)
   └── develop (integration)
@@ -163,6 +167,7 @@ Use Conventional Commits format:
 | `chore` | Maintenance tasks |
 
 **Examples:**
+
 ```
 feat(auth): add Google OAuth login
 fix(api): handle null user in profile endpoint
@@ -240,7 +245,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 ## License
 
 {License type} - see [LICENSE](LICENSE) for details.
-```
+````
 
 ### 6. Create CONTRIBUTING.md
 
@@ -267,11 +272,12 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 ## Commit Messages
 
 We use [Conventional Commits](https://www.conventionalcommits.org/):
-
 ```
+
 feat(scope): add new feature
 fix(scope): fix bug
 docs(scope): update documentation
+
 ```
 
 ## Pull Request Process
@@ -290,6 +296,8 @@ docs(scope): update documentation
 ## Questions?
 
 Open an issue for questions or discussions.
+```
+
 ````
 
 ### 7. Create Pull Request Template
@@ -331,6 +339,7 @@ Create `.github/pull_request_template.md`:
 After pushing to GitHub/GitLab, configure:
 
 **Recommended branch protection for `main`:**
+
 - [ ] Require pull request reviews before merging
 - [ ] Require status checks to pass (when CI is set up)
 - [ ] Require branches to be up to date
@@ -397,3 +406,4 @@ The project is: {brief description}
 - **SOP-001:** Tech Stack Selection (informs `.gitignore`)
 - **SOP-003:** Project Structure (folder organization)
 - **SOP-006:** Code Style Standards (linting rules referenced in CONTRIBUTING)
+````

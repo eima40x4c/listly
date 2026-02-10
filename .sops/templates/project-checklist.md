@@ -157,9 +157,24 @@
 
 ### Validation (SOP-204)
 
-- [ ] Input validation library selected
-- [ ] Request schemas defined
-- [ ] Sanitization for user inputs
+- [x] Input validation library selected: **Zod**
+- [x] Request schemas defined (9 resource schemas + common + pagination)
+- [x] Sanitization for user inputs (trim, lowercase, coercion)
+- [x] Common field schemas created (email, password, price, etc.)
+- [x] Resource-specific schemas:
+  - [x] User (register, login, update, preferences)
+  - [x] Shopping List (create, update, query, duplicate)
+  - [x] List Item (create, update, bulk operations, reorder)
+  - [x] Collaborator (add, update role, respond to invitation)
+  - [x] Category (create, update, query, reorder)
+  - [x] Store (create, update, query, store categories)
+  - [x] Pantry Item (create, update, query, expiration tracking)
+  - [x] Recipe (create, update, query, ingredients)
+  - [x] Meal Plan (create, update, query, generate shopping lists)
+- [x] Pagination schema with helpers
+- [x] Validation utilities (validateBody, validateQuery, validateParams)
+- [x] Type-safe validation with automatic type inference
+- [x] Consistent error response format
 
 ---
 

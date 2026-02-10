@@ -26,23 +26,23 @@ Implement monitoring and controls for AI API usage to prevent unexpected costs, 
 
 ### 1. Understand Cost Drivers
 
-| Factor | Impact |
-|--------|--------|
-| **Model choice** | GPT-4 costs 20x more than GPT-3.5 |
-| **Token count** | Input + output tokens both cost |
-| **Request volume** | More users = more costs |
-| **Prompt length** | System prompts add up |
-| **Response length** | max_tokens affects costs |
+| Factor              | Impact                            |
+| ------------------- | --------------------------------- |
+| **Model choice**    | GPT-4 costs 20x more than GPT-3.5 |
+| **Token count**     | Input + output tokens both cost   |
+| **Request volume**  | More users = more costs           |
+| **Prompt length**   | System prompts add up             |
+| **Response length** | max_tokens affects costs          |
 
 **Typical pricing (as of 2024):**
 
-| Model | Input (per 1K) | Output (per 1K) |
-|-------|---------------|-----------------|
-| GPT-4 Turbo | $0.01 | $0.03 |
-| GPT-3.5 Turbo | $0.0005 | $0.0015 |
-| Claude 3 Opus | $0.015 | $0.075 |
-| Claude 3 Sonnet | $0.003 | $0.015 |
-| Claude 3 Haiku | $0.00025 | $0.00125 |
+| Model           | Input (per 1K) | Output (per 1K) |
+| --------------- | -------------- | --------------- |
+| GPT-4 Turbo     | $0.01          | $0.03           |
+| GPT-3.5 Turbo   | $0.0005        | $0.0015         |
+| Claude 3 Opus   | $0.015         | $0.075          |
+| Claude 3 Sonnet | $0.003         | $0.015          |
+| Claude 3 Haiku  | $0.00025       | $0.00125        |
 
 ### 2. Create Usage Tracking
 
@@ -76,9 +76,7 @@ export async function recordUsage(record: UsageRecord): Promise<void> {
   });
 }
 
-export async function getDailyUsage(
-  date: Date = new Date()
-): Promise<{
+export async function getDailyUsage(date: Date = new Date()): Promise<{
   totalCost: number;
   totalTokens: number;
   requestCount: number;
@@ -106,7 +104,8 @@ export async function getDailyUsage(
 
   return {
     totalCost: result._sum.cost || 0,
-    totalTokens: (result._sum.promptTokens || 0) + (result._sum.completionTokens || 0),
+    totalTokens:
+      (result._sum.promptTokens || 0) + (result._sum.completionTokens || 0),
     requestCount: result._count,
   };
 }
@@ -195,7 +194,9 @@ export async function trackedCompletion({
   const response = await openai.chat.completions.create({
     model: DEFAULT_MODEL,
     messages: [
-      ...(systemPrompt ? [{ role: 'system' as const, content: systemPrompt }] : []),
+      ...(systemPrompt
+        ? [{ role: 'system' as const, content: systemPrompt }]
+        : []),
       { role: 'user' as const, content: prompt },
     ],
     max_tokens: maxTokens,
@@ -276,7 +277,10 @@ export async function checkBudget(): Promise<{
   if (monthly.totalCost >= config.monthlyLimit) {
     allowed = false;
     warnings.push('Monthly AI budget exceeded');
-  } else if (monthly.totalCost >= config.monthlyLimit * config.warningThreshold) {
+  } else if (
+    monthly.totalCost >=
+    config.monthlyLimit * config.warningThreshold
+  ) {
     warnings.push(
       `Monthly AI usage at ${Math.round((monthly.totalCost / config.monthlyLimit) * 100)}%`
     );
@@ -455,7 +459,9 @@ export async function checkAndAlert(): Promise<void> {
 // src/lib/ai/optimization.ts
 
 // 1. Model tiering - use cheaper models for simple tasks
-export function selectModel(complexity: 'simple' | 'medium' | 'complex'): string {
+export function selectModel(
+  complexity: 'simple' | 'medium' | 'complex'
+): string {
   switch (complexity) {
     case 'simple':
       return 'gpt-3.5-turbo'; // $0.002/1K tokens
@@ -538,22 +544,22 @@ Admin dashboard: `/admin/ai-usage`
 
 ## Metrics Tracked
 
-| Metric | Description |
-|--------|-------------|
-| Daily cost | Total API costs today |
-| Monthly cost | Total API costs this month |
-| Cost breakdown | Costs by operation |
-| Request count | Number of API calls |
-| Token usage | Prompt + completion tokens |
-| Latency | Response time |
+| Metric         | Description                |
+| -------------- | -------------------------- |
+| Daily cost     | Total API costs today      |
+| Monthly cost   | Total API costs this month |
+| Cost breakdown | Costs by operation         |
+| Request count  | Number of API calls        |
+| Token usage    | Prompt + completion tokens |
+| Latency        | Response time              |
 
 ## Budget Limits
 
-| Limit | Value | Action when exceeded |
-|-------|-------|---------------------|
-| Daily | $50 | Block new requests |
-| Monthly | $1,000 | Block new requests |
-| Warning | 80% | Send Slack alert |
+| Limit   | Value  | Action when exceeded |
+| ------- | ------ | -------------------- |
+| Daily   | $50    | Block new requests   |
+| Monthly | $1,000 | Block new requests   |
+| Warning | 80%    | Send Slack alert     |
 
 ## Optimization Checklist
 
@@ -567,12 +573,14 @@ Admin dashboard: `/admin/ai-usage`
 ## Troubleshooting
 
 **Unexpected cost spike:**
+
 1. Check `/admin/ai-usage` for breakdown
 2. Look for unusual operations
 3. Review recent deployments
 4. Check for potential abuse
 
 **Budget exceeded:**
+
 1. Wait for daily/monthly reset
 2. Increase limits if justified
 3. Contact admin for override

@@ -24,9 +24,9 @@
 
 <!-- List the main changes in this PR -->
 
-- 
-- 
-- 
+-
+-
+-
 
 ## Testing
 
@@ -42,9 +42,9 @@
 
 <!-- If manual testing was done, provide steps to reproduce -->
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## Screenshots/Recordings
 

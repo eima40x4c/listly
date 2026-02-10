@@ -26,12 +26,12 @@ Create realistic, consistent seed data for local development and testing. Good s
 
 ### 1. Identify Seed Data Needs
 
-| Data Type | Purpose | Examples |
-|-----------|---------|----------|
+| Data Type          | Purpose              | Examples                     |
+| ------------------ | -------------------- | ---------------------------- |
 | **Reference data** | Static lookup values | Categories, countries, roles |
-| **Test users** | Development accounts | Admin user, test customer |
-| **Sample content** | Realistic examples | Products, posts, orders |
-| **Edge cases** | Testing boundaries | Empty states, max values |
+| **Test users**     | Development accounts | Admin user, test customer    |
+| **Sample content** | Realistic examples   | Products, posts, orders      |
+| **Edge cases**     | Testing boundaries   | Empty states, max values     |
 
 ### 2. Create Seed Script Structure
 
@@ -148,9 +148,7 @@ async function seedUsers() {
 
 async function seedProducts() {
   const categories = await prisma.category.findMany();
-  const categoryMap = Object.fromEntries(
-    categories.map((c) => [c.slug, c.id])
-  );
+  const categoryMap = Object.fromEntries(categories.map((c) => [c.slug, c.id]));
 
   const products = [
     // Electronics
@@ -251,7 +249,7 @@ import { faker } from '@faker-js/faker';
 
 async function seedManyProducts(count: number = 50) {
   const categories = await prisma.category.findMany();
-  
+
   const products = Array.from({ length: count }, () => ({
     name: faker.commerce.productName(),
     description: faker.commerce.productDescription(),
@@ -349,7 +347,7 @@ export const SEED_PASSWORD = 'password123';
 
 Create `/docs/database/seed-data.md`:
 
-```markdown
+````markdown
 # Seed Data
 
 ## Overview
@@ -365,31 +363,34 @@ pnpm db:seed
 # Reset and re-seed
 pnpm db:reset
 ```
+````
 
 ## Test Accounts
 
-| Email | Password | Role | Purpose |
-|-------|----------|------|---------|
-| admin@example.com | password123 | ADMIN | Admin testing |
-| user@example.com | password123 | USER | Standard user testing |
-| demo@example.com | password123 | USER | Demo/presentation |
+| Email             | Password    | Role  | Purpose               |
+| ----------------- | ----------- | ----- | --------------------- |
+| admin@example.com | password123 | ADMIN | Admin testing         |
+| user@example.com  | password123 | USER  | Standard user testing |
+| demo@example.com  | password123 | USER  | Demo/presentation     |
 
 ## Data Quantities
 
-| Entity | Count | Notes |
-|--------|-------|-------|
-| Users | 3+ | Test accounts + random |
-| Categories | 5 | Fixed reference data |
-| Products | 50+ | Mix of fixed and random |
-| Orders | 2+ | Sample completed and pending |
+| Entity     | Count | Notes                        |
+| ---------- | ----- | ---------------------------- |
+| Users      | 3+    | Test accounts + random       |
+| Categories | 5     | Fixed reference data         |
+| Products   | 50+   | Mix of fixed and random      |
+| Orders     | 2+    | Sample completed and pending |
 
 ## Customizing Seed
 
 Edit `prisma/seed.ts` to:
+
 - Add more reference data
 - Change product quantities
 - Add edge case data
-```
+
+````
 
 ### 10. Edge Case Seeds
 
@@ -435,7 +436,7 @@ async function seedEdgeCases() {
 
   console.log('🔧 Created edge case data');
 }
-```
+````
 
 ---
 

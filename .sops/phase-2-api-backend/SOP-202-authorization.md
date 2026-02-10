@@ -26,12 +26,12 @@ Implement access control to ensure users can only access resources and perform a
 
 ### 1. Identify Authorization Requirements
 
-| Access Pattern | Example |
-|----------------|---------|
-| **Role-based** | Only admins can delete products |
-| **Ownership** | Users can only edit their own orders |
-| **Relationship** | Team members can view team resources |
-| **Conditional** | Users can edit orders only if status is "pending" |
+| Access Pattern   | Example                                           |
+| ---------------- | ------------------------------------------------- |
+| **Role-based**   | Only admins can delete products                   |
+| **Ownership**    | Users can only edit their own orders              |
+| **Relationship** | Team members can view team resources              |
+| **Conditional**  | Users can edit orders only if status is "pending" |
 
 ### 2. Define Roles and Permissions
 
@@ -42,43 +42,46 @@ Create `/docs/auth/permissions.md`:
 
 ## Roles
 
-| Role | Description |
-|------|-------------|
-| USER | Standard authenticated user |
-| ADMIN | Full system access |
+| Role  | Description                 |
+| ----- | --------------------------- |
+| USER  | Standard authenticated user |
+| ADMIN | Full system access          |
 
 ## Resource Permissions
 
 ### Users Resource
-| Action | USER | ADMIN |
-|--------|------|-------|
-| List all | ❌ | ✅ |
-| View own | ✅ | ✅ |
-| View any | ❌ | ✅ |
-| Update own | ✅ | ✅ |
-| Update any | ❌ | ✅ |
-| Delete own | ❌ | ✅ |
-| Delete any | ❌ | ✅ |
+
+| Action     | USER | ADMIN |
+| ---------- | ---- | ----- |
+| List all   | ❌   | ✅    |
+| View own   | ✅   | ✅    |
+| View any   | ❌   | ✅    |
+| Update own | ✅   | ✅    |
+| Update any | ❌   | ✅    |
+| Delete own | ❌   | ✅    |
+| Delete any | ❌   | ✅    |
 
 ### Products Resource
+
 | Action | USER | ADMIN |
-|--------|------|-------|
-| List | ✅ | ✅ |
-| View | ✅ | ✅ |
-| Create | ❌ | ✅ |
-| Update | ❌ | ✅ |
-| Delete | ❌ | ✅ |
+| ------ | ---- | ----- |
+| List   | ✅   | ✅    |
+| View   | ✅   | ✅    |
+| Create | ❌   | ✅    |
+| Update | ❌   | ✅    |
+| Delete | ❌   | ✅    |
 
 ### Orders Resource
-| Action | USER | ADMIN |
-|--------|------|-------|
-| List own | ✅ | ✅ |
-| List all | ❌ | ✅ |
-| View own | ✅ | ✅ |
-| View any | ❌ | ✅ |
-| Create | ✅ | ✅ |
-| Cancel own (if pending) | ✅ | ✅ |
-| Update status | ❌ | ✅ |
+
+| Action                  | USER | ADMIN |
+| ----------------------- | ---- | ----- |
+| List own                | ✅   | ✅    |
+| List all                | ❌   | ✅    |
+| View own                | ✅   | ✅    |
+| View any                | ❌   | ✅    |
+| Create                  | ✅   | ✅    |
+| Cancel own (if pending) | ✅   | ✅    |
+| Update status           | ❌   | ✅    |
 ```
 
 ### 3. Create Permission Utilities

@@ -14,16 +14,17 @@ This document defines the architectural and code-level design patterns used thro
 
 **Rationale:**
 
-| Factor | Assessment | Impact on Decision |
-|--------|------------|-------------------|
-| **Team Size** | Small (1-2 developers) | ✅ Monolith enables rapid iteration without microservice overhead |
-| **Time to Market** | Critical (MVP launch in 12 weeks) | ✅ Single codebase, single deployment pipeline |
-| **Scalability Needs** | Progressive (start small, scale up) | ✅ Vercel handles horizontal scaling automatically |
-| **Domain Complexity** | Moderate (distinct features: lists, pantry, AI, collaboration) | ✅ Module boundaries align with domain features |
-| **DevOps Maturity** | Managed services (Vercel, Supabase) | ✅ Platform abstracts infrastructure complexity |
-| **Tech Stack** | Next.js 14 App Router | ✅ Native support for modular organization |
+| Factor                | Assessment                                                     | Impact on Decision                                                |
+| --------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------- |
+| **Team Size**         | Small (1-2 developers)                                         | ✅ Monolith enables rapid iteration without microservice overhead |
+| **Time to Market**    | Critical (MVP launch in 12 weeks)                              | ✅ Single codebase, single deployment pipeline                    |
+| **Scalability Needs** | Progressive (start small, scale up)                            | ✅ Vercel handles horizontal scaling automatically                |
+| **Domain Complexity** | Moderate (distinct features: lists, pantry, AI, collaboration) | ✅ Module boundaries align with domain features                   |
+| **DevOps Maturity**   | Managed services (Vercel, Supabase)                            | ✅ Platform abstracts infrastructure complexity                   |
+| **Tech Stack**        | Next.js 14 App Router                                          | ✅ Native support for modular organization                        |
 
 **Benefits:**
+
 - **Simplified deployment:** Single build and deploy to Vercel
 - **Faster development:** No inter-service communication complexity
 - **Easier debugging:** Full stack trace within one application
@@ -31,6 +32,7 @@ This document defines the architectural and code-level design patterns used thro
 - **Migration path:** Clear module boundaries enable future extraction to microservices if needed
 
 **Trade-offs:**
+
 - **Scaling limitations:** All features scale together (mitigated by Vercel's edge network)
 - **Technology constraints:** Entire app uses same stack (acceptable for our use case)
 
@@ -150,9 +152,11 @@ src/
    - Features can import from `lib/`, `components/`, and other features' public APIs
 
 2. **Dependency Flow:**
+
    ```
    App Router Pages → Features → Lib/Shared
    ```
+
    - Pages orchestrate features
    - Features contain domain logic
    - Shared utilities support features
@@ -216,10 +220,7 @@ export const listRepository = {
   async findByUserId(userId: string) {
     return prisma.shoppingList.findMany({
       where: {
-        OR: [
-          { ownerId: userId },
-          { members: { some: { userId } } },
-        ],
+        OR: [{ ownerId: userId }, { members: { some: { userId } } }],
       },
       include: {
         items: { where: { completed: false } },
@@ -261,6 +262,7 @@ export const listRepository = {
 ```
 
 **Benefits:**
+
 - Centralized data access logic
 - Easy to mock for testing
 - Database implementation can change without affecting business logic
@@ -330,7 +332,8 @@ export const listService = {
     }
 
     // AI-powered category suggestion
-    const category = data.category || await aiService.categorizeItem(data.name);
+    const category =
+      data.category || (await aiService.categorizeItem(data.name));
 
     // Create item
     const item = await itemRepository.create({
@@ -389,7 +392,11 @@ export const listService = {
   /**
    * Complete shopping trip and record history
    */
-  async completeShoppingTrip(listId: string, userId: string, data: CompleteShoppingDTO) {
+  async completeShoppingTrip(
+    listId: string,
+    userId: string,
+    data: CompleteShoppingDTO
+  ) {
     const list = await listRepository.findById(listId);
     if (!list) {
       throw new NotFoundError('List not found');
@@ -409,7 +416,11 @@ export const listService = {
 
     // Transfer purchased items to pantry if enabled
     if (data.addToPantry) {
-      await pantryService.addItemsFromList(userId, listId, data.completedItemIds);
+      await pantryService.addItemsFromList(
+        userId,
+        listId,
+        data.completedItemIds
+      );
     }
 
     // Archive or clear list based on user preference
@@ -425,6 +436,7 @@ export const listService = {
 ```
 
 **Benefits:**
+
 - Business logic is centralized and testable
 - Multiple repository operations are coordinated
 - Complex workflows are encapsulated
@@ -453,7 +465,11 @@ export function useShoppingList(listId: string) {
   const queryClient = useQueryClient();
 
   // Fetch list data
-  const { data: list, isLoading, error } = useQuery({
+  const {
+    data: list,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['shopping-list', listId],
     queryFn: () => fetch(`/api/lists/${listId}`).then((res) => res.json()),
     enabled: !!listId,
@@ -473,7 +489,11 @@ export function useShoppingList(listId: string) {
       toast({ title: 'Item added', description: data.item.name });
     },
     onError: (error) => {
-      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
     },
   });
 
@@ -485,7 +505,7 @@ export function useShoppingList(listId: string) {
       // Optimistic update
       await queryClient.cancelQueries({ queryKey: ['shopping-list', listId] });
       const previous = queryClient.getQueryData(['shopping-list', listId]);
-      
+
       queryClient.setQueryData(['shopping-list', listId], (old: any) => ({
         ...old,
         items: old.items.map((item: any) =>
@@ -498,7 +518,11 @@ export function useShoppingList(listId: string) {
     onError: (err, itemId, context) => {
       // Rollback on error
       queryClient.setQueryData(['shopping-list', listId], context?.previous);
-      toast({ title: 'Error', description: 'Failed to update item', variant: 'destructive' });
+      toast({
+        title: 'Error',
+        description: 'Failed to update item',
+        variant: 'destructive',
+      });
     },
   });
 
@@ -557,6 +581,7 @@ export function useRealtimeList(listId: string) {
 ```
 
 **Benefits:**
+
 - Logic is reusable across components
 - Components remain focused on rendering
 - Side effects are properly managed
@@ -863,7 +888,10 @@ export class UnauthorizedError extends AppError {
 }
 
 export class ValidationError extends AppError {
-  constructor(message: string, public fields?: Record<string, string>) {
+  constructor(
+    message: string,
+    public fields?: Record<string, string>
+  ) {
     super(message, 400, 'VALIDATION_ERROR');
   }
 }
@@ -883,7 +911,9 @@ export class ConflictError extends AppError {
 import { NextRequest, NextResponse } from 'next/server';
 import { AppError } from '@/lib/errors';
 
-export function withErrorHandler(handler: (req: NextRequest) => Promise<NextResponse>) {
+export function withErrorHandler(
+  handler: (req: NextRequest) => Promise<NextResponse>
+) {
   return async (req: NextRequest) => {
     try {
       return await handler(req);
@@ -1001,53 +1031,60 @@ describe('listService.createList', () => {
 
 ## Summary
 
-| Pattern Category | Patterns Used | Primary Location |
-|-----------------|---------------|------------------|
-| **Architectural** | Modular Monolith | Entire application |
-| **Application Layer** | Feature-Based Organization | `src/features/` |
-| **Data Access** | Repository Pattern | `src/lib/repositories/` |
-| **Business Logic** | Service Pattern | `src/features/*/services/` |
-| **React State** | Custom Hooks | `src/hooks/`, `src/features/*/hooks/` |
-| **React Components** | Container/Presenter, Compound Components, Render Props | `src/components/`, `src/features/*/components/` |
-| **Object Creation** | Factory Pattern | `src/lib/notifications/`, `src/lib/*/factory.ts` |
-| **Algorithms** | Strategy Pattern | `src/features/ai-suggestions/strategies/` |
-| **Error Handling** | Custom Error Classes | `src/lib/errors.ts` |
+| Pattern Category      | Patterns Used                                          | Primary Location                                 |
+| --------------------- | ------------------------------------------------------ | ------------------------------------------------ |
+| **Architectural**     | Modular Monolith                                       | Entire application                               |
+| **Application Layer** | Feature-Based Organization                             | `src/features/`                                  |
+| **Data Access**       | Repository Pattern                                     | `src/lib/repositories/`                          |
+| **Business Logic**    | Service Pattern                                        | `src/features/*/services/`                       |
+| **React State**       | Custom Hooks                                           | `src/hooks/`, `src/features/*/hooks/`            |
+| **React Components**  | Container/Presenter, Compound Components, Render Props | `src/components/`, `src/features/*/components/`  |
+| **Object Creation**   | Factory Pattern                                        | `src/lib/notifications/`, `src/lib/*/factory.ts` |
+| **Algorithms**        | Strategy Pattern                                       | `src/features/ai-suggestions/strategies/`        |
+| **Error Handling**    | Custom Error Classes                                   | `src/lib/errors.ts`                              |
 
 ---
 
 ## Pattern Selection Guidelines
 
 **When to use Repository Pattern:**
+
 - ✅ Any database access
 - ✅ Need to abstract data source
 - ✅ Want testable data layer
 
 **When to use Service Pattern:**
+
 - ✅ Business logic spans multiple repositories
 - ✅ Complex workflows (e.g., complete shopping trip)
 - ✅ Need to coordinate external services (email, real-time, AI)
 
 **When to use Custom Hooks:**
+
 - ✅ Stateful logic used in multiple components
 - ✅ API calls with React Query
 - ✅ Side effects (subscriptions, event listeners)
 
 **When to use Container/Presenter:**
+
 - ✅ Component has significant data fetching logic
 - ✅ Want to test UI independently of data
 - ✅ Component is complex and benefits from separation
 
 **When to use Compound Components:**
+
 - ✅ Building flexible UI components
 - ✅ Sub-components need shared context
 - ✅ Want intuitive component API (e.g., `<Card.Header>`)
 
 **When to use Factory Pattern:**
+
 - ✅ Object creation logic is complex
 - ✅ Need to create different types based on input
 - ✅ Want to hide instantiation details
 
 **When to use Strategy Pattern:**
+
 - ✅ Multiple algorithms for same task
 - ✅ Need to switch algorithms at runtime
 - ✅ Want to avoid large conditional statements

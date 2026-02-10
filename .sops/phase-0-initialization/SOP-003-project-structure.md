@@ -189,18 +189,19 @@ project-root/
 
 ### 3. File Naming Conventions
 
-| Type | Convention | Example |
-|------|------------|---------|
-| React Components | PascalCase | `UserCard.tsx` |
-| Utilities/Hooks | camelCase | `useAuth.ts`, `formatDate.ts` |
-| Routes/Pages | kebab-case (folders) | `user-profile/page.tsx` |
-| Config files | kebab-case | `tailwind.config.ts` |
-| Tests | Same as source + `.test` | `UserCard.test.tsx` |
-| Constants | SCREAMING_SNAKE | Inside file, not filename |
+| Type             | Convention               | Example                       |
+| ---------------- | ------------------------ | ----------------------------- |
+| React Components | PascalCase               | `UserCard.tsx`                |
+| Utilities/Hooks  | camelCase                | `useAuth.ts`, `formatDate.ts` |
+| Routes/Pages     | kebab-case (folders)     | `user-profile/page.tsx`       |
+| Config files     | kebab-case               | `tailwind.config.ts`          |
+| Tests            | Same as source + `.test` | `UserCard.test.tsx`           |
+| Constants        | SCREAMING_SNAKE          | Inside file, not filename     |
 
 ### 4. Module Organization Principles
 
 **Colocation:** Keep related files together.
+
 ```
 components/
   └── UserCard/
@@ -211,6 +212,7 @@ components/
 ```
 
 **Separation of Concerns:**
+
 ```
 src/
   ├── components/    # UI (presentation)
@@ -242,6 +244,7 @@ export { Card } from './Card';
 ```
 
 Usage:
+
 ```typescript
 import { Button, Input, Card } from '@/components/ui';
 ```
@@ -249,6 +252,7 @@ import { Button, Input, Card } from '@/components/ui';
 ### 7. Configure Path Aliases
 
 **TypeScript (tsconfig.json):**
+
 ```json
 {
   "compilerOptions": {
@@ -275,14 +279,14 @@ This project follows [Next.js App Router / FastAPI / etc.] conventions.
 
 ## Directory Map
 
-| Directory | Purpose |
-|-----------|---------|
-| `src/app/` | Routes and pages |
-| `src/components/` | Reusable UI components |
-| `src/lib/` | Utility functions and configurations |
-| `src/services/` | Business logic and API integrations |
-| `src/hooks/` | Custom React hooks |
-| `src/types/` | TypeScript type definitions |
+| Directory         | Purpose                              |
+| ----------------- | ------------------------------------ |
+| `src/app/`        | Routes and pages                     |
+| `src/components/` | Reusable UI components               |
+| `src/lib/`        | Utility functions and configurations |
+| `src/services/`   | Business logic and API integrations  |
+| `src/hooks/`      | Custom React hooks                   |
+| `src/types/`      | TypeScript type definitions          |
 
 ## Naming Conventions
 

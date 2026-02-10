@@ -35,12 +35,12 @@ Create or update `next.config.ts`:
 
 ```typescript
 // next.config.ts
-import withSerwistInit from "@serwist/next";
+import withSerwistInit from '@serwist/next';
 
 const withSerwist = withSerwistInit({
-  swSrc: "src/sw.ts",
-  swDest: "public/sw.js",
-  disable: process.env.NODE_ENV === "development",
+  swSrc: 'src/sw.ts',
+  swDest: 'public/sw.js',
+  disable: process.env.NODE_ENV === 'development',
 });
 
 const nextConfig = {
@@ -54,8 +54,8 @@ export default withSerwist(nextConfig);
 
 ```typescript
 // src/sw.ts
-import { defaultCache } from "@serwist/next/worker";
-import { Serwist } from "serwist";
+import { defaultCache } from '@serwist/next/worker';
+import { Serwist } from 'serwist';
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -120,26 +120,26 @@ serwist.addEventListeners();
 
 ```tsx
 // src/app/layout.tsx
-import type { Metadata, Viewport } from "next";
+import type { Metadata, Viewport } from 'next';
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#000000' },
   ],
-  width: "device-width",
+  width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  viewportFit: "cover",
+  viewportFit: 'cover',
 };
 
 export const metadata: Metadata = {
-  manifest: "/manifest.json",
+  manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
-    title: "Your App Name",
+    statusBarStyle: 'default',
+    title: 'Your App Name',
   },
   formatDetection: {
     telephone: false,
@@ -151,24 +151,24 @@ export const metadata: Metadata = {
 
 ```typescript
 // src/hooks/use-pwa-install.ts
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
 export function usePwaInstall() {
-  const [installPrompt, setInstallPrompt] = 
+  const [installPrompt, setInstallPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
     // Check if already installed
-    if (window.matchMedia("(display-mode: standalone)").matches) {
+    if (window.matchMedia('(display-mode: standalone)').matches) {
       setIsInstalled(true);
       return;
     }
@@ -179,9 +179,9 @@ export function usePwaInstall() {
       setIsInstallable(true);
     };
 
-    window.addEventListener("beforeinstallprompt", handler);
+    window.addEventListener('beforeinstallprompt', handler);
 
-    return () => window.removeEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
   const install = async () => {
@@ -190,13 +190,13 @@ export function usePwaInstall() {
     await installPrompt.prompt();
     const { outcome } = await installPrompt.userChoice;
 
-    if (outcome === "accepted") {
+    if (outcome === 'accepted') {
       setIsInstalled(true);
       setIsInstallable(false);
     }
 
     setInstallPrompt(null);
-    return outcome === "accepted";
+    return outcome === 'accepted';
   };
 
   return { isInstallable, isInstalled, install };
@@ -207,15 +207,15 @@ export function usePwaInstall() {
 
 ```typescript
 // src/lib/cache-strategies.ts
-import type { RuntimeCaching } from "serwist";
+import type { RuntimeCaching } from 'serwist';
 
 export const cacheStrategies: RuntimeCaching[] = [
   // API calls - Network first, fall back to cache
   {
     urlPattern: /^https:\/\/api\./,
-    handler: "NetworkFirst",
+    handler: 'NetworkFirst',
     options: {
-      cacheName: "api-cache",
+      cacheName: 'api-cache',
       expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 }, // 1 hour
       networkTimeoutSeconds: 10,
     },
@@ -223,26 +223,26 @@ export const cacheStrategies: RuntimeCaching[] = [
   // Images - Cache first
   {
     urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
-    handler: "CacheFirst",
+    handler: 'CacheFirst',
     options: {
-      cacheName: "image-cache",
+      cacheName: 'image-cache',
       expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 30 }, // 30 days
     },
   },
   // Static assets - Stale while revalidate
   {
     urlPattern: /\.(?:js|css|woff2?)$/,
-    handler: "StaleWhileRevalidate",
+    handler: 'StaleWhileRevalidate',
     options: {
-      cacheName: "static-cache",
+      cacheName: 'static-cache',
     },
   },
   // Pages - Network first with offline fallback
   {
-    urlPattern: ({ request }) => request.mode === "navigate",
-    handler: "NetworkFirst",
+    urlPattern: ({ request }) => request.mode === 'navigate',
+    handler: 'NetworkFirst',
     options: {
-      cacheName: "pages-cache",
+      cacheName: 'pages-cache',
       networkTimeoutSeconds: 5,
     },
   },
@@ -259,12 +259,12 @@ export default function OfflinePage() {
       <div className="text-center">
         <div className="mb-4 text-6xl">📡</div>
         <h1 className="mb-2 text-2xl font-bold">You're Offline</h1>
-        <p className="mb-4 text-muted-foreground">
+        <p className="text-muted-foreground mb-4">
           Please check your internet connection and try again.
         </p>
         <button
           onClick={() => window.location.reload()}
-          className="rounded-lg bg-primary px-4 py-2 text-primary-foreground"
+          className="bg-primary text-primary-foreground rounded-lg px-4 py-2"
         >
           Retry
         </button>
@@ -280,25 +280,25 @@ export default function OfflinePage() {
 
 ```tsx
 // src/components/navigation/bottom-nav.tsx
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Home, Search, PlusCircle, User } from "lucide-react";
-import { cn } from "@/lib/utils";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Home, Search, PlusCircle, User } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const navItems = [
-  { href: "/", icon: Home, label: "Home" },
-  { href: "/search", icon: Search, label: "Search" },
-  { href: "/add", icon: PlusCircle, label: "Add" },
-  { href: "/profile", icon: User, label: "Profile" },
+  { href: '/', icon: Home, label: 'Home' },
+  { href: '/search', icon: Search, label: 'Search' },
+  { href: '/add', icon: PlusCircle, label: 'Add' },
+  { href: '/profile', icon: User, label: 'Profile' },
 ];
 
 export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background pb-safe">
+    <nav className="bg-background pb-safe fixed bottom-0 left-0 right-0 z-50 border-t">
       <div className="flex h-16 items-center justify-around">
         {navItems.map(({ href, icon: Icon, label }) => {
           const isActive = pathname === href;
@@ -307,9 +307,9 @@ export function BottomNav() {
               key={href}
               href={href}
               className={cn(
-                "flex flex-col items-center gap-1 p-2 transition-colors",
-                "min-w-[64px] min-h-[48px]", // Touch target size
-                isActive ? "text-primary" : "text-muted-foreground"
+                'flex flex-col items-center gap-1 p-2 transition-colors',
+                'min-h-[48px] min-w-[64px]', // Touch target size
+                isActive ? 'text-primary' : 'text-muted-foreground'
               )}
             >
               <Icon className="h-6 w-6" />
@@ -327,9 +327,9 @@ export function BottomNav() {
 
 ```tsx
 // src/hooks/use-pull-to-refresh.ts
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
 export function usePullToRefresh(onRefresh: () => Promise<void>) {
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -357,12 +357,12 @@ export function usePullToRefresh(onRefresh: () => Promise<void>) {
       }
     };
 
-    container.addEventListener("touchstart", handleTouchStart);
-    container.addEventListener("touchend", handleTouchEnd);
+    container.addEventListener('touchstart', handleTouchStart);
+    container.addEventListener('touchend', handleTouchEnd);
 
     return () => {
-      container.removeEventListener("touchstart", handleTouchStart);
-      container.removeEventListener("touchend", handleTouchEnd);
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchend', handleTouchEnd);
     };
   }, [onRefresh]);
 
@@ -374,10 +374,10 @@ export function usePullToRefresh(onRefresh: () => Promise<void>) {
 
 ```tsx
 // src/components/ui/swipeable-row.tsx
-"use client";
+'use client';
 
-import { useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import { useRef, useState } from 'react';
+import { cn } from '@/lib/utils';
 
 interface SwipeableRowProps {
   children: React.ReactNode;
@@ -420,19 +420,15 @@ export function SwipeableRow({
     <div className="relative overflow-hidden">
       {/* Background actions */}
       <div className="absolute inset-0 flex justify-between">
-        <div className="flex items-center bg-green-500 px-4">
-          {rightAction}
-        </div>
-        <div className="flex items-center bg-red-500 px-4">
-          {leftAction}
-        </div>
+        <div className="flex items-center bg-green-500 px-4">{rightAction}</div>
+        <div className="flex items-center bg-red-500 px-4">{leftAction}</div>
       </div>
 
       {/* Content */}
       <div
         className={cn(
-          "relative bg-background transition-transform",
-          offset === 0 && "duration-200"
+          'bg-background relative transition-transform',
+          offset === 0 && 'duration-200'
         )}
         style={{ transform: `translateX(${offset}px)` }}
         onTouchStart={handleTouchStart}
@@ -452,9 +448,9 @@ export function SwipeableRow({
 
 ```typescript
 // src/hooks/use-geolocation.ts
-"use client";
+'use client';
 
-import { useState, useCallback } from "react";
+import { useState, useCallback } from 'react';
 
 interface GeolocationState {
   latitude: number | null;
@@ -473,7 +469,7 @@ export function useGeolocation() {
 
   const getLocation = useCallback(() => {
     if (!navigator.geolocation) {
-      setState((s) => ({ ...s, error: "Geolocation not supported" }));
+      setState((s) => ({ ...s, error: 'Geolocation not supported' }));
       return;
     }
 
@@ -507,28 +503,31 @@ export function useGeolocation() {
 
 ```typescript
 // src/hooks/use-camera.ts
-"use client";
+'use client';
 
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState } from 'react';
 
 export function useCamera() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const startCamera = useCallback(async (facingMode: "user" | "environment" = "environment") => {
-    try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode },
-      });
-      setStream(mediaStream);
-      if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream;
+  const startCamera = useCallback(
+    async (facingMode: 'user' | 'environment' = 'environment') => {
+      try {
+        const mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode },
+        });
+        setStream(mediaStream);
+        if (videoRef.current) {
+          videoRef.current.srcObject = mediaStream;
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Camera access denied');
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Camera access denied");
-    }
-  }, []);
+    },
+    []
+  );
 
   const stopCamera = useCallback(() => {
     stream?.getTracks().forEach((track) => track.stop());
@@ -538,12 +537,12 @@ export function useCamera() {
   const capturePhoto = useCallback(() => {
     if (!videoRef.current) return null;
 
-    const canvas = document.createElement("canvas");
+    const canvas = document.createElement('canvas');
     canvas.width = videoRef.current.videoWidth;
     canvas.height = videoRef.current.videoHeight;
-    canvas.getContext("2d")?.drawImage(videoRef.current, 0, 0);
+    canvas.getContext('2d')?.drawImage(videoRef.current, 0, 0);
 
-    return canvas.toDataURL("image/jpeg");
+    return canvas.toDataURL('image/jpeg');
   }, []);
 
   return { videoRef, startCamera, stopCamera, capturePhoto, error };
@@ -564,15 +563,15 @@ export async function shareContent(data: {
       await navigator.share(data);
       return true;
     } catch (err) {
-      if ((err as Error).name !== "AbortError") {
-        console.error("Share failed:", err);
+      if ((err as Error).name !== 'AbortError') {
+        console.error('Share failed:', err);
       }
       return false;
     }
   }
 
   // Fallback: copy to clipboard
-  const shareText = `${data.title}\n${data.text || ""}\n${data.url || ""}`;
+  const shareText = `${data.title}\n${data.text || ''}\n${data.url || ''}`;
   await navigator.clipboard.writeText(shareText.trim());
   return true;
 }
@@ -583,12 +582,12 @@ export async function shareContent(data: {
 ```typescript
 // src/lib/notifications.ts
 export async function requestNotificationPermission() {
-  if (!("Notification" in window)) {
-    return "unsupported";
+  if (!('Notification' in window)) {
+    return 'unsupported';
   }
 
-  if (Notification.permission === "granted") {
-    return "granted";
+  if (Notification.permission === 'granted') {
+    return 'granted';
   }
 
   const permission = await Notification.requestPermission();
@@ -604,9 +603,9 @@ export async function subscribeToPush() {
   });
 
   // Send subscription to your server
-  await fetch("/api/push/subscribe", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  await fetch('/api/push/subscribe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(subscription),
   });
 
@@ -618,12 +617,13 @@ export async function subscribeToPush() {
 
 ```typescript
 // Add to next.config.ts for bundle analysis
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true",
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
 });
 ```
 
 **Performance targets for mobile:**
+
 - First Contentful Paint (FCP): < 1.8s
 - Largest Contentful Paint (LCP): < 2.5s
 - Time to Interactive (TTI): < 3.8s
@@ -634,6 +634,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 ## Review Checklist
 
 ### Manifest & Installation
+
 - [ ] `manifest.json` with all required fields
 - [ ] App icons (192x192 and 512x512 minimum)
 - [ ] Maskable icons for Android
@@ -641,12 +642,14 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 - [ ] Install prompt handled gracefully
 
 ### Service Worker
+
 - [ ] Service worker registered
 - [ ] Precaching for critical assets
 - [ ] Runtime caching strategies defined
 - [ ] Offline fallback page exists
 
 ### Mobile UX
+
 - [ ] Touch targets ≥ 48x48px
 - [ ] Bottom navigation for primary actions
 - [ ] Safe area insets handled (`pb-safe`, `pt-safe`)
@@ -655,6 +658,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 - [ ] Swipe gestures for common actions
 
 ### Performance
+
 - [ ] Bundle size analyzed
 - [ ] Images optimized (WebP, lazy loading)
 - [ ] Fonts preloaded
@@ -662,6 +666,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 - [ ] Lighthouse PWA score ≥ 90
 
 ### Native Features
+
 - [ ] Geolocation permission handling
 - [ ] Camera access with fallbacks
 - [ ] Share API with clipboard fallback
@@ -675,11 +680,13 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 Execute SOP-304 (Progressive Web App Setup):
 
 **Project Context:**
+
 - App name: {name}
 - Primary mobile features needed: {list features like offline, camera, location, push}
 - Target platforms: {iOS Safari, Android Chrome, both}
 
 **Requirements:**
+
 1. Configure Serwist/next-pwa for service worker
 2. Create manifest.json with proper icons
 3. Set up offline caching strategy for: {API calls, images, pages}
@@ -689,6 +696,7 @@ Execute SOP-304 (Progressive Web App Setup):
 7. Set up push notification infrastructure (if needed)
 
 **Deliverables:**
+
 - [ ] next.config.ts with PWA configuration
 - [ ] public/manifest.json
 - [ ] src/sw.ts service worker

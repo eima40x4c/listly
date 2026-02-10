@@ -28,54 +28,55 @@ Evaluate whether AI integration is appropriate for the project, identify specifi
 
 Common AI capabilities in applications:
 
-| Category | Use Cases |
-|----------|-----------|
-| **Text Generation** | Chatbots, content creation, summaries, translations |
-| **Text Analysis** | Sentiment analysis, classification, entity extraction |
-| **Code Assistance** | Code generation, review, documentation |
-| **Search & Retrieval** | Semantic search, Q&A over documents |
-| **Image Processing** | Generation, analysis, OCR |
-| **Recommendations** | Personalization, similar items |
-| **Automation** | Data extraction, form filling, workflows |
+| Category               | Use Cases                                             |
+| ---------------------- | ----------------------------------------------------- |
+| **Text Generation**    | Chatbots, content creation, summaries, translations   |
+| **Text Analysis**      | Sentiment analysis, classification, entity extraction |
+| **Code Assistance**    | Code generation, review, documentation                |
+| **Search & Retrieval** | Semantic search, Q&A over documents                   |
+| **Image Processing**   | Generation, analysis, OCR                             |
+| **Recommendations**    | Personalization, similar items                        |
+| **Automation**         | Data extraction, form filling, workflows              |
 
 ### 2. Use Case Evaluation Matrix
 
 For each potential use case, evaluate:
 
-| Criteria | Weight | Score (1-5) | Weighted |
-|----------|--------|-------------|----------|
-| **User Value** - Does it solve a real problem? | 30% | | |
-| **Frequency** - How often will it be used? | 20% | | |
-| **Feasibility** - Can current AI handle it well? | 20% | | |
-| **Alternatives** - Are non-AI solutions viable? | 15% | | |
-| **Cost-Benefit** - Worth the API costs? | 15% | | |
-| **Total** | 100% | | |
+| Criteria                                         | Weight | Score (1-5) | Weighted |
+| ------------------------------------------------ | ------ | ----------- | -------- |
+| **User Value** - Does it solve a real problem?   | 30%    |             |          |
+| **Frequency** - How often will it be used?       | 20%    |             |          |
+| **Feasibility** - Can current AI handle it well? | 20%    |             |          |
+| **Alternatives** - Are non-AI solutions viable?  | 15%    |             |          |
+| **Cost-Benefit** - Worth the API costs?          | 15%    |             |          |
+| **Total**                                        | 100%   |             |          |
 
 **Decision thresholds:**
+
 - **4.0+**: Strong candidate for AI
 - **3.0-3.9**: Consider if budget allows
 - **Below 3.0**: Use traditional solutions
 
 ### 3. AI Provider Comparison
 
-| Provider | Best For | Pricing Model | Notes |
-|----------|----------|---------------|-------|
-| **OpenAI** | General text, GPT-4 quality | Per token | Most capable, highest cost |
-| **Anthropic** | Long context, safety | Per token | Claude 3, up to 200K context |
-| **Google** | Multimodal, Gemini | Per character/token | Good free tier |
-| **Mistral** | Open weights, EU hosting | Per token | Good quality, lower cost |
-| **Groq** | Speed, Llama/Mixtral | Per token | Extremely fast inference |
-| **Replicate** | Open source models | Per second | Pay only when running |
-| **Hugging Face** | Custom models, variety | Per request/hour | Serverless inference |
+| Provider         | Best For                    | Pricing Model       | Notes                        |
+| ---------------- | --------------------------- | ------------------- | ---------------------------- |
+| **OpenAI**       | General text, GPT-4 quality | Per token           | Most capable, highest cost   |
+| **Anthropic**    | Long context, safety        | Per token           | Claude 3, up to 200K context |
+| **Google**       | Multimodal, Gemini          | Per character/token | Good free tier               |
+| **Mistral**      | Open weights, EU hosting    | Per token           | Good quality, lower cost     |
+| **Groq**         | Speed, Llama/Mixtral        | Per token           | Extremely fast inference     |
+| **Replicate**    | Open source models          | Per second          | Pay only when running        |
+| **Hugging Face** | Custom models, variety      | Per request/hour    | Serverless inference         |
 
 ### 4. Build vs Buy Decision
 
-| Approach | When to Use | Pros | Cons |
-|----------|-------------|------|------|
-| **API (Buy)** | Most cases, especially starting | Quick, no infrastructure | Ongoing costs, dependency |
-| **Self-host** | High volume, privacy needs | Cost control, privacy | DevOps complexity |
-| **Fine-tune** | Domain-specific needs | Better quality | Training cost, maintenance |
-| **Custom model** | Unique problems, lots of data | Full control | Expensive, expertise needed |
+| Approach         | When to Use                     | Pros                     | Cons                        |
+| ---------------- | ------------------------------- | ------------------------ | --------------------------- |
+| **API (Buy)**    | Most cases, especially starting | Quick, no infrastructure | Ongoing costs, dependency   |
+| **Self-host**    | High volume, privacy needs      | Cost control, privacy    | DevOps complexity           |
+| **Fine-tune**    | Domain-specific needs           | Better quality           | Training cost, maintenance  |
+| **Custom model** | Unique problems, lots of data   | Full control             | Expensive, expertise needed |
 
 **Recommendation:** Start with APIs, optimize later if needed.
 
@@ -88,19 +89,23 @@ For each potential use case, evaluate:
 
 **Model:** GPT-4 Turbo
 **Average tokens per request:**
+
 - Input: 500 tokens
 - Output: 200 tokens
 
 **Estimated usage:**
+
 - Daily active users: 1,000
 - Requests per user per day: 5
 - Total daily requests: 5,000
 
 **Token costs (as of 2024):**
+
 - Input: $0.01 / 1K tokens
 - Output: $0.03 / 1K tokens
 
 **Daily cost:**
+
 - Input: 5,000 × 500 / 1000 × $0.01 = $25
 - Output: 5,000 × 200 / 1000 × $0.03 = $30
 - Total daily: $55
@@ -112,24 +117,24 @@ For each potential use case, evaluate:
 
 ### 6. Technical Feasibility Check
 
-| Requirement | Check |
-|-------------|-------|
-| **Latency acceptable?** | Streaming for chat, batch for background |
-| **Context window sufficient?** | Most docs under 128K tokens |
-| **Quality good enough?** | Test with sample prompts |
-| **Rate limits workable?** | Check provider limits |
-| **Privacy compliant?** | Review data handling policies |
+| Requirement                    | Check                                    |
+| ------------------------------ | ---------------------------------------- |
+| **Latency acceptable?**        | Streaming for chat, batch for background |
+| **Context window sufficient?** | Most docs under 128K tokens              |
+| **Quality good enough?**       | Test with sample prompts                 |
+| **Rate limits workable?**      | Check provider limits                    |
+| **Privacy compliant?**         | Review data handling policies            |
 
 ### 7. Risk Assessment
 
-| Risk | Mitigation |
-|------|------------|
-| **API downtime** | Implement fallbacks, queue retries |
-| **Cost overrun** | Set hard limits, monitor usage |
-| **Quality issues** | Prompt engineering, output validation |
-| **Hallucinations** | RAG, fact-checking, human review |
-| **Vendor lock-in** | Abstract AI calls, use standards |
-| **Privacy concerns** | Anonymize data, check compliance |
+| Risk                 | Mitigation                            |
+| -------------------- | ------------------------------------- |
+| **API downtime**     | Implement fallbacks, queue retries    |
+| **Cost overrun**     | Set hard limits, monitor usage        |
+| **Quality issues**   | Prompt engineering, output validation |
+| **Hallucinations**   | RAG, fact-checking, human review      |
+| **Vendor lock-in**   | Abstract AI calls, use standards      |
+| **Privacy concerns** | Anonymize data, check compliance      |
 
 ### 8. Document Decision
 
@@ -139,7 +144,9 @@ Create `/docs/ai/feasibility-assessment.md`:
 # AI Feasibility Assessment
 
 ## Project: [Name]
+
 ## Date: [Date]
+
 ## Assessor: [Name]
 
 ## Executive Summary
@@ -148,11 +155,11 @@ Create `/docs/ai/feasibility-assessment.md`:
 
 ## Identified Use Cases
 
-| Use Case | Priority | Feasibility | Recommendation |
-|----------|----------|-------------|----------------|
-| Chatbot for customer support | High | High | Implement |
-| Product description generation | Medium | High | Implement |
-| Image generation for products | Low | Medium | Defer |
+| Use Case                       | Priority | Feasibility | Recommendation |
+| ------------------------------ | -------- | ----------- | -------------- |
+| Chatbot for customer support   | High     | High        | Implement      |
+| Product description generation | Medium   | High        | Implement      |
+| Image generation for products  | Low      | Medium      | Defer          |
 
 ## Selected Use Case Details
 
@@ -163,6 +170,7 @@ Create `/docs/ai/feasibility-assessment.md`:
 **User Value:** Reduces support ticket volume by 40-60%.
 
 **Technical Approach:**
+
 - Provider: OpenAI GPT-4 Turbo
 - Pattern: RAG with knowledge base
 - Integration: Chat widget + API
@@ -170,6 +178,7 @@ Create `/docs/ai/feasibility-assessment.md`:
 **Cost Estimate:** $800-1200/month at 10K users
 
 **Risks:**
+
 - Hallucinations → Mitigate with strict prompts + fallback to human
 - Cost spikes → Set daily limits
 
@@ -185,21 +194,21 @@ Create `/docs/ai/feasibility-assessment.md`:
 
 ## Budget Summary
 
-| Component | Monthly Cost |
-|-----------|-------------|
-| OpenAI API | $1,500 |
-| Vector DB (Pinecone) | $70 |
-| Monitoring | $50 |
-| **Total** | **$1,620** |
+| Component            | Monthly Cost |
+| -------------------- | ------------ |
+| OpenAI API           | $1,500       |
+| Vector DB (Pinecone) | $70          |
+| Monitoring           | $50          |
+| **Total**            | **$1,620**   |
 
 ## Implementation Timeline
 
-| Phase | Duration | Deliverable |
-|-------|----------|-------------|
-| Proof of concept | 1 week | Working prototype |
-| Integration | 2 weeks | Connected to app |
-| Testing & refinement | 1 week | Quality validated |
-| Launch | - | Production ready |
+| Phase                | Duration | Deliverable       |
+| -------------------- | -------- | ----------------- |
+| Proof of concept     | 1 week   | Working prototype |
+| Integration          | 2 weeks  | Connected to app  |
+| Testing & refinement | 1 week   | Quality validated |
+| Launch               | -        | Production ready  |
 
 ## Decision
 
@@ -258,12 +267,14 @@ Execute SOP-400 (AI Feasibility Assessment):
 ## Decision Framework Quick Reference
 
 **When to use AI:**
+
 - ✅ Natural language understanding/generation needed
 - ✅ Pattern recognition at scale
 - ✅ Personalization based on behavior
 - ✅ Automating repetitive cognitive tasks
 
 **When NOT to use AI:**
+
 - ❌ Deterministic logic (use code)
 - ❌ Simple rule-based decisions
 - ❌ When accuracy must be 100%

@@ -102,7 +102,10 @@ export interface CreateUserOptions {
 }
 
 export async function createUser(options: CreateUserOptions = {}) {
-  const hashedPassword = await bcrypt.hash(options.password || 'password123', 10);
+  const hashedPassword = await bcrypt.hash(
+    options.password || 'password123',
+    10
+  );
 
   return prisma.user.create({
     data: {
@@ -191,7 +194,9 @@ describe('Users API', () => {
     it('supports pagination', async () => {
       await Promise.all(Array.from({ length: 25 }, () => createUser()));
 
-      const req = new NextRequest('http://localhost:3000/api/users?page=1&limit=10');
+      const req = new NextRequest(
+        'http://localhost:3000/api/users?page=1&limit=10'
+      );
       const response = await GET(req);
       const data = await response.json();
 
@@ -290,7 +295,9 @@ describe('User by ID API', () => {
     });
 
     it('returns 404 for non-existent user', async () => {
-      const req = new NextRequest('http://localhost:3000/api/users/nonexistent');
+      const req = new NextRequest(
+        'http://localhost:3000/api/users/nonexistent'
+      );
       const response = await GET(req, { params: { id: 'nonexistent' } });
 
       expect(response.status).toBe(404);
@@ -301,11 +308,14 @@ describe('User by ID API', () => {
     it('updates user', async () => {
       const user = await createUser({ name: 'Old Name' });
 
-      const req = new NextRequest(`http://localhost:3000/api/users/${user.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: 'New Name' }),
-      });
+      const req = new NextRequest(
+        `http://localhost:3000/api/users/${user.id}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: 'New Name' }),
+        }
+      );
 
       const response = await PUT(req, { params: { id: user.id } });
       const data = await response.json();
@@ -319,16 +329,21 @@ describe('User by ID API', () => {
     it('deletes user', async () => {
       const user = await createUser();
 
-      const req = new NextRequest(`http://localhost:3000/api/users/${user.id}`, {
-        method: 'DELETE',
-      });
+      const req = new NextRequest(
+        `http://localhost:3000/api/users/${user.id}`,
+        {
+          method: 'DELETE',
+        }
+      );
 
       const response = await DELETE(req, { params: { id: user.id } });
 
       expect(response.status).toBe(204);
 
       // Verify deletion
-      const req2 = new NextRequest(`http://localhost:3000/api/users/${user.id}`);
+      const req2 = new NextRequest(
+        `http://localhost:3000/api/users/${user.id}`
+      );
       const response2 = await GET(req2, { params: { id: user.id } });
       expect(response2.status).toBe(404);
     });
@@ -498,9 +513,9 @@ describe('Transaction Tests', () => {
     });
 
     // Attempt transfer exceeding balance
-    await expect(
-      transferFunds(sender.id, receiver.id, 50)
-    ).rejects.toThrow('Insufficient funds');
+    await expect(transferFunds(sender.id, receiver.id, 50)).rejects.toThrow(
+      'Insufficient funds'
+    );
 
     // Verify no changes
     const senderWallet = await prisma.wallet.findUnique({
@@ -524,6 +539,7 @@ describe('Transaction Tests', () => {
 ```
 
 Install dotenv-cli:
+
 ```bash
 pnpm add -D dotenv-cli
 ```
@@ -586,10 +602,10 @@ Execute SOP-501 (Integration Testing):
 
 ## Best Practices
 
-| Do | Don't |
-|----|-------|
-| Use a separate test database | Share database with development |
-| Clean up after each test | Leave test data behind |
-| Use factories for consistent data | Hardcode test data |
-| Test happy path AND error cases | Only test success scenarios |
-| Test authentication/authorization | Assume security works |
+| Do                                | Don't                           |
+| --------------------------------- | ------------------------------- |
+| Use a separate test database      | Share database with development |
+| Clean up after each test          | Leave test data behind          |
+| Use factories for consistent data | Hardcode test data              |
+| Test happy path AND error cases   | Only test success scenarios     |
+| Test authentication/authorization | Assume security works           |

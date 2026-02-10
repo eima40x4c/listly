@@ -27,16 +27,19 @@ Implement Large Language Model (LLM) integration following best practices for pr
 ### 1. Install SDK
 
 **OpenAI:**
+
 ```bash
 pnpm add openai
 ```
 
 **Vercel AI SDK (Recommended for Next.js):**
+
 ```bash
 pnpm add ai @ai-sdk/openai
 ```
 
 **Anthropic:**
+
 ```bash
 pnpm add @anthropic-ai/sdk
 ```
@@ -44,6 +47,7 @@ pnpm add @anthropic-ai/sdk
 ### 2. Environment Setup
 
 Add to `.env`:
+
 ```bash
 # OpenAI
 OPENAI_API_KEY=sk-...
@@ -56,6 +60,7 @@ AI_MODEL=gpt-4-turbo-preview
 ```
 
 Add to `.env.example`:
+
 ```bash
 OPENAI_API_KEY=your-api-key-here
 AI_MODEL=gpt-4-turbo-preview
@@ -154,14 +159,14 @@ export function ChatInterface() {
     });
 
   return (
-    <div className="flex flex-col h-[600px]">
+    <div className="flex h-[600px] flex-col">
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 space-y-4 overflow-y-auto p-4">
         {messages.map((message) => (
           <div
             key={message.id}
             className={cn(
-              'p-4 rounded-lg',
+              'rounded-lg p-4',
               message.role === 'user'
                 ? 'bg-primary text-primary-foreground ml-12'
                 : 'bg-muted mr-12'
@@ -171,14 +176,14 @@ export function ChatInterface() {
           </div>
         ))}
         {isLoading && (
-          <div className="bg-muted p-4 rounded-lg mr-12 animate-pulse">
+          <div className="bg-muted mr-12 animate-pulse rounded-lg p-4">
             Thinking...
           </div>
         )}
       </div>
 
       {/* Input */}
-      <form onSubmit={handleSubmit} className="p-4 border-t flex gap-2">
+      <form onSubmit={handleSubmit} className="flex gap-2 border-t p-4">
         <Input
           value={input}
           onChange={handleInputChange}
@@ -393,12 +398,14 @@ export async function withRetry<T>(
       return await fn();
     } catch (error) {
       lastError = handleAIError(error);
-      
+
       if (!lastError.retryable || attempt === maxRetries - 1) {
         throw lastError;
       }
 
-      await new Promise((resolve) => setTimeout(resolve, delay * (attempt + 1)));
+      await new Promise((resolve) =>
+        setTimeout(resolve, delay * (attempt + 1))
+      );
     }
   }
 
@@ -435,7 +442,7 @@ export function truncateToTokenLimit(
 ): string {
   const encoder = encoding_for_model(model as any);
   const tokens = encoder.encode(text);
-  
+
   if (tokens.length <= maxTokens) {
     encoder.free();
     return text;
@@ -448,6 +455,7 @@ export function truncateToTokenLimit(
 ```
 
 Install tiktoken:
+
 ```bash
 pnpm add tiktoken
 ```
@@ -510,11 +518,11 @@ Execute SOP-401 (LLM Integration):
 
 ## Best Practices
 
-| Do | Don't |
-|----|-------|
-| Use streaming for chat interfaces | Block UI waiting for full response |
-| Set max_tokens limits | Allow unbounded generation |
-| Validate AI outputs | Trust AI output blindly |
-| Use structured outputs for data | Parse unstructured text |
-| Implement graceful degradation | Let AI errors crash the app |
-| Log prompts and responses (sanitized) | Log sensitive user data |
+| Do                                    | Don't                              |
+| ------------------------------------- | ---------------------------------- |
+| Use streaming for chat interfaces     | Block UI waiting for full response |
+| Set max_tokens limits                 | Allow unbounded generation         |
+| Validate AI outputs                   | Trust AI output blindly            |
+| Use structured outputs for data       | Parse unstructured text            |
+| Implement graceful degradation        | Let AI errors crash the app        |
+| Log prompts and responses (sanitized) | Log sensitive user data            |

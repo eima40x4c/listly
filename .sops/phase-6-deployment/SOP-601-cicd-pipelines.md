@@ -238,7 +238,7 @@ jobs:
     name: Deploy to Production
     runs-on: ubuntu-latest
     environment: production
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -273,7 +273,7 @@ jobs:
   deploy-preview:
     name: Deploy Preview
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -321,7 +321,7 @@ jobs:
     name: Run Migrations
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -636,10 +636,10 @@ Execute SOP-601 (CI/CD Pipelines):
 
 ## Pipeline Performance Tips
 
-| Optimization | Impact |
-|--------------|--------|
-| Parallel jobs | Faster total time |
-| Dependency caching | Faster installs |
-| Artifact reuse | Avoid rebuilding |
-| Conditional runs | Skip unnecessary jobs |
-| Concurrency limits | Cancel stale runs |
+| Optimization       | Impact                |
+| ------------------ | --------------------- |
+| Parallel jobs      | Faster total time     |
+| Dependency caching | Faster installs       |
+| Artifact reuse     | Avoid rebuilding      |
+| Conditional runs   | Skip unnecessary jobs |
+| Concurrency limits | Cancel stale runs     |
