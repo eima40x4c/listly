@@ -81,7 +81,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             {label}
-            {props.required && <span className="text-destructive ml-1">*</span>}
+            {props.required && <span className="ml-1 text-destructive">*</span>}
           </label>
         )}
         <textarea
@@ -104,7 +104,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             </p>
           )}
           {showCount && maxLength && (
-            <p className="text-muted-foreground ml-auto text-xs">
+            <p className="ml-auto text-xs text-muted-foreground">
               {currentLength} / {maxLength}
             </p>
           )}

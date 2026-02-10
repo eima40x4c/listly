@@ -502,7 +502,7 @@ export default async function ProductPage({
 // src/components/ui/LoadingSkeleton.tsx
 
 export function Skeleton({ className }: { className?: string }) {
-  return <div className={cn('bg-muted animate-pulse rounded-md', className)} />;
+  return <div className={cn('animate-pulse rounded-md bg-muted', className)} />;
 }
 
 // Usage
@@ -537,9 +537,9 @@ export function ErrorMessage({ error, retry }: ErrorMessageProps) {
 
   return (
     <div className="flex flex-col items-center justify-center p-8 text-center">
-      <AlertCircle className="text-destructive mb-4 h-12 w-12" />
+      <AlertCircle className="mb-4 h-12 w-12 text-destructive" />
       <h3 className="mb-2 font-semibold">Error</h3>
-      <p className="text-muted-foreground mb-4">{message}</p>
+      <p className="mb-4 text-muted-foreground">{message}</p>
       {retry && (
         <Button onClick={retry} variant="outline">
           Try Again

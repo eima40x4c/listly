@@ -42,7 +42,7 @@ export function Header({ user, className }: HeaderProps) {
   return (
     <header
       className={cn(
-        'bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur',
+        'sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
         className
       )}
     >
@@ -50,7 +50,7 @@ export function Header({ user, className }: HeaderProps) {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="bg-primary text-primary-foreground flex h-8 w-8 items-center justify-center rounded-lg font-bold">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary font-bold text-primary-foreground">
               L
             </div>
             <span className="text-lg font-bold">Listly</span>
@@ -62,19 +62,19 @@ export function Header({ user, className }: HeaderProps) {
               <>
                 <Link
                   href="/dashboard"
-                  className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors"
+                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
                 >
                   Dashboard
                 </Link>
                 <Link
                   href="/lists"
-                  className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors"
+                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
                 >
                   Lists
                 </Link>
                 <Link
                   href="/pantry"
-                  className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors"
+                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
                 >
                   Pantry
                 </Link>
@@ -137,19 +137,19 @@ export function Header({ user, className }: HeaderProps) {
                 <>
                   <Link
                     href="/dashboard"
-                    className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors"
+                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
                   >
                     Dashboard
                   </Link>
                   <Link
                     href="/lists"
-                    className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors"
+                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
                   >
                     Lists
                   </Link>
                   <Link
                     href="/pantry"
-                    className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors"
+                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
                   >
                     Pantry
                   </Link>

@@ -259,12 +259,12 @@ export default function OfflinePage() {
       <div className="text-center">
         <div className="mb-4 text-6xl">📡</div>
         <h1 className="mb-2 text-2xl font-bold">You're Offline</h1>
-        <p className="text-muted-foreground mb-4">
+        <p className="mb-4 text-muted-foreground">
           Please check your internet connection and try again.
         </p>
         <button
           onClick={() => window.location.reload()}
-          className="bg-primary text-primary-foreground rounded-lg px-4 py-2"
+          className="rounded-lg bg-primary px-4 py-2 text-primary-foreground"
         >
           Retry
         </button>
@@ -298,7 +298,7 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="bg-background pb-safe fixed bottom-0 left-0 right-0 z-50 border-t">
+    <nav className="pb-safe fixed bottom-0 left-0 right-0 z-50 border-t bg-background">
       <div className="flex h-16 items-center justify-around">
         {navItems.map(({ href, icon: Icon, label }) => {
           const isActive = pathname === href;
@@ -427,7 +427,7 @@ export function SwipeableRow({
       {/* Content */}
       <div
         className={cn(
-          'bg-background relative transition-transform',
+          'relative bg-background transition-transform',
           offset === 0 && 'duration-200'
         )}
         style={{ transform: `translateX(${offset}px)` }}

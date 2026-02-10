@@ -75,7 +75,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
             className="aspect-square h-full w-full object-cover"
           />
         ) : (
-          <div className="bg-muted text-muted-foreground flex h-full w-full items-center justify-center text-xs font-medium">
+          <div className="flex h-full w-full items-center justify-center bg-muted text-xs font-medium text-muted-foreground">
             {fallback || (alt ? getInitials(alt) : '?')}
           </div>
         )}

@@ -744,7 +744,7 @@ export function ContactForm() {
         </label>
         <Input id="name" name="name" required />
         {state.errors?.name && (
-          <p className="text-destructive mt-1 text-sm">
+          <p className="mt-1 text-sm text-destructive">
             {state.errors.name[0]}
           </p>
         )}
@@ -756,7 +756,7 @@ export function ContactForm() {
         </label>
         <Input id="email" name="email" type="email" required />
         {state.errors?.email && (
-          <p className="text-destructive mt-1 text-sm">
+          <p className="mt-1 text-sm text-destructive">
             {state.errors.email[0]}
           </p>
         )}
@@ -769,11 +769,11 @@ export function ContactForm() {
         <textarea
           id="message"
           name="message"
-          className="border-input bg-background flex min-h-[120px] w-full rounded-md border px-3 py-2 text-sm"
+          className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
           required
         />
         {state.errors?.message && (
-          <p className="text-destructive mt-1 text-sm">
+          <p className="mt-1 text-sm text-destructive">
             {state.errors.message[0]}
           </p>
         )}

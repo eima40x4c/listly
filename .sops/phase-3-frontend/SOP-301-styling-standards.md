@@ -311,12 +311,12 @@ Use consistent spacing:
 
 @layer components {
   .prose-custom {
-    @apply prose prose-slate prose-headings:font-bold
-      prose-a:text-primary
-      prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg
-      prose-code:bg-muted
-      prose-code:px-1 prose-code:py-0.5 prose-code:rounded dark:prose-invert
-      max-w-none;
+    @apply prose prose-slate max-w-none
+      dark:prose-invert
+      prose-headings:font-bold prose-a:text-primary prose-a:no-underline
+      hover:prose-a:underline
+      prose-code:rounded prose-code:bg-muted prose-code:px-1 prose-code:py-0.5
+      prose-img:rounded-lg;
   }
 }
 ```
@@ -419,10 +419,10 @@ pnpm add next-themes
 // Accessible button example
 <button
   className="
-  focus-visible:ring-ring h-11
-  px-4
+  h-11 px-4
   focus-visible:outline-none
   focus-visible:ring-2
+  focus-visible:ring-ring
   focus-visible:ring-offset-2
   motion-reduce:transition-none
 "

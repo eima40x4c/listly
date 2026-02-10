@@ -30,19 +30,19 @@ export function Footer({ className }: FooterProps) {
 
   return (
     <footer
-      className={cn('bg-background w-full border-t py-8 md:py-12', className)}
+      className={cn('w-full border-t bg-background py-8 md:py-12', className)}
     >
       <Container>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="bg-primary text-primary-foreground flex h-8 w-8 items-center justify-center rounded-lg font-bold">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary font-bold text-primary-foreground">
                 L
               </div>
               <span className="text-lg font-bold">Listly</span>
             </div>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-sm text-muted-foreground">
               Smart shopping companion for organized, efficient grocery
               shopping.
             </p>
@@ -54,19 +54,19 @@ export function Footer({ className }: FooterProps) {
             <nav className="flex flex-col space-y-3">
               <Link
                 href="/features"
-                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 Features
               </Link>
               <Link
                 href="/pricing"
-                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 Pricing
               </Link>
               <Link
                 href="/download"
-                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 Download
               </Link>
@@ -79,19 +79,19 @@ export function Footer({ className }: FooterProps) {
             <nav className="flex flex-col space-y-3">
               <Link
                 href="/about"
-                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 About
               </Link>
               <Link
                 href="/blog"
-                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 Blog
               </Link>
               <Link
                 href="/contact"
-                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 Contact
               </Link>
@@ -104,19 +104,19 @@ export function Footer({ className }: FooterProps) {
             <nav className="flex flex-col space-y-3">
               <Link
                 href="/privacy"
-                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 Privacy Policy
               </Link>
               <Link
                 href="/terms"
-                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 Terms of Service
               </Link>
               <Link
                 href="/cookies"
-                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 Cookie Policy
               </Link>
@@ -127,7 +127,7 @@ export function Footer({ className }: FooterProps) {
         {/* Bottom Bar */}
         <div className="mt-8 border-t pt-8">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <p className="text-muted-foreground text-sm">
+            <p className="text-sm text-muted-foreground">
               © {currentYear} Listly. All rights reserved.
             </p>
             <div className="flex gap-6">
@@ -135,7 +135,7 @@ export function Footer({ className }: FooterProps) {
                 href="https://twitter.com/listly"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="text-muted-foreground transition-colors hover:text-foreground"
                 aria-label="Twitter"
               >
                 <svg
@@ -150,7 +150,7 @@ export function Footer({ className }: FooterProps) {
                 href="https://github.com/listly"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="text-muted-foreground transition-colors hover:text-foreground"
                 aria-label="GitHub"
               >
                 <svg

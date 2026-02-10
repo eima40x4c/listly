@@ -168,15 +168,15 @@ export function ChatInterface() {
             className={cn(
               'rounded-lg p-4',
               message.role === 'user'
-                ? 'bg-primary text-primary-foreground ml-12'
-                : 'bg-muted mr-12'
+                ? 'ml-12 bg-primary text-primary-foreground'
+                : 'mr-12 bg-muted'
             )}
           >
             {message.content}
           </div>
         ))}
         {isLoading && (
-          <div className="bg-muted mr-12 animate-pulse rounded-lg p-4">
+          <div className="mr-12 animate-pulse rounded-lg bg-muted p-4">
             Thinking...
           </div>
         )}

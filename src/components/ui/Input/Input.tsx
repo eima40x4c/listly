@@ -83,7 +83,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             {label}
-            {props.required && <span className="text-destructive ml-1">*</span>}
+            {props.required && <span className="ml-1 text-destructive">*</span>}
           </label>
         )}
         <input
