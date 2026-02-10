@@ -77,13 +77,13 @@
 
 ### Phase 2: Backend
 
-| SOP | Title          | Status | Output Location                                                                                                                                                                                            | Notes                                                                                              |
-| --- | -------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| 200 | API Design     | ✅     | `/docs/api/openapi.yaml`, `/docs/api/endpoints.md`                                                                                                                                                         | Complete - Full REST API specification with 12 resources, OpenAPI 3.0.3                            |
-| 201 | Authentication | ✅     | `src/lib/db.ts`, `src/lib/auth.ts`, `src/lib/auth/*.ts`, `src/app/api/auth/**/*.ts`, `src/hooks/useAuth.ts`, `src/types/next-auth.d.ts`, `docs/authentication.md`, updated `docs/environment-variables.md` | Complete - NextAuth v5, OAuth primary (Google, Apple), email/password fallback, session protection |
-| 202 | Authorization  | ✅     | `docs/authorization.md`, `src/lib/auth/permissions.ts`, `src/lib/auth/authorize.ts`, `src/lib/auth/ownership.ts`, `src/hooks/usePermissions.ts`                                                            | Complete - Resource-based authorization with ownership and collaboration roles                     |
-| 203 | Error Handling | ⬚      | Error handler module                                                                                                                                                                                       |                                                                                                    |
-| 204 | Validation     | ⬚      | Validation schemas                                                                                                                                                                                         |                                                                                                    |
+| SOP | Title          | Status | Output Location                                                                                                                                                                                            | Notes                                                                                               |
+| --- | -------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| 200 | API Design     | ✅     | `/docs/api/openapi.yaml`, `/docs/api/endpoints.md`                                                                                                                                                         | Complete - Full REST API specification with 12 resources, OpenAPI 3.0.3                             |
+| 201 | Authentication | ✅     | `src/lib/db.ts`, `src/lib/auth.ts`, `src/lib/auth/*.ts`, `src/app/api/auth/**/*.ts`, `src/hooks/useAuth.ts`, `src/types/next-auth.d.ts`, `docs/authentication.md`, updated `docs/environment-variables.md` | Complete - NextAuth v5, OAuth primary (Google, Apple), email/password fallback, session protection  |
+| 202 | Authorization  | ✅     | `docs/authorization.md`, `src/lib/auth/permissions.ts`, `src/lib/auth/authorize.ts`, `src/lib/auth/ownership.ts`, `src/hooks/usePermissions.ts`                                                            | Complete - Resource-based authorization with ownership and collaboration roles                      |
+| 203 | Error Handling | ✅     | `src/lib/errors/codes.ts`, `src/lib/errors/AppError.ts`, `src/lib/errors/handler.ts`, `src/lib/api/withErrorHandling.ts`, `src/lib/logger.ts`, `docs/api/errors.md`                                        | Complete - Consistent error handling with custom error classes, request IDs, and comprehensive docs |
+| 204 | Validation     | ⬚      | Validation schemas                                                                                                                                                                                         |                                                                                                     |
 
 ### Phase 3: Frontend
 
@@ -134,28 +134,26 @@
 
 ### Active SOP
 
-**SOP:** SOP-203
-**Title:** Error Handling
+**SOP:** SOP-204
+**Title:** Validation
 **Status:** ⬚ Not Started
 
 ### Context Files to Read
 
 ```
-.sops/phase-2-api-backend/SOP-203-error-handling.md
+.sops/phase-2-api-backend/SOP-204-validation.md
 /docs/requirements.md
 /docs/api/endpoints.md
 /docs/api/openapi.yaml
-src/lib/auth/api.ts
-src/lib/auth/authorize.ts
+src/lib/errors/AppError.ts
+src/lib/errors/handler.ts
 ```
 
 ### Expected Outputs
 
-- [ ] Error handler utilities
-- [ ] Standard error response formats
-- [ ] Error logging configuration
-- [ ] API error middleware
-- [ ] Documentation for error handling patterns
+- [ ] Validation schemas for API endpoints
+- [ ] Request validation middleware
+- [ ] Validation error handling
 
 ---
 
@@ -180,13 +178,11 @@ The following SOPs have been completed:
 - Phase 1: Database (SOPs 100-102)
   - Database Selection, Schema Design, Seed Data
 - Phase 2: Backend
-  - (SOP-200) API Design
-  - (SOP-201) Authentication
-  - (SOP-202) Authorization
+  - API Design, Authentication, Authorization, Error Handling
 
 ## Current Task
 
-Execute **SOP-203** (Error Handling).
+Execute **SOP-204** (Validation).
 
 **Read these files:**
 
@@ -827,6 +823,80 @@ Execute **SOP-203** (Error Handling).
 - Client hooks for UI only - server always enforces permissions
 - Security: Always return 404 (not 403) when user shouldn't know resource exists
 - Ready for SOP-203 (Error Handling)
+
+### Session 13 — 2026-02-09
+
+**SOPs Completed:** SOP-203 (Error Handling)
+**Files Created:**
+
+- `src/lib/errors/codes.ts` — Error code constants (client errors, business errors, server errors)
+- `src/lib/errors/AppError.ts` — Custom error classes (AppError base class + 8 convenience subclasses)
+- `src/lib/errors/handler.ts` — Error handler utility (converts all error types to NextResponse)
+- `src/lib/api/withErrorHandling.ts` — Request wrapper with automatic error handling
+- `src/lib/logger.ts` — Structured logging utility (debug, info, warn, error)
+- `docs/api/errors.md` — Comprehensive error documentation (12KB)
+
+**Dependencies Installed:**
+
+- nanoid (latest) — Unique request ID generation
+
+**Error Handling Implementation:**
+
+- **Error Response Format:** Consistent JSON structure with error code, message, optional details, and request ID
+- **Error Codes:** 18 standardized codes covering client errors (4xx), business errors (422), and server errors (5xx)
+- **Custom Error Classes:** 9 classes (AppError base + ValidationError, UnauthorizedError, ForbiddenError, NotFoundError, ConflictError, RateLimitError, InternalError, DatabaseError, ExternalServiceError)
+- **Error Handler:** Central handleError() function for AppError, ZodError, Prisma errors, and unknown errors
+- **Request Wrapper:** withErrorHandling() HOF that wraps API routes with automatic error handling and request ID generation
+- **Logger:** Structured JSON logging with dev-friendly pretty printing and production-optimized single-line format
+
+**Key Features:**
+
+- **Request IDs:** Unique 10-character IDs (nanoid) added to all responses via X-Request-Id header
+- **Prisma Error Mapping:** Automatic conversion of 6 Prisma error codes (P2002, P2025, P2003, P2014, P2034, etc.) to user-friendly responses
+- **Zod Validation:** Automatic extraction of field-level validation errors with field paths and messages
+- **Security:** Server errors log full details but return generic messages to prevent information leakage
+- **Logging Levels:** debug (dev only), info, warn, error with timestamps and structured data
+- **Type Safety:** Full TypeScript support with proper types for all error classes and utilities
+
+**Error Codes Defined:**
+
+- Client Errors (4xx): VALIDATION_ERROR, UNAUTHORIZED, FORBIDDEN, NOT_FOUND, CONFLICT, RATE_LIMITED
+- Business Errors: EMAIL_EXISTS, INSUFFICIENT_STOCK, PAYMENT_FAILED, ORDER_CANCELLED, ITEM_ALREADY_CHECKED, LIST_NOT_EMPTY
+- Server Errors (5xx): INTERNAL_ERROR, SERVER_ERROR, DATABASE_ERROR, EXTERNAL_SERVICE_ERROR
+
+**Documentation Includes:**
+
+- Error response format specification
+- Complete error code reference table with HTTP status codes and examples
+- 6 detailed error examples (validation, unauthorized, not found, conflict, forbidden, internal)
+- Client-side error handling code examples
+- Request ID usage for support and debugging
+- Prisma error mapping table
+- Best practices for API consumers and developers
+- Security guidelines (do's and don'ts)
+- Related documentation links
+
+**Usage Pattern:**
+
+```typescript
+// Wrap API routes with withErrorHandling
+export const GET = withErrorHandling(async (request) => {
+  const list = await getShoppingList(id);
+  if (!list) throw new NotFoundError('Shopping list');
+  return Response.json({ success: true, data: list });
+});
+```
+
+**Notes:**
+
+- Error handling follows SOP-203 procedure exactly
+- All error responses include request IDs for tracing
+- Logger supports both development (pretty) and production (JSON) modes
+- Prisma errors automatically mapped to user-friendly messages
+- Zod validation errors automatically formatted with field details
+- Security: Stack traces and sensitive data never exposed to clients
+- ESLint configured to allow console statements in logger only
+- Ready for SOP-204 (Validation)
 
 ---
 
