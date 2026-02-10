@@ -54,6 +54,8 @@ export default [
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/consistent-type-imports': 'error',
+      // Disable no-undef for TypeScript files - TypeScript handles this check
+      'no-undef': 'off',
 
       // React
       'react/react-in-jsx-scope': 'off',

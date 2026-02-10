@@ -10,15 +10,16 @@
 
 The AI agent is responsible for **managing the entire session lifecycle**:
 
-| Responsibility         | When           | What to Update                                                      |
-| ---------------------- | -------------- | ------------------------------------------------------------------- |
-| **Initialize session** | First prompt   | Fill Project Overview, Goals from user description                  |
-| **Track progress**     | After each SOP | Update Progress Tracker status and outputs                          |
-| **Update checklist**   | After each SOP | Check off completed items in `.sops/templates/project-checklist.md` |
-| **Commit changes**     | After each SOP | Git commit with conventional message (see Version Control)          |
-| **Maintain context**   | After each SOP | Update Current Session, Session Prompt Template                     |
-| **Log sessions**       | End of session | Add entry to Session Log                                            |
-| **Resume context**     | New session    | Read AI-SESSION.md, continue from last SOP                          |
+| Responsibility         | When             | What to Update                                                      |
+| ---------------------- | ---------------- | ------------------------------------------------------------------- |
+| **Initialize session** | First prompt     | Fill Project Overview, Goals from user description                  |
+| **Track progress**     | After each SOP   | Update Progress Tracker status and outputs                          |
+| **Update checklist**   | After each SOP   | Check off completed items in `.sops/templates/project-checklist.md` |
+| **Commit changes**     | After each SOP   | Git commit with conventional message (see Version Control)          |
+| **Run checkpoint**     | After each phase | Verify alignment with requirements (see Checkpoint System)          |
+| **Maintain context**   | After each SOP   | Update Current Session, Session Prompt Template                     |
+| **Log sessions**       | End of session   | Add entry to Session Log                                            |
+| **Resume context**     | New session      | Read AI-SESSION.md, continue from last SOP                          |
 
 **The human only provides:**
 
@@ -60,6 +61,88 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 **Types:** `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `wip`
 **Scope:** Usually the SOP number (e.g., `sop-101`) or component name
+
+---
+
+## Checkpoint System (Drift Prevention)
+
+AI agents can drift from original specifications over time. Run **alignment checkpoints** at phase boundaries to catch drift early.
+
+### When to Run Checkpoints
+
+| Checkpoint       | After Phase        | Purpose                               |
+| ---------------- | ------------------ | ------------------------------------- |
+| **Checkpoint 1** | Phase 1 (Database) | Verify schema covers all requirements |
+| **Checkpoint 2** | Phase 2 (Backend)  | Verify APIs support all features      |
+| **Checkpoint 3** | Phase 3 (Frontend) | Verify UI implements all user stories |
+| **Checkpoint 4** | Phase 5 (Quality)  | Final pre-deployment alignment check  |
+
+### Checkpoint Prompt Template
+
+Use this prompt at each checkpoint:
+
+```markdown
+## Alignment Checkpoint — Phase {X} Complete
+
+Perform a drift analysis before proceeding to the next phase.
+
+### Step 1: Re-read Source Documents
+
+Read these files completely:
+
+- `/docs/requirements.md` — Original requirements and user stories
+- `/docs/tech-stack.md` — Agreed technology decisions
+
+### Step 2: Audit Current Implementation
+
+Review what has been built so far and compare against requirements.
+
+### Step 3: Report Findings
+
+**A. Requirements Coverage**
+For each user story in requirements.md:
+| User Story | Status | Implementation Location | Notes |
+|------------|--------|------------------------|-------|
+| US-001: ... | ✅ Covered / ⚠️ Partial / ❌ Missing | file:line | |
+
+**B. Tech Stack Compliance**
+| Decision | Expected | Actual | Compliant? |
+|----------|----------|--------|------------|
+| Framework | Next.js | ? | ✅/❌ |
+| Database | PostgreSQL | ? | ✅/❌ |
+| ORM | Prisma | ? | ✅/❌ |
+| ... | ... | ... | ... |
+
+**C. Scope Drift**
+List any features that were:
+
+- Added but NOT in original requirements (scope creep)
+- Modified from original specification
+- Deferred or descoped
+
+**D. Recommended Actions**
+
+- [ ] Issues to fix before proceeding
+- [ ] Items to add to backlog
+- [ ] Specs that need updating
+
+### Step 4: Await Approval
+
+Do not proceed to the next phase until the human reviews and approves this checkpoint.
+```
+
+### Quick Checkpoint (Mid-Phase)
+
+For a lighter check during complex phases:
+
+```markdown
+Quick alignment check:
+
+1. Re-read `/docs/requirements.md`
+2. List the last 3 things you implemented
+3. Confirm each maps to a specific user story
+4. Flag any implementation that doesn't trace to requirements
+```
 
 ---
 
