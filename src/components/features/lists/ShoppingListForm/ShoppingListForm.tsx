@@ -53,6 +53,8 @@ export interface ShoppingListFormProps {
   stores?: Array<{ id: string; name: string }>;
   /** Callback after successful save */
   onSuccess?: () => void;
+  /** Callback when form is cancelled */
+  onCancel?: () => void;
 }
 
 /**
@@ -68,6 +70,7 @@ export function ShoppingListForm({
   list,
   stores = [],
   onSuccess,
+  onCancel: _onCancel,
 }: ShoppingListFormProps) {
   const router = useRouter();
   const isEditing = !!list;

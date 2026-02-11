@@ -90,7 +90,10 @@ export const itemKeys = {
 export function useListItems(listId: string) {
   return useQuery({
     queryKey: itemKeys.list(listId),
-    queryFn: () => api.get<ItemsResponse>(`/lists/${listId}/items`),
+    queryFn: async () => {
+      const response = await api.get<ItemsResponse>(`/lists/${listId}/items`);
+      return response.data;
+    },
     enabled: !!listId,
   });
 }
@@ -107,8 +110,13 @@ export function useCreateItem(listId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreateItemData) =>
-      api.post<ItemResponse>(`/lists/${listId}/items`, data),
+    mutationFn: async (data: CreateItemData) => {
+      const response = await api.post<ItemResponse>(
+        `/lists/${listId}/items`,
+        data
+      );
+      return response.data;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: itemKeys.list(listId) });
       queryClient.invalidateQueries({ queryKey: listKeys.detail(listId) });
@@ -133,8 +141,16 @@ export function useUpdateItem(listId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ itemId, data }: { itemId: string; data: UpdateItemData }) =>
-      api.patch<ItemResponse>(`/lists/${listId}/items/${itemId}`, data),
+    mutationFn: async ({
+      itemId,
+      data,
+    }: {
+      itemId: string;
+      data: UpdateItemData;
+    }) => {
+      const response = await api.patch<ItemResponse>(`/items/${itemId}`, data);
+      return response.data;
+    },
     onSuccess: (_, { itemId }) => {
       queryClient.invalidateQueries({
         queryKey: itemKeys.detail(listId, itemId),
@@ -149,10 +165,18 @@ export function useCheckItem(listId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ itemId, checked }: { itemId: string; checked: boolean }) =>
-      api.patch<ItemResponse>(`/lists/${listId}/items/${itemId}`, {
+    mutationFn: async ({
+      itemId,
+      checked,
+    }: {
+      itemId: string;
+      checked: boolean;
+    }) => {
+      const response = await api.patch<ItemResponse>(`/items/${itemId}`, {
         isChecked: checked,
-      }),
+      });
+      return response.data;
+    },
     onSuccess: (_, { itemId }) => {
       queryClient.invalidateQueries({
         queryKey: itemKeys.detail(listId, itemId),
@@ -167,8 +191,7 @@ export function useDeleteItem(listId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (itemId: string) =>
-      api.delete(`/lists/${listId}/items/${itemId}`),
+    mutationFn: (itemId: string) => api.delete(`/items/${itemId}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: itemKeys.list(listId) });
       queryClient.invalidateQueries({ queryKey: listKeys.detail(listId) });

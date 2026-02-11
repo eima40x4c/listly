@@ -134,7 +134,10 @@ export function useLists(filters: ListFilters = {}) {
 
   return useQuery({
     queryKey: listKeys.list(filters),
-    queryFn: () => api.get<ListsResponse>(endpoint),
+    queryFn: async () => {
+      const response = await api.get<ListsResponse>(endpoint);
+      return response.data;
+    },
   });
 }
 
@@ -147,7 +150,10 @@ export function useList(id: string, include?: string) {
 
   return useQuery({
     queryKey: listKeys.detail(id, include),
-    queryFn: () => api.get<ListResponse>(endpoint),
+    queryFn: async () => {
+      const response = await api.get<ListResponse>(endpoint);
+      return response.data;
+    },
     enabled: !!id,
   });
 }
@@ -156,8 +162,10 @@ export function useCreateList() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreateListData) =>
-      api.post<ListResponse>('/lists', data),
+    mutationFn: async (data: CreateListData) => {
+      const response = await api.post<ListResponse>('/lists', data);
+      return response.data;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: listKeys.lists() });
     },
@@ -168,8 +176,10 @@ export function useUpdateList() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: UpdateListData }) =>
-      api.patch<ListResponse>(`/lists/${id}`, data),
+    mutationFn: async ({ id, data }: { id: string; data: UpdateListData }) => {
+      const response = await api.patch<ListResponse>(`/lists/${id}`, data);
+      return response.data;
+    },
     onSuccess: (_, { id }) => {
       queryClient.invalidateQueries({ queryKey: listKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: listKeys.lists() });

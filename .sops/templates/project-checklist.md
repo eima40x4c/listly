@@ -309,11 +309,35 @@
 
 ### Page Implementation (SOP-305)
 
-- [ ] Page planning documents created
-- [ ] Server/client components structured
-- [ ] Loading skeletons implemented
-- [ ] Error boundaries configured
-- [ ] Navigation wired up
+- [x] Page planning documents created
+  - [x] Lists Overview page spec (lists-overview.md)
+  - [x] List Detail page spec (list-detail.md)
+  - [x] Authentication pages spec (auth.md)
+- [x] Server/client components structured
+  - [x] Root page (redirects to /lists)
+  - [x] Lists Overview page (server + client split)
+  - [x] List Detail page (server + client split with dual modes)
+  - [x] Login page (with OAuth + email/password)
+  - [x] Register page (with OAuth + email/password)
+- [x] Loading skeletons implemented
+  - [x] Global loading state
+  - [x] Lists loading skeleton
+  - [x] List detail loading skeleton
+- [x] Error boundaries configured
+  - [x] Global error boundary
+  - [x] Global 404 page
+  - [x] List detail error boundary
+  - [x] List detail 404 page
+- [x] Navigation wired up
+  - [x] Back button navigation
+  - [x] List card click navigation
+  - [x] Auth page transitions
+- [x] Feature components created
+  - [x] ListCard (with progress, budget, collaborators)
+  - [x] CategorySection (collapsible categories)
+  - [x] ListItemCard (with optimistic updates)
+  - [x] EmptyListsState
+  - [x] EmptyItemsState
 
 ### Progressive Web App (SOP-306) — _Optional_
 
