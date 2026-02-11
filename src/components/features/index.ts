@@ -6,11 +6,17 @@
  *
  * @example
  * ```tsx
- * import { ShoppingListCard } from '@/components/features';
+ * import { LoginForm, ShoppingListForm } from '@/components/features';
  * ```
  */
 
-// Feature components will be added as they are implemented
-// Example:
-// export { ShoppingListCard } from './shopping-lists/ShoppingListCard';
-// export { PantryItemCard } from './pantry/PantryItemCard';
+// Auth components
+export { LoginForm, type LoginFormProps } from './auth/LoginForm';
+export { RegisterForm, type RegisterFormProps } from './auth/RegisterForm';
+
+// Shopping list components
+export { ListItemForm, type ListItemFormProps } from './lists/ListItemForm';
+export {
+  ShoppingListForm,
+  type ShoppingListFormProps,
+} from './lists/ShoppingListForm';
