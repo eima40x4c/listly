@@ -79,6 +79,14 @@ export default [
       react: { version: 'detect' },
     },
   },
+  // More lenient rules for interface files (type declarations don't "use" parameters)
+  {
+    files: ['**/*.interface.ts', '**/*types.ts', '**/*.d.ts'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
+      'no-unused-vars': 'off',
+    },
+  },
   {
     ignores: [
       'node_modules/',

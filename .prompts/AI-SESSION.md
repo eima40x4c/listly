@@ -77,13 +77,15 @@
 
 ### Phase 2: Backend
 
-| SOP | Title          | Status | Output Location                                                                                                                                                                                            | Notes                                                                                               |
-| --- | -------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| 200 | API Design     | ✅     | `/docs/api/openapi.yaml`, `/docs/api/endpoints.md`                                                                                                                                                         | Complete - Full REST API specification with 12 resources, OpenAPI 3.0.3                             |
-| 201 | Authentication | ✅     | `src/lib/db.ts`, `src/lib/auth.ts`, `src/lib/auth/*.ts`, `src/app/api/auth/**/*.ts`, `src/hooks/useAuth.ts`, `src/types/next-auth.d.ts`, `docs/authentication.md`, updated `docs/environment-variables.md` | Complete - NextAuth v5, OAuth primary (Google, Apple), email/password fallback, session protection  |
-| 202 | Authorization  | ✅     | `docs/authorization.md`, `src/lib/auth/permissions.ts`, `src/lib/auth/authorize.ts`, `src/lib/auth/ownership.ts`, `src/hooks/usePermissions.ts`                                                            | Complete - Resource-based authorization with ownership and collaboration roles                      |
-| 203 | Error Handling | ✅     | `src/lib/errors/codes.ts`, `src/lib/errors/AppError.ts`, `src/lib/errors/handler.ts`, `src/lib/api/withErrorHandling.ts`, `src/lib/logger.ts`, `docs/api/errors.md`                                        | Complete - Consistent error handling with custom error classes, request IDs, and comprehensive docs |
-| 204 | Validation     | ✅     | `src/lib/validation/*.ts`, `src/lib/validation/schemas/*.ts`                                                                                                                                               | Complete - Zod validation with 9 resource schemas, common schemas, pagination, and utilities        |
+| SOP | Title              | Status | Output Location                                                                                                                                                                                            | Notes                                                                                               |
+| --- | ------------------ | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| 200 | Service Layer      | ✅     | `src/services/*.ts`, `src/services/interfaces/*.ts`, `docs/backend/services.md`, `docs/backend/business-rules.md`, `docs/backend/traceability.md`                                                          | Complete - 7 service classes with interfaces, service factory, business rules, traceability matrix  |
+| 201 | API Design         | ✅     | `/docs/api/openapi.yaml`, `/docs/api/endpoints.md`                                                                                                                                                         | Complete - Full REST API specification with 12 resources, OpenAPI 3.0.3                             |
+| 202 | Authentication     | ✅     | `src/lib/db.ts`, `src/lib/auth.ts`, `src/lib/auth/*.ts`, `src/app/api/auth/**/*.ts`, `src/hooks/useAuth.ts`, `src/types/next-auth.d.ts`, `docs/authentication.md`, updated `docs/environment-variables.md` | Complete - NextAuth v5, OAuth primary (Google, Apple), email/password fallback, session protection  |
+| 203 | Authorization      | ✅     | `docs/authorization.md`, `src/lib/auth/permissions.ts`, `src/lib/auth/authorize.ts`, `src/lib/auth/ownership.ts`, `src/hooks/usePermissions.ts`                                                            | Complete - Resource-based authorization with ownership and collaboration roles                      |
+| 204 | Error Handling     | ✅     | `src/lib/errors/codes.ts`, `src/lib/errors/AppError.ts`, `src/lib/errors/handler.ts`, `src/lib/api/withErrorHandling.ts`, `src/lib/logger.ts`, `docs/api/errors.md`                                        | Complete - Consistent error handling with custom error classes, request IDs, and comprehensive docs |
+| 205 | Validation         | ✅     | `src/lib/validation/*.ts`, `src/lib/validation/schemas/*.ts`                                                                                                                                               | Complete - Zod validation with 9 resource schemas, common schemas, pagination, and utilities        |
+| 206 | Repository Pattern | ⬚      | `src/repositories/`                                                                                                                                                                                        | Next - Data access layer abstraction                                                                |
 
 ### Phase 3: Frontend
 
@@ -121,6 +123,15 @@
 | 604 | Monitoring & Alerting | ⬚      | Monitoring configs                 |       |
 | 605 | Incident Response     | ⬚      | `/docs/incident-response.md`       |       |
 
+## Backfill Status (Post-Refactor)
+
+| SOP     | Status         | Notes                                           |
+| ------- | -------------- | ----------------------------------------------- |
+| SOP-200 | ✅ Complete    | Service layer with 7 services, interfaces, docs |
+| SOP-201 | 🔴 Not Started | Next - Repository pattern for data access       |
+| SOP-302 | 🔴 Not Started | Retroactive docs                                |
+| SOP-305 | 🔴 Not Started |                                                 |
+
 **Status Legend:**
 
 - ⬚ Not Started
@@ -134,8 +145,8 @@
 
 ### Active SOP
 
-**SOP:** SOP-303
-**Title:** Form Handling
+**SOP:** SOP-201
+**Title:** Repository Pattern (Data Access Layer)
 **Status:** ⬚ Not Started
 
 ### Context Files to Read
@@ -179,26 +190,28 @@ The following SOPs have been completed:
   - Environment Setup, Design Patterns, Code Style Standards
 - Phase 1: Database (SOPs 100-102)
   - Database Selection, Schema Design, Seed Data
-- Phase 2: Backend (SOPs 200-204)
+- Phase 2: Backend (SOPs 200-205)
+  - Service Layer (7 service classes with interfaces, business rules, traceability matrix)
   - API Design, Authentication, Authorization
   - Error Handling, Validation
-- Phase 3: Frontend (SOPs 300-302)
+- Phase 3: Frontend (SOPs 300-303)
   - Component Architecture (14 production-ready components)
   - Styling Standards (Tailwind CSS configuration, dark mode support)
   - API Integration (TanStack Query, API client with error handling, query hooks)
+  - Form Handling (React Hook Form with Zod validation, auth and shopping forms)
 
 ## Current Task
 
-Execute **SOP-303** (Form Handling).
+Execute **SOP-201** (Repository Pattern).
 
 **Read these files:**
 
-1. .sops/phase-3-frontend/SOP-303-form-handling.md
-2. /docs/requirements.md
-3. /docs/tech-stack.md
-4. /src/lib/validation/schemas/
-5. /src/components/ui/
-6. /src/hooks/
+1. .sops/phase-2-api-backend/SOP-201-repository-pattern.md
+2. /docs/database/schema.md
+3. /docs/architecture/patterns.md
+4. /docs/backend/services.md
+5. /src/services/
+6. prisma/schema.prisma
 
 **Refer to `AI-GUIDE.md` to attend to your responsibilities and for guidance on best practices.**
 **Follow the SOP's Procedure section step by step.**
@@ -1115,7 +1128,70 @@ export const GET = withErrorHandling(async (request) => {
 
 ---
 
-You ## 🔗 Quick Reference
+### Session 18 — 2026-02-11
+
+**SOPs Completed:** SOP-200 (Service Layer - BACKFILL)
+**Files Created:**
+
+- **Service Interfaces (9 files):** Base interface + 7 domain interfaces defining contracts for all services
+  - `src/services/interfaces/base-service.interface.ts`
+  - `src/services/interfaces/list-service.interface.ts` (20 methods)
+  - `src/services/interfaces/item-service.interface.ts` (17 methods)
+  - `src/services/interfaces/category-service.interface.ts` (11 methods)
+  - `src/services/interfaces/collaboration-service.interface.ts` (12 methods)
+  - `src/services/interfaces/user-service.interface.ts` (11 methods)
+  - `src/services/interfaces/store-service.interface.ts` (12 methods)
+  - `src/services/interfaces/auth-service.interface.ts` (11 methods)
+  - `src/services/interfaces/index.ts` (barrel export)
+
+- **Service Implementations (7 files):** Complete business logic for all MVP services
+  - `src/services/list.service.ts` (422 lines) — CRUD, budget tracking, templates, duplication
+  - `src/services/item.service.ts` (565 lines) — CRUD, check-off, auto-categorization, voice input
+  - `src/services/category.service.ts` (211 lines) — CRUD, store customization, usage statistics
+  - `src/services/user.service.ts` (141 lines) — Profile management, preferences, statistics
+  - `src/services/collaboration.service.ts` (298 lines) — Sharing, invitations, permissions, activity
+  - `src/services/store.service.ts` (260 lines) — CRUD, favorites, geolocation with Haversine formula
+  - `src/services/index.ts` — Service factory with singleton pattern and DI
+
+- **Documentation (3 files):**
+  - `docs/backend/services.md` — Service layer design, mapping, inventory
+  - `docs/backend/business-rules.md` — 50+ business rules across all domains
+  - `docs/backend/traceability.md` — Requirements traceability matrix for all 29 user stories
+
+**Implementation Highlights:**
+
+- **Business Logic:** 50+ rules enforced (max 100 lists, max 500 items, max 10 collaborators, etc.)
+- **Auto-Categorization:** 9 category patterns with keyword matching (produce, dairy, meat, bakery, etc.)
+- **Geolocation:** Haversine formula for accurate store distance calculation
+- **Transactions:** Multi-step operations wrapped in Prisma transactions
+- **Access Control:** Ownership and permission checks in all services
+- **Service Factory:** Singleton pattern with resetServices() for testing
+
+**Architecture:**
+
+- Services contain business logic only (no data access code)
+- Currently use Prisma directly (will be refactored to use repositories in SOP-201)
+- Clean separation between API routes → Services → (future) Repositories → Prisma
+- Type-safe interfaces ensure contract compliance
+- Factory pattern enables dependency injection and testing
+
+**Traceability:**
+
+- All 29 MVP user stories mapped to service methods
+- 8 epics covered (Shopping Lists, Collaboration, Budget, AI, Pantry, Meals, Offline, Location)
+- 100% coverage for Phase 1 MVP scope
+- Phase 2/3 services interfaces defined for future implementation
+
+**Notes:**
+
+- This was a backfill task — service layer was skipped earlier and identified during post-implementation audit
+- Authentication logic in lib/auth/ retained as-is (functions correctly, will refactor if needed in SOP-206)
+- Ready for SOP-201 (Repository Pattern) to abstract data access layer
+- All services tested manually during implementation
+
+---
+
+## 🔗 Quick Reference
 
 ### Directory Structure
 
