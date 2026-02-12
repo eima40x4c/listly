@@ -1,8 +1,10 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-import { auth } from '@/lib/auth';
-import { ItemService } from '@/services/item.service';
+import { withAuthAndErrorHandling } from '@/lib/api/withErrorHandling';
+import { createListItemSchema } from '@/lib/validation/schemas/list-item';
+import { validateBody } from '@/lib/validation/validate';
+import { getItemService } from '@/services';
 
 interface RouteParams {
   params: Promise<{
@@ -14,74 +16,51 @@ interface RouteParams {
  * GET /api/v1/lists/[id]/items
  * Get all items in a list
  */
-export async function GET(request: NextRequest, { params }: RouteParams) {
-  try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Unauthorized' } },
-        { status: 401 }
-      );
-    }
-
+export function GET(request: NextRequest, { params }: RouteParams) {
+  return withAuthAndErrorHandling(async (req, user) => {
     const { id: listId } = await params;
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = new URL(req.url);
     const isChecked = searchParams.get('isChecked');
-    const categoryId = searchParams.get('categoryId') || undefined;
 
-    const itemService = new ItemService();
-    const result = await itemService.getByList(listId, session.user.id, {
-      isChecked:
-        isChecked === 'true' ? true : isChecked === 'false' ? false : undefined,
-      categoryId,
-    });
+    const itemService = getItemService();
+    // Service signature: getByList(listId, userId, includeChecked)
+    // When isChecked param is 'false', we want includeChecked=false (hide checked items)
+    // When isChecked is 'true' or null, we want includeChecked=true (show all)
+    const includeChecked = isChecked !== 'false';
+    const result = await itemService.getByList(listId, user.id, includeChecked);
 
     return NextResponse.json({
       success: true,
       data: result,
     });
-  } catch (error) {
-    console.error('Error fetching items:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: { message: 'Failed to fetch items' },
-      },
-      { status: 500 }
-    );
-  }
+  })(request);
 }
 
 /**
  * POST /api/v1/lists/[id]/items
  * Add a new item to the list
  */
-export async function POST(request: NextRequest, { params }: RouteParams) {
-  try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Unauthorized' } },
-        { status: 401 }
-      );
-    }
-
+export function POST(request: NextRequest, { params }: RouteParams) {
+  return withAuthAndErrorHandling(async (req, user) => {
     const { id: listId } = await params;
-    const body = await request.json();
 
-    const itemService = new ItemService();
+    // Validate request body
+    const validation = await validateBody(req, createListItemSchema);
+    if (!validation.success) return validation.error;
+
+    const data = validation.data;
+
+    const itemService = getItemService();
     const result = await itemService.create({
       listId,
-      name: body.name,
-      quantity: body.quantity || 1,
-      unit: body.unit,
-      categoryId: body.categoryId,
-      estimatedPrice: body.estimatedPrice,
-      notes: body.notes,
-      priority: body.priority,
-      addedById: session.user.id,
+      name: data.name,
+      quantity: data.quantity,
+      unit: data.unit,
+      categoryId: data.categoryId,
+      estimatedPrice: data.estimatedPrice,
+      notes: data.notes,
+      priority: data.priority,
+      addedById: user.id,
     });
 
     return NextResponse.json(
@@ -91,14 +70,5 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       },
       { status: 201 }
     );
-  } catch (error) {
-    console.error('Error creating item:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: { message: 'Failed to create item' },
-      },
-      { status: 500 }
-    );
-  }
+  })(request);
 }

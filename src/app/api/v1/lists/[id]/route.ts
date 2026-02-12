@@ -1,8 +1,10 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-import { auth } from '@/lib/auth';
-import { ListService } from '@/services/list.service';
+import { withAuthAndErrorHandling } from '@/lib/api/withErrorHandling';
+import { updateShoppingListSchema } from '@/lib/validation/schemas/shopping-list';
+import { validateBody } from '@/lib/validation/validate';
+import { getListService } from '@/services';
 
 interface RouteParams {
   params: Promise<{
@@ -14,30 +16,24 @@ interface RouteParams {
  * GET /api/v1/lists/[id]
  * Get a specific list by ID
  */
-export async function GET(request: NextRequest, { params }: RouteParams) {
-  try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Unauthorized' } },
-        { status: 401 }
-      );
-    }
-
+export function GET(_request: NextRequest, { params }: RouteParams) {
+  return withAuthAndErrorHandling(async (req, user) => {
     const { id } = await params;
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = new URL(req.url);
     const include = searchParams.get('include')?.split(',') || [];
 
-    const listService = new ListService();
+    const listService = getListService();
     const result =
       include.length > 0
-        ? await listService.getByIdWithDetails(id, session.user.id)
-        : await listService.getById(id, session.user.id);
+        ? await listService.getByIdWithDetails(id, user.id)
+        : await listService.getById(id, user.id);
 
     if (!result) {
       return NextResponse.json(
-        { success: false, error: { message: 'List not found' } },
+        {
+          success: false,
+          error: { code: 'NOT_FOUND', message: 'List not found' },
+        },
         { status: 404 }
       );
     }
@@ -46,84 +42,47 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       success: true,
       data: result,
     });
-  } catch (error) {
-    console.error('Error fetching list:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: { message: 'Failed to fetch list' },
-      },
-      { status: 500 }
-    );
-  }
+  })(_request);
 }
 
 /**
  * PATCH /api/v1/lists/[id]
  * Update a specific list
  */
-export async function PATCH(request: NextRequest, { params }: RouteParams) {
-  try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Unauthorized' } },
-        { status: 401 }
-      );
-    }
-
+export function PATCH(request: NextRequest, { params }: RouteParams) {
+  return withAuthAndErrorHandling(async (req, user) => {
     const { id } = await params;
-    const body = await request.json();
 
-    const listService = new ListService();
-    const result = await listService.update(id, session.user.id, body);
+    // Validate request body
+    const validation = await validateBody(req, updateShoppingListSchema);
+    if (!validation.success) return validation.error;
+
+    // Filter out null values
+    const updateData = Object.fromEntries(
+      Object.entries(validation.data).filter(([_, v]) => v !== null)
+    );
+
+    const listService = getListService();
+    const result = await listService.update(id, user.id, updateData);
 
     return NextResponse.json({
       success: true,
       data: result,
     });
-  } catch (error) {
-    console.error('Error updating list:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: { message: 'Failed to update list' },
-      },
-      { status: 500 }
-    );
-  }
+  })(request);
 }
 
 /**
  * DELETE /api/v1/lists/[id]
  * Delete a specific list
  */
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
-  try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Unauthorized' } },
-        { status: 401 }
-      );
-    }
-
+export function DELETE(request: NextRequest, { params }: RouteParams) {
+  return withAuthAndErrorHandling(async (_req, user) => {
     const { id } = await params;
 
-    const listService = new ListService();
-    await listService.delete(id, session.user.id);
+    const listService = getListService();
+    await listService.delete(id, user.id);
 
     return new NextResponse(null, { status: 204 });
-  } catch (error) {
-    console.error('Error deleting list:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: { message: 'Failed to delete list' },
-      },
-      { status: 500 }
-    );
-  }
+  })(request);
 }

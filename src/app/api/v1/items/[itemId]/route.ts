@@ -1,8 +1,10 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-import { auth } from '@/lib/auth';
-import { ItemService } from '@/services/item.service';
+import { withAuthAndErrorHandling } from '@/lib/api/withErrorHandling';
+import { updateListItemSchema } from '@/lib/validation/schemas/list-item';
+import { validateBody } from '@/lib/validation/validate';
+import { getItemService } from '@/services';
 
 interface RouteParams {
   params: Promise<{
@@ -14,68 +16,40 @@ interface RouteParams {
  * PATCH /api/v1/items/[itemId]
  * Update an item
  */
-export async function PATCH(request: NextRequest, { params }: RouteParams) {
-  try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Unauthorized' } },
-        { status: 401 }
-      );
-    }
-
+export function PATCH(request: NextRequest, { params }: RouteParams) {
+  return withAuthAndErrorHandling(async (req, user) => {
     const { itemId } = await params;
-    const body = await request.json();
 
-    const itemService = new ItemService();
-    const result = await itemService.update(itemId, session.user.id, body);
+    // Validate request body
+    const validation = await validateBody(req, updateListItemSchema);
+    if (!validation.success) return validation.error;
+
+    // Filter out null values
+    const updateData = Object.fromEntries(
+      Object.entries(validation.data).filter(([_, v]) => v !== null)
+    );
+
+    const itemService = getItemService();
+    const result = await itemService.update(itemId, user.id, updateData);
 
     return NextResponse.json({
       success: true,
       data: result,
     });
-  } catch (error) {
-    console.error('Error updating item:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: { message: 'Failed to update item' },
-      },
-      { status: 500 }
-    );
-  }
+  })(request);
 }
 
 /**
  * DELETE /api/v1/items/[itemId]
  * Delete an item
  */
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
-  try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Unauthorized' } },
-        { status: 401 }
-      );
-    }
-
+export function DELETE(request: NextRequest, { params }: RouteParams) {
+  return withAuthAndErrorHandling(async (_req, user) => {
     const { itemId } = await params;
 
-    const itemService = new ItemService();
-    await itemService.delete(itemId, session.user.id);
+    const itemService = getItemService();
+    await itemService.delete(itemId, user.id);
 
     return new NextResponse(null, { status: 204 });
-  } catch (error) {
-    console.error('Error deleting item:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: { message: 'Failed to delete item' },
-      },
-      { status: 500 }
-    );
-  }
+  })(request);
 }
