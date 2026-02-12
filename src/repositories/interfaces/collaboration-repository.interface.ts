@@ -98,4 +98,31 @@ export interface ICollaborationRepository extends IBaseRepository<ListCollaborat
    * Get user's role on a list
    */
   getRole(listId: string, userId: string): Promise<CollaboratorRole | null>;
+
+  /**
+   * Find a list with its collaborators for permission check
+   */
+  findListWithCollaborators(
+    listId: string,
+    userId: string
+  ): Promise<{
+    ownerId: string;
+    collaborator: { role: CollaboratorRole } | null;
+  } | null>;
+
+  /**
+   * Get item history for a list
+   */
+  getItemHistory(
+    listId: string,
+    limit: number
+  ): Promise<
+    Array<{
+      id: string;
+      userId: string;
+      userName: string | null;
+      itemName: string;
+      createdAt: Date;
+    }>
+  >;
 }

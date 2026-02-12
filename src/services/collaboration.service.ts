@@ -10,7 +10,6 @@
 import type { CollaboratorRole, ListCollaborator } from '@prisma/client';
 import { randomBytes } from 'crypto';
 
-import { prisma } from '@/lib/db';
 import {
   ForbiddenError,
   NotFoundError,
@@ -223,26 +222,22 @@ export class CollaborationService implements ICollaborationService {
     userId: string,
     permission: 'view' | 'edit' | 'admin'
   ): Promise<boolean> {
-    const list = await prisma.shoppingList.findUnique({
-      where: { id: listId },
-      include: {
-        collaborators: {
-          where: { userId },
-        },
-      },
-    });
+    const result = await this.collabRepo.findListWithCollaborators(
+      listId,
+      userId
+    );
 
-    if (!list) {
+    if (!result) {
       return false;
     }
 
     // Owner has all permissions
-    if (list.ownerId === userId) {
+    if (result.ownerId === userId) {
       return true;
     }
 
     // Check collaborator role
-    const collaborator = list.collaborators[0];
+    const collaborator = result.collaborator;
     if (!collaborator) {
       return false;
     }
@@ -272,32 +267,15 @@ export class CollaborationService implements ICollaborationService {
       throw new ForbiddenError('You do not have access to this list');
     }
 
-    // Get recent item history
-    const history = await prisma.itemHistory.findMany({
-      where: { item: { listId } },
-      include: {
-        user: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        item: {
-          select: {
-            name: true,
-          },
-        },
-      },
-      orderBy: { createdAt: 'desc' },
-      take: limit,
-    });
+    // Get recent item history via repository
+    const history = await this.collabRepo.getItemHistory(listId, limit);
 
     return history.map((h) => ({
       id: h.id,
       action: 'CHECKED' as const,
-      itemName: h.item?.name || 'Unknown Item',
+      itemName: h.itemName,
       userId: h.userId,
-      userName: h.user.name,
+      userName: h.userName || 'Unknown User',
       timestamp: h.createdAt,
     }));
   }

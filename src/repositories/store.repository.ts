@@ -232,4 +232,63 @@ export class StoreRepository
   async count(): Promise<number> {
     return (this.db as PrismaClient).store.count();
   }
+
+  /**
+   * Find all stores with filter, pagination, and sorting
+   */
+  async findAllFiltered(
+    where: Prisma.StoreWhereInput,
+    options: { skip: number; take: number; orderBy?: Record<string, string> }
+  ): Promise<{ stores: Store[]; total: number }> {
+    const [stores, total] = await Promise.all([
+      (this.db as PrismaClient).store.findMany({
+        where,
+        skip: options.skip,
+        take: options.take,
+        orderBy: options.orderBy || { name: 'asc' },
+      }),
+      (this.db as PrismaClient).store.count({ where }),
+    ]);
+
+    return { stores, total };
+  }
+
+  /**
+   * Get user's favorite stores with store details
+   */
+  async getFavoritesWithStore(
+    userId: string
+  ): Promise<Array<Store & { isFavorite: boolean }>> {
+    const favorites = await (
+      this.db as PrismaClient
+    ).userFavoriteStore.findMany({
+      where: { userId },
+      include: { store: true },
+      orderBy: { createdAt: 'asc' },
+    });
+
+    return favorites.map((fav) => ({
+      ...fav.store,
+      isFavorite: true,
+    }));
+  }
+
+  /**
+   * Reorder user's favorite stores
+   */
+  async reorderFavorites(userId: string, storeIds: string[]): Promise<void> {
+    await (this.db as PrismaClient).$transaction(async (tx) => {
+      // Delete all current favorites
+      await tx.userFavoriteStore.deleteMany({
+        where: { userId },
+      });
+
+      // Re-add in new order
+      for (const storeId of storeIds) {
+        await tx.userFavoriteStore.create({
+          data: { userId, storeId },
+        });
+      }
+    });
+  }
 }

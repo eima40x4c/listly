@@ -7,7 +7,13 @@
  * @module repositories/user.repository
  */
 
-import type { AuthProvider, Prisma, PrismaClient, User } from '@prisma/client';
+import type {
+  AuthProvider,
+  Prisma,
+  PrismaClient,
+  User,
+  UserPreferences,
+} from '@prisma/client';
 
 import { BaseRepository } from './base.repository';
 import type { IUserRepository, UserWithPreferences } from './interfaces';
@@ -94,7 +100,16 @@ export class UserRepository
   }
 
   /**
-   * Update user preferences
+   * Find user preferences
+   */
+  async findPreferences(userId: string): Promise<UserPreferences | null> {
+    return (this.db as PrismaClient).userPreferences.findUnique({
+      where: { userId },
+    });
+  }
+
+  /**
+   * Update user preferences (upsert)
    */
   async updatePreferences(
     userId: string,
@@ -117,20 +132,32 @@ export class UserRepository
     listCount: number;
     itemCount: number;
     collaborationCount: number;
+    completedListsCount: number;
   }> {
-    const [listCount, itemCount, collaborationCount] = await Promise.all([
-      (this.db as PrismaClient).shoppingList.count({
-        where: { ownerId: userId },
-      }),
-      (this.db as PrismaClient).listItem.count({
-        where: { addedById: userId },
-      }),
-      (this.db as PrismaClient).listCollaborator.count({
-        where: { userId },
-      }),
-    ]);
+    const [listCount, itemCount, collaborationCount, completedListsCount] =
+      await Promise.all([
+        (this.db as PrismaClient).shoppingList.count({
+          where: { ownerId: userId },
+        }),
+        (this.db as PrismaClient).listItem.count({
+          where: {
+            list: {
+              OR: [
+                { ownerId: userId },
+                { collaborators: { some: { userId } } },
+              ],
+            },
+          },
+        }),
+        (this.db as PrismaClient).listCollaborator.count({
+          where: { userId },
+        }),
+        (this.db as PrismaClient).shoppingList.count({
+          where: { ownerId: userId, status: 'COMPLETED' },
+        }),
+      ]);
 
-    return { listCount, itemCount, collaborationCount };
+    return { listCount, itemCount, collaborationCount, completedListsCount };
   }
 
   /**

@@ -99,4 +99,24 @@ export interface IStoreRepository extends IBaseRepository<Store> {
    * Count total stores
    */
   count(): Promise<number>;
+
+  /**
+   * Find all stores with filter, pagination, and sorting
+   */
+  findAllFiltered(
+    where: Prisma.StoreWhereInput,
+    options: { skip: number; take: number; orderBy?: Record<string, string> }
+  ): Promise<{ stores: Store[]; total: number }>;
+
+  /**
+   * Get user's favorite stores with store details
+   */
+  getFavoritesWithStore(
+    userId: string
+  ): Promise<Array<Store & { isFavorite: boolean }>>;
+
+  /**
+   * Reorder user's favorite stores
+   */
+  reorderFavorites(userId: string, storeIds: string[]): Promise<void>;
 }

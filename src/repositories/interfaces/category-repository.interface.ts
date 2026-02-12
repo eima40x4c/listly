@@ -91,4 +91,29 @@ export interface ICategoryRepository extends IBaseRepository<Category> {
    * Delete store category customization
    */
   deleteStoreCategory(storeId: string, categoryId: string): Promise<void>;
+
+  /**
+   * Get category usage stats for a specific user
+   */
+  getUsageStatsForUser(
+    userId: string
+  ): Promise<Array<Category & { itemCount: number }>>;
+
+  /**
+   * Replace store category customizations
+   */
+  customizeForStore(
+    storeId: string,
+    customizations: Array<{
+      categoryId: string;
+      aisleNumber?: string;
+      customName?: string;
+      sortOrder: number;
+    }>
+  ): Promise<StoreCategory[]>;
+
+  /**
+   * Update store category sort order
+   */
+  updateStoreOrder(storeId: string, categoryIds: string[]): Promise<void>;
 }

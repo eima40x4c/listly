@@ -109,7 +109,7 @@ export interface IStoreService extends IBaseService {
   /**
    * Add store to user's favorites
    */
-  addFavorite(userId: string, storeId: string): Promise<UserFavoriteStore>;
+  addFavorite(userId: string, storeId: string): Promise<IStoreWithFavorite>;
 
   /**
    * Remove store from user's favorites

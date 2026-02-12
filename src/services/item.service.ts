@@ -9,7 +9,6 @@
 
 import type { ListItem, Prisma } from '@prisma/client';
 
-import { prisma } from '@/lib/db';
 import {
   ForbiddenError,
   NotFoundError,
@@ -126,12 +125,9 @@ export class ItemService implements IItemService {
       }
     }
 
-    // Get next sort order (still using prisma for aggregation)
-    const maxOrder = await prisma.listItem.aggregate({
-      where: { listId: input.listId },
-      _max: { sortOrder: true },
-    });
-    const sortOrder = (maxOrder._max.sortOrder || 0) + 1;
+    // Get next sort order via repository
+    const maxSortOrder = await this.itemRepo.getMaxSortOrder(input.listId);
+    const sortOrder = maxSortOrder + 1;
 
     const item = await this.itemRepo.create({
       name: input.name,

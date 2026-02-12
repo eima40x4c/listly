@@ -9,7 +9,6 @@
 
 import type { User, UserPreferences } from '@prisma/client';
 
-import { prisma } from '@/lib/db';
 import { NotFoundError } from '@/lib/errors/AppError';
 import { UserRepository } from '@/repositories';
 
@@ -64,34 +63,28 @@ export class UserService implements IUserService {
     userId: string,
     data: IUpdatePreferencesInput
   ): Promise<UserPreferences> {
-    // Check if preferences exist
-    const existing = await prisma.userPreferences.findUnique({
-      where: { userId },
-    });
+    // Check if preferences exist via repository
+    const existing = await this.userRepo.findPreferences(userId);
 
     if (existing) {
-      return prisma.userPreferences.update({
-        where: { userId },
-        data,
-      });
+      // Use repository upsert (handles update case)
+      await this.userRepo.updatePreferences(userId, data);
+      // Fetch updated preferences
+      const updated = await this.userRepo.findPreferences(userId);
+      return updated!;
     }
 
-    // Create if not exists
-    return prisma.userPreferences.create({
-      data: {
-        userId,
-        ...data,
-      },
-    });
+    // Create if not exists via repository upsert
+    await this.userRepo.updatePreferences(userId, data);
+    const created = await this.userRepo.findPreferences(userId);
+    return created!;
   }
 
   /**
    * Get user preferences
    */
   async getPreferences(userId: string): Promise<UserPreferences | null> {
-    return prisma.userPreferences.findUnique({
-      where: { userId },
-    });
+    return this.userRepo.findPreferences(userId);
   }
 
   /**
@@ -111,35 +104,7 @@ export class UserService implements IUserService {
    * Get user statistics
    */
   async getStats(userId: string): Promise<IUserStats> {
-    const [listCount, itemCount, collaborationCount, completedListsCount] =
-      await Promise.all([
-        prisma.shoppingList.count({
-          where: { ownerId: userId },
-        }),
-        prisma.listItem.count({
-          where: {
-            list: {
-              OR: [
-                { ownerId: userId },
-                { collaborators: { some: { userId } } },
-              ],
-            },
-          },
-        }),
-        prisma.listCollaborator.count({
-          where: { userId },
-        }),
-        prisma.shoppingList.count({
-          where: { ownerId: userId, status: 'COMPLETED' },
-        }),
-      ]);
-
-    return {
-      listCount,
-      itemCount,
-      collaborationCount,
-      completedListsCount,
-    };
+    return this.userRepo.getStats(userId);
   }
 
   /**

@@ -122,4 +122,29 @@ export interface IListRepository extends IBaseRepository<ShoppingList> {
    * Get estimated total for a list
    */
   getEstimatedTotal(listId: string): Promise<number>;
+
+  /**
+   * Find accessible lists with filter, pagination, and sorting
+   */
+  findAccessible(
+    where: Prisma.ShoppingListWhereInput,
+    options: { skip: number; take: number; orderBy?: Record<string, string> }
+  ): Promise<{ lists: ShoppingList[]; total: number }>;
+
+  /**
+   * Find template lists owned by a user
+   */
+  findTemplates(ownerId: string): Promise<ShoppingList[]>;
+
+  /**
+   * Find a template list by ID
+   */
+  findTemplate(id: string): Promise<ShoppingList | null>;
+
+  /**
+   * Find a list with owner info
+   */
+  findByIdWithOwner(
+    id: string
+  ): Promise<(ShoppingList & { owner: { id: string; name: string } }) | null>;
 }

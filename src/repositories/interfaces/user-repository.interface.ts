@@ -6,7 +6,7 @@
  * @module repositories/interfaces/user-repository.interface
  */
 
-import type { Prisma, User } from '@prisma/client';
+import type { Prisma, User, UserPreferences } from '@prisma/client';
 import type { Decimal } from '@prisma/client/runtime/library';
 
 import type { IBaseRepository } from './base-repository.interface';
@@ -65,7 +65,12 @@ export interface IUserRepository extends IBaseRepository<User> {
   delete(id: string): Promise<void>;
 
   /**
-   * Update user preferences
+   * Find user preferences
+   */
+  findPreferences(userId: string): Promise<UserPreferences | null>;
+
+  /**
+   * Update user preferences (upsert)
    */
   updatePreferences(
     userId: string,
@@ -79,6 +84,7 @@ export interface IUserRepository extends IBaseRepository<User> {
     listCount: number;
     itemCount: number;
     collaborationCount: number;
+    completedListsCount: number;
   }>;
 
   /**

@@ -9,6 +9,8 @@
 
 import type { Category, StoreCategory } from '@prisma/client';
 
+import type { CategoryWithStore } from '@/repositories/interfaces/category-repository.interface';
+
 import type { IBaseService } from './base-service.interface';
 
 /**
@@ -63,9 +65,7 @@ export interface ICategoryService extends IBaseService {
   /**
    * Get categories for a specific store
    */
-  getByStore(
-    storeId: string
-  ): Promise<(Category & { storeCategory?: StoreCategory })[]>;
+  getByStore(storeId: string): Promise<CategoryWithStore[]>;
 
   /**
    * Get category by slug

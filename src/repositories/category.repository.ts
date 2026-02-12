@@ -188,4 +188,88 @@ export class CategoryRepository
       },
     });
   }
+
+  /**
+   * Get category usage stats for a specific user
+   */
+  async getUsageStatsForUser(
+    userId: string
+  ): Promise<Array<Category & { itemCount: number }>> {
+    const categories = await (this.db as PrismaClient).category.findMany({
+      where: { isDefault: true },
+    });
+
+    const stats = await Promise.all(
+      categories.map(async (category) => {
+        const count = await (this.db as PrismaClient).listItem.count({
+          where: {
+            categoryId: category.id,
+            list: {
+              OR: [
+                { ownerId: userId },
+                { collaborators: { some: { userId } } },
+              ],
+            },
+          },
+        });
+
+        return {
+          ...category,
+          itemCount: count,
+        };
+      })
+    );
+
+    return stats.sort((a, b) => b.itemCount - a.itemCount);
+  }
+
+  /**
+   * Replace store category customizations
+   */
+  async customizeForStore(
+    storeId: string,
+    customizations: Array<{
+      categoryId: string;
+      aisleNumber?: string;
+      customName?: string;
+      sortOrder: number;
+    }>
+  ): Promise<StoreCategory[]> {
+    // Delete existing customizations
+    await (this.db as PrismaClient).storeCategory.deleteMany({
+      where: { storeId },
+    });
+
+    // Create new customizations
+    return (this.db as PrismaClient).$transaction(
+      customizations.map((custom) =>
+        (this.db as PrismaClient).storeCategory.create({
+          data: {
+            storeId,
+            categoryId: custom.categoryId,
+            aisleNumber: custom.aisleNumber,
+            customName: custom.customName,
+            sortOrder: custom.sortOrder,
+          },
+        })
+      )
+    );
+  }
+
+  /**
+   * Update store category sort order
+   */
+  async updateStoreOrder(
+    storeId: string,
+    categoryIds: string[]
+  ): Promise<void> {
+    await (this.db as PrismaClient).$transaction(
+      categoryIds.map((categoryId, index) =>
+        (this.db as PrismaClient).storeCategory.updateMany({
+          where: { storeId, categoryId },
+          data: { sortOrder: index },
+        })
+      )
+    );
+  }
 }

@@ -9,7 +9,6 @@
 
 import type { Prisma, ShoppingList } from '@prisma/client';
 
-import { prisma } from '@/lib/db';
 import {
   ForbiddenError,
   NotFoundError,
@@ -164,19 +163,16 @@ export class ListService implements IListService {
       where.name = { contains: filters.search, mode: 'insensitive' };
     }
 
-    // Get lists and total count (still using prisma for complex queries)
-    // TODO: Move to repository when complex query support is added
-    const [lists, total] = await Promise.all([
-      prisma.shoppingList.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy: filters?.sort
-          ? { [filters.sort]: filters.order || 'desc' }
-          : { createdAt: 'desc' },
-      }),
-      prisma.shoppingList.count({ where }),
-    ]);
+    // Get lists and total count via repository
+    const orderBy = filters?.sort
+      ? { [filters.sort]: filters.order || 'desc' }
+      : { createdAt: 'desc' };
+
+    const { lists, total } = await this.listRepo.findAccessible(where, {
+      skip,
+      take: limit,
+      orderBy,
+    });
 
     // Enrich with metadata using repositories
     const enrichedLists = await Promise.all(
@@ -302,20 +298,8 @@ export class ListService implements IListService {
       throw new NotFoundError('List not found');
     }
 
-    // Get all items from original list
-    const items = await prisma.listItem.findMany({
-      where: { listId: id },
-      select: {
-        name: true,
-        quantity: true,
-        unit: true,
-        notes: true,
-        priority: true,
-        estimatedPrice: true,
-        categoryId: true,
-        sortOrder: true,
-      },
-    });
+    // Get all items from original list via repository
+    const items = await this.itemRepo.findByList(id);
 
     // Create new list with items using transaction
     return withTransaction(async ({ listRepo, itemRepo }) => {
@@ -363,9 +347,7 @@ export class ListService implements IListService {
     userId: string,
     name?: string
   ): Promise<ShoppingList> {
-    const template = await prisma.shoppingList.findUnique({
-      where: { id: templateId, isTemplate: true },
-    });
+    const template = await this.listRepo.findTemplate(templateId);
 
     if (!template) {
       throw new NotFoundError('Template not found');
@@ -382,13 +364,7 @@ export class ListService implements IListService {
    * Get user's list templates
    */
   async getTemplates(userId: string): Promise<ShoppingList[]> {
-    return prisma.shoppingList.findMany({
-      where: {
-        ownerId: userId,
-        isTemplate: true,
-      },
-      orderBy: { name: 'asc' },
-    });
+    return this.listRepo.findTemplates(userId);
   }
 
   /**
@@ -404,14 +380,7 @@ export class ListService implements IListService {
   async getOwner(
     listId: string
   ): Promise<{ ownerId: string; ownerName: string }> {
-    const list = await prisma.shoppingList.findUnique({
-      where: { id: listId },
-      include: {
-        owner: {
-          select: { id: true, name: true },
-        },
-      },
-    });
+    const list = await this.listRepo.findByIdWithOwner(listId);
 
     if (!list) {
       throw new NotFoundError('List not found');

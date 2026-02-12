@@ -213,4 +213,62 @@ export class ListRepository
     });
     return Number(result._sum.estimatedPrice) || 0;
   }
+
+  /**
+   * Find accessible lists with filter, pagination, and sorting
+   */
+  async findAccessible(
+    where: Prisma.ShoppingListWhereInput,
+    options: { skip: number; take: number; orderBy?: Record<string, string> }
+  ): Promise<{ lists: ShoppingList[]; total: number }> {
+    const [lists, total] = await Promise.all([
+      (this.db as PrismaClient).shoppingList.findMany({
+        where,
+        skip: options.skip,
+        take: options.take,
+        orderBy: options.orderBy || { createdAt: 'desc' },
+      }),
+      (this.db as PrismaClient).shoppingList.count({ where }),
+    ]);
+
+    return { lists, total };
+  }
+
+  /**
+   * Find template lists owned by a user
+   */
+  async findTemplates(ownerId: string): Promise<ShoppingList[]> {
+    return (this.db as PrismaClient).shoppingList.findMany({
+      where: {
+        ownerId,
+        isTemplate: true,
+      },
+      orderBy: { name: 'asc' },
+    });
+  }
+
+  /**
+   * Find a template list by ID
+   */
+  async findTemplate(id: string): Promise<ShoppingList | null> {
+    return (this.db as PrismaClient).shoppingList.findUnique({
+      where: { id, isTemplate: true },
+    });
+  }
+
+  /**
+   * Find a list with owner info
+   */
+  async findByIdWithOwner(
+    id: string
+  ): Promise<(ShoppingList & { owner: { id: string; name: string } }) | null> {
+    return (this.db as PrismaClient).shoppingList.findUnique({
+      where: { id },
+      include: {
+        owner: {
+          select: { id: true, name: true },
+        },
+      },
+    });
+  }
 }

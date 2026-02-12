@@ -237,4 +237,15 @@ export class ItemRepository
       )
     );
   }
+
+  /**
+   * Get max sort order for items in a list
+   */
+  async getMaxSortOrder(listId: string): Promise<number> {
+    const result = await (this.db as PrismaClient).listItem.aggregate({
+      where: { listId },
+      _max: { sortOrder: true },
+    });
+    return result._max.sortOrder || 0;
+  }
 }

@@ -159,4 +159,79 @@ export class CollaborationRepository
     const collaborator = await this.findByListAndUser(listId, userId);
     return collaborator?.role || null;
   }
+
+  /**
+   * Find a list with its collaborators for permission check
+   */
+  async findListWithCollaborators(
+    listId: string,
+    userId: string
+  ): Promise<{
+    ownerId: string;
+    collaborator: { role: CollaboratorRole } | null;
+  } | null> {
+    const list = await (this.db as PrismaClient).shoppingList.findUnique({
+      where: { id: listId },
+      select: {
+        ownerId: true,
+        collaborators: {
+          where: { userId },
+          select: { role: true },
+          take: 1,
+        },
+      },
+    });
+
+    if (!list) {
+      return null;
+    }
+
+    return {
+      ownerId: list.ownerId,
+      collaborator: list.collaborators[0] || null,
+    };
+  }
+
+  /**
+   * Get item history for a list
+   */
+  async getItemHistory(
+    listId: string,
+    limit: number
+  ): Promise<
+    Array<{
+      id: string;
+      userId: string;
+      userName: string | null;
+      itemName: string;
+      createdAt: Date;
+    }>
+  > {
+    const history = await (this.db as PrismaClient).itemHistory.findMany({
+      where: { item: { listId } },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        item: {
+          select: {
+            name: true,
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+      take: limit,
+    });
+
+    return history.map((h) => ({
+      id: h.id,
+      userId: h.userId,
+      userName: h.user.name,
+      itemName: h.item?.name || 'Unknown Item',
+      createdAt: h.createdAt,
+    }));
+  }
 }

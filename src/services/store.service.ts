@@ -7,9 +7,8 @@
  * @module services/store.service
  */
 
-import type { Prisma, Store, UserFavoriteStore } from '@prisma/client';
+import type { Prisma, Store } from '@prisma/client';
 
-import { prisma } from '@/lib/db';
 import { NotFoundError } from '@/lib/errors/AppError';
 import { StoreRepository } from '@/repositories';
 
@@ -53,15 +52,11 @@ export class StoreService implements IStoreService {
       ];
     }
 
-    const [stores, total] = await Promise.all([
-      prisma.store.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy: { name: 'asc' },
-      }),
-      prisma.store.count({ where }),
-    ]);
+    const { stores, total } = await this.storeRepo.findAllFiltered(where, {
+      skip,
+      take: limit,
+      orderBy: { name: 'asc' },
+    });
 
     return {
       data: stores,
@@ -96,33 +91,7 @@ export class StoreService implements IStoreService {
     longitude: number,
     radiusKm = 10
   ): Promise<IStoreWithDistance[]> {
-    // Get all stores with coordinates
-    const stores = await prisma.store.findMany({
-      where: {
-        latitude: { not: null },
-        longitude: { not: null },
-      },
-    });
-
-    // Calculate distance using Haversine formula
-    const storesWithDistance = stores
-      .map((store) => {
-        const distance = this.calculateDistance(
-          latitude,
-          longitude,
-          Number(store.latitude),
-          Number(store.longitude)
-        );
-
-        return {
-          ...store,
-          distance,
-        };
-      })
-      .filter((store) => store.distance <= radiusKm)
-      .sort((a, b) => a.distance - b.distance);
-
-    return storesWithDistance;
+    return this.storeRepo.findNearby(latitude, longitude, radiusKm);
   }
 
   /**
@@ -162,96 +131,46 @@ export class StoreService implements IStoreService {
   async addFavorite(
     userId: string,
     storeId: string
-  ): Promise<UserFavoriteStore> {
+  ): Promise<Store & { isFavorite: boolean }> {
     // Check if already favorited
-    const existing = await prisma.userFavoriteStore.findUnique({
-      where: {
-        userId_storeId: {
-          userId,
-          storeId,
-        },
-      },
-    });
+    const alreadyFav = await this.storeRepo.isFavorite(storeId, userId);
 
-    if (existing) {
-      return existing;
+    if (alreadyFav) {
+      const store = await this.storeRepo.findById(storeId);
+      return { ...store!, isFavorite: true };
     }
 
-    return prisma.userFavoriteStore.create({
-      data: {
-        userId,
-        storeId,
-      },
-    });
+    await this.storeRepo.addFavorite(storeId, userId);
+    const store = await this.storeRepo.findById(storeId);
+    return { ...store!, isFavorite: true };
   }
 
   /**
    * Remove store from favorites
    */
   async removeFavorite(userId: string, storeId: string): Promise<void> {
-    await prisma.userFavoriteStore.delete({
-      where: {
-        userId_storeId: {
-          userId,
-          storeId,
-        },
-      },
-    });
+    await this.storeRepo.removeFavorite(storeId, userId);
   }
 
   /**
    * Get user's favorite stores
    */
   async getFavorites(userId: string): Promise<IStoreWithFavorite[]> {
-    const favorites = await prisma.userFavoriteStore.findMany({
-      where: { userId },
-      include: {
-        store: true,
-      },
-      orderBy: { createdAt: 'asc' },
-    });
-
-    return favorites.map((fav) => ({
-      ...fav.store,
-      isFavorite: true,
-    }));
+    return this.storeRepo.getFavoritesWithStore(userId);
   }
 
   /**
    * Reorder favorites
    */
   async reorderFavorites(userId: string, storeIds: string[]): Promise<void> {
-    // Without a sortOrder field, we'll need to delete and re-add favorites in order
-    // This maintains the order via createdAt timestamps
-    await prisma.$transaction(async (tx) => {
-      // Delete all current favorites
-      await tx.userFavoriteStore.deleteMany({
-        where: { userId },
-      });
-
-      // Re-add in new order
-      for (const storeId of storeIds) {
-        await tx.userFavoriteStore.create({
-          data: { userId, storeId },
-        });
-      }
-    });
+    await this.storeRepo.reorderFavorites(userId, storeIds);
   }
 
   /**
    * Check if store is favorited
    */
   async isFavorite(userId: string, storeId: string): Promise<boolean> {
-    const favorite = await prisma.userFavoriteStore.findUnique({
-      where: {
-        userId_storeId: {
-          userId,
-          storeId,
-        },
-      },
-    });
-
-    return !!favorite;
+    return this.storeRepo.isFavorite(storeId, userId);
   }
 
   /**
@@ -259,33 +178,5 @@ export class StoreService implements IStoreService {
    */
   async getByChain(chain: string): Promise<Store[]> {
     return this.storeRepo.findByChain(chain);
-  }
-
-  /**
-   * Calculate distance between two coordinates using Haversine formula
-   */
-  private calculateDistance(
-    lat1: number,
-    lon1: number,
-    lat2: number,
-    lon2: number
-  ): number {
-    const R = 6371; // Earth's radius in kilometers
-    const dLat = this.toRadians(lat2 - lat1);
-    const dLon = this.toRadians(lon2 - lon1);
-
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(this.toRadians(lat1)) *
-        Math.cos(this.toRadians(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-  }
-
-  private toRadians(degrees: number): number {
-    return degrees * (Math.PI / 180);
   }
 }

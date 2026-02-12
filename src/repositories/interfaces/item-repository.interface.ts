@@ -113,4 +113,9 @@ export interface IItemRepository extends IBaseRepository<ListItem> {
   updatePositions(
     updates: Array<{ id: string; sortOrder: number }>
   ): Promise<void>;
+
+  /**
+   * Get max sort order for items in a list
+   */
+  getMaxSortOrder(listId: string): Promise<number>;
 }
