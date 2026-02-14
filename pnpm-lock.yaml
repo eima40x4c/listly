@@ -71,6 +71,9 @@ dependencies:
   next-auth:
     specifier: ^5.0.0-beta.18
     version: 5.0.0-beta.30(next@14.2.35)(react@18.3.1)
+  next-themes:
+    specifier: ^0.4.6
+    version: 0.4.6(react-dom@18.3.1)(react@18.3.1)
   postcss:
     specifier: ^8.4.0
     version: 8.5.6
@@ -92,6 +95,9 @@ dependencies:
   resend:
     specifier: ^3.2.0
     version: 3.5.0(react-dom@18.3.1)(react@18.3.1)
+  sonner:
+    specifier: ^2.0.7
+    version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
   tailwind-merge:
     specifier: ^2.3.0
     version: 2.6.1
@@ -175,9 +181,6 @@ devDependencies:
   lint-staged:
     specifier: ^15.2.0
     version: 15.5.2
-  next-themes:
-    specifier: ^0.4.6
-    version: 0.4.6(react-dom@18.3.1)(react@18.3.1)
   prettier:
     specifier: ^3.2.0
     version: 3.8.1
@@ -6255,7 +6258,7 @@ packages:
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-    dev: true
+    dev: false
 
   /next@14.2.35(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(@playwright/test@1.58.2)(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-KhYd2Hjt/O1/1aZVX3dCwGXM1QmOV4eNM2UTacK5gipDdPN/oHHK/4oVGy7X8GMfPMsUTUEmGlsy0EY1YGAkig==}
@@ -7335,6 +7338,16 @@ packages:
       ansi-styles: 6.2.3
       is-fullwidth-code-point: 5.1.0
     dev: true
+
+  /sonner@2.0.7(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-W6ZN4p58k8aDKA4XPcx2hpIQXBRAgyiWVkYhT7CvK6D3iAu7xjvVyhQHg2/iaKJZ1XVJ4r7XuwGL+WGEK37i9w==}
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+      react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    dev: false
 
   /source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}

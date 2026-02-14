@@ -1,0 +1,264 @@
+/* ==========================================================================
+   Animations & Micro-Interactions
+   Per interactions.md spec — CSS keyframe animations with reduced motion support.
+   ========================================================================== */
+
+/* Shimmer animation for skeleton loading states */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Slide in from top for new items */
+@keyframes slide-in-from-top {
+  0% {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide in from bottom for modals/toasts */
+@keyframes slide-in-from-bottom {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade in */
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Scale up for modal open */
+@keyframes scale-up {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Pulse for warnings (budget exceeded, expiring items) */
+@keyframes pulse-warning {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Checkmark draw-in */
+@keyframes check-draw {
+  0% {
+    stroke-dashoffset: 24;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Success pulse on button */
+@keyframes success-pulse {
+  0% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px hsl(var(--primary) / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0);
+  }
+}
+
+/* Glow effect for real-time updates */
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 0 0 hsl(210 100% 50% / 0.4);
+  }
+  70% {
+    box-shadow: 0 0 8px 4px hsl(210 100% 50% / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 hsl(210 100% 50% / 0);
+  }
+}
+
+/* Page enter — fade in + slide up */
+@keyframes page-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dropdown enter — scale + fade */
+@keyframes dropdown-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Modal enter — scale + fade + backdrop */
+@keyframes modal-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modal-backdrop-enter {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Button pulse-ready — highlights button when form is ready */
+@keyframes button-pulse-ready {
+  0% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0.5);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 8px hsl(var(--primary) / 0);
+    transform: scale(1.02);
+  }
+  100% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0);
+    transform: scale(1);
+  }
+}
+
+/* Utility classes */
+.animate-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+  background-size: 200% 100%;
+}
+
+.animate-slide-in-top {
+  animation: slide-in-from-top 400ms ease-out;
+}
+
+.animate-slide-in-bottom {
+  animation: slide-in-from-bottom 400ms ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 300ms ease-out;
+}
+
+.animate-scale-up {
+  animation: scale-up 250ms ease-out;
+}
+
+.animate-pulse-warning {
+  animation: pulse-warning 300ms ease-in-out 3;
+}
+
+.animate-success-pulse {
+  animation: success-pulse 600ms ease-out;
+}
+
+.animate-glow {
+  animation: glow 2s ease-out;
+}
+
+.animate-check {
+  stroke-dasharray: 24;
+  animation: check-draw 300ms ease-out forwards;
+}
+
+.animate-page-enter {
+  animation: page-enter 200ms ease-out forwards;
+}
+
+.animate-dropdown-enter {
+  animation: dropdown-enter 200ms ease-out forwards;
+}
+
+.animate-modal-enter {
+  animation: modal-enter 250ms ease-out forwards;
+}
+
+.animate-modal-backdrop {
+  animation: modal-backdrop-enter 200ms ease-out forwards;
+}
+
+.animate-button-pulse-ready {
+  animation: button-pulse-ready 600ms ease-out 2;
+}
+
+/* Strikethrough animation for checked items */
+.animate-strikethrough {
+  position: relative;
+}
+
+.animate-strikethrough::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 200ms ease-out;
+}
+
+.animate-strikethrough.checked::after {
+  width: 100%;
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-shimmer {
+    animation: none;
+    background-size: 100% 100%;
+  }
+}

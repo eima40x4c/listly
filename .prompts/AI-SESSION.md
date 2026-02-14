@@ -134,6 +134,110 @@
 
 ---
 
+## �️ Checkpoint Tracker
+
+> **AI Agent Responsibility:** Update this section as you complete each phase. Fill in the document locations and key decisions so checkpoints can be run efficiently.
+>
+> **See:** `AI-GUIDE.md` → "Checkpoint System" for the checkpoint prompt template.
+
+### Source of Truth (Level 0)
+
+These are human-approved and must never be contradicted:
+
+| Document     | Location                | Last Updated | Key Decisions                                                   |
+| ------------ | ----------------------- | ------------ | --------------------------------------------------------------- |
+| Requirements | `/docs/requirements.md` | 2026-02-08   | 29 user stories, 8 epics, MVP scope: lists, auth, collaboration |
+| Tech Stack   | `/docs/tech-stack.md`   | 2026-02-08   | Next.js 14, PostgreSQL 16, Prisma 5, NextAuth.js 5, Supabase    |
+
+### Phase 1 Checkpoint — Database Design
+
+| Design Doc (Level 1) | Location                              | Traces to Requirement                       |
+| -------------------- | ------------------------------------- | ------------------------------------------- |
+| Database Selection   | `/docs/database/database-decision.md` | PostgreSQL for relational data (US-001–029) |
+| Schema/ERD           | `/docs/database/schema.md`            | All 12 entities from requirements mapped    |
+| Seed Data            | `/docs/database/seed-data.md`         | Test data for 3 users, all resource types   |
+
+| Implementation (Level 2) | Location               | Traces to Design                |
+| ------------------------ | ---------------------- | ------------------------------- |
+| Prisma Schema            | `prisma/schema.prisma` | Matches ERD: 12 tables, 5 enums |
+| Migrations               | `prisma/migrations/`   | Not yet created (using db push) |
+| Seed Script              | `prisma/seed.ts`       | Matches seed data doc           |
+
+**Checkpoint Status:** ⬚ Not Run
+**Last Run:** —
+**Issues:** —
+
+---
+
+### Phase 2 Checkpoint — Backend/API
+
+| Design Doc (Level 1) | Location                          | Traces to Requirement                           |
+| -------------------- | --------------------------------- | ----------------------------------------------- |
+| API Endpoints        | `/docs/api/endpoints.md`          | CRUD for all 12 resources, 60+ endpoints        |
+| OpenAPI Spec         | `/docs/api/openapi.yaml`          | Full OpenAPI 3.0.3 spec matching endpoints.md   |
+| Auth Strategy        | `/docs/authentication.md`         | OAuth primary + email/password per requirements |
+| Authorization        | `/docs/authorization.md`          | Resource-based: owner > ADMIN > EDITOR > VIEWER |
+| Error Codes          | `/docs/api/errors.md`             | 18 standardized error codes with examples       |
+| Service Layer        | `/docs/backend/services.md`       | 7 services mapped to user stories               |
+| Business Rules       | `/docs/backend/business-rules.md` | 50+ rules across all domains                    |
+| Traceability         | `/docs/backend/traceability.md`   | All 29 user stories mapped to service methods   |
+
+| Implementation (Level 2) | Location                           | Traces to Design                                 |
+| ------------------------ | ---------------------------------- | ------------------------------------------------ |
+| API Routes               | `src/app/api/v1/`                  | Lists, items, categories, stores, users, collabs |
+| Auth Module              | `src/lib/auth/`, `src/lib/auth.ts` | NextAuth v5 JWT, Google+Apple OAuth, credentials |
+| Validation Schemas       | `src/lib/validation/schemas/`      | 9 resource schemas matching OpenAPI spec         |
+| Error Handling           | `src/lib/errors/`, `src/lib/api/`  | AppError classes, handleError, withErrorHandling |
+| Service Layer            | `src/services/`                    | 6 services + interfaces, factory pattern         |
+| Repository Layer         | `src/repositories/`                | 6 repos + interfaces, transactions               |
+
+**Checkpoint Status:** ⚠️ Issues Found
+**Last Run:** 2026-02-12
+**Issues:** Layer 0→1: 92% (session expiry wording). Layer 1→2: 85% (partial repo refactoring, unused withErrorHandling, bypassed service factory). No critical blockers.
+
+---
+
+### Phase 3 Checkpoint — Frontend
+
+| Design Doc (Level 1)   | Location                                                                | Traces to Requirement                            |
+| ---------------------- | ----------------------------------------------------------------------- | ------------------------------------------------ |
+| Component Architecture | `/docs/components/README.md`                                            | 14 components mapped to user stories             |
+| Styling Standards      | `/docs/styling-standards.md`                                            | Tailwind CSS, CVA, dark mode, accessibility      |
+| UI/UX Design           | `/docs/frontend/ui-analysis.md`, `/docs/frontend/ui-design/*.md`        | All 29 user stories mapped to screens/components |
+| Form Patterns          | SOP-303 outputs in `src/hooks/useZodForm.ts`, `src/components/ui/Form/` | React Hook Form + Zod per tech stack             |
+| API Integration        | `src/lib/api/client.ts`, `src/lib/query-client.ts`, `src/hooks/api/`    | TanStack Query with query keys factory           |
+| Page Planning          | `/docs/frontend/pages/lists-overview.md`, `list-detail.md`, `auth.md`   | 3 of 14 screens planned in detail                |
+
+| Implementation (Level 2) | Location                                              | Traces to Design                                            |
+| ------------------------ | ----------------------------------------------------- | ----------------------------------------------------------- |
+| Components               | `src/components/` (55 files across 4 categories)      | Matches component architecture: ui, layout, forms, features |
+| Pages/Routes             | `src/app/lists/`, `src/app/(auth)/`, `src/app/`       | Lists overview, list detail, login, register, global pages  |
+| API Client               | `src/lib/api/client.ts`                               | ApiClientError, fetch-based, handles 204                    |
+| Query Hooks              | `src/hooks/api/` (4 files)                            | Lists, items, categories, users                             |
+| Auth Hooks               | `src/hooks/useAuth.ts`, `src/hooks/usePermissions.ts` | Auth actions, permission checks                             |
+
+**Checkpoint Status:** ⚠️ Issues Found
+**Last Run:** 2026-02-12
+**Issues:** Layer 0→1: 88% (Zustand not in designs, no PWA/real-time design docs). Layer 1→2: 82% (no Apple Sign-In, no Zustand, no real-time, no offline). No critical blockers. 5 warnings tracked.
+
+---
+
+### Phase 5 Checkpoint — Pre-Deployment Quality
+
+| Validation                     | Status | Notes                |
+| ------------------------------ | ------ | -------------------- |
+| All user stories implemented   | ⬚      |                      |
+| Test coverage meets target     | ⬚      | {e.g., "80% target"} |
+| No critical security issues    | ⬚      |                      |
+| Tech stack compliance verified | ⬚      |                      |
+| Documentation complete         | ⬚      |                      |
+
+**Checkpoint Status:** ⬚ Not Run / ✅ Passed / ⚠️ Issues Found
+**Last Run:** {date}
+**Issues:** {none or list issues}
+
+---
+
 ## 🔄 Current Session
 
 ### Active SOP

@@ -69,7 +69,7 @@ export async function requireAuth(redirectTo?: string) {
   const user = await getCurrentUser();
 
   if (!user) {
-    const callbackUrl = redirectTo || '/dashboard';
+    const callbackUrl = redirectTo || '/lists';
     redirect(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
   }
 

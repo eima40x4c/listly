@@ -1,16 +1,30 @@
 /**
  * Header Component
  *
- * Application header with navigation, user menu, and mobile support.
+ * Slim application header with logo, theme toggle, and enhanced user menu.
+ * Navigation links removed — handled by Sidebar (desktop) and BottomNavigation (mobile).
  *
  * @module components/layout/Header
  */
 
 'use client';
 
+import {
+  BarChart3,
+  BookOpen,
+  HelpCircle,
+  LogOut,
+  Package,
+  Settings,
+  ShoppingCart,
+  UtensilsCrossed,
+} from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { signOut } from 'next-auth/react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
@@ -28,8 +42,16 @@ export interface HeaderProps {
   className?: string;
 }
 
+const dropdownNavItems = [
+  { href: '/lists', label: 'Lists', icon: ShoppingCart },
+  { href: '/pantry', label: 'Pantry', icon: Package },
+  { href: '/meals', label: 'Meal Plan', icon: UtensilsCrossed },
+  { href: '/recipes', label: 'Recipes', icon: BookOpen },
+  { href: '/budget', label: 'Budget', icon: BarChart3 },
+];
+
 /**
- * Application header component.
+ * Slim application header.
  *
  * @example
  * ```tsx
@@ -37,7 +59,33 @@ export interface HeaderProps {
  * ```
  */
 export function Header({ user, className }: HeaderProps) {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  const handleLogout = () => {
+    signOut({ callbackUrl: '/login' });
+  };
+
+  // Close dropdown on click outside
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      setIsUserMenuOpen(false);
+    }
+  }, []);
+
+  // Close dropdown on route change
+  useEffect(() => {
+    setIsUserMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (isUserMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () =>
+        document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isUserMenuOpen, handleClickOutside]);
 
   return (
     <header
@@ -47,7 +95,7 @@ export function Header({ user, className }: HeaderProps) {
       )}
     >
       <Container>
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-14 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary font-bold text-primary-foreground">
@@ -56,127 +104,113 @@ export function Header({ user, className }: HeaderProps) {
             <span className="text-lg font-bold">Listly</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden items-center gap-6 md:flex">
+          {/* Right Side Actions */}
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+
             {user ? (
-              <>
-                <Link
-                  href="/dashboard"
-                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              <div className="relative" ref={menuRef}>
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="rounded-full transition-transform hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  aria-label="User menu"
+                  aria-expanded={isUserMenuOpen}
                 >
-                  Dashboard
-                </Link>
-                <Link
-                  href="/lists"
-                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  Lists
-                </Link>
-                <Link
-                  href="/pantry"
-                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  Pantry
-                </Link>
-                <div className="ml-4">
                   <Avatar
                     src={user.image}
                     alt={user.name || user.email || 'User'}
                     size="sm"
                   />
-                </div>
-              </>
+                </button>
+
+                {/* Enhanced Dropdown Menu */}
+                {isUserMenuOpen && (
+                  <div
+                    className="animate-dropdown-enter absolute right-0 z-50 mt-2 w-56 origin-top-right rounded-xl border bg-background py-1 shadow-xl"
+                    role="menu"
+                  >
+                    {/* User Info */}
+                    <div className="border-b px-4 py-3">
+                      <p className="text-sm font-semibold">
+                        {user.name || 'User'}
+                      </p>
+                      <p className="truncate text-xs text-muted-foreground">
+                        {user.email}
+                      </p>
+                    </div>
+
+                    {/* Quick Nav */}
+                    <div className="border-b py-1">
+                      {dropdownNavItems.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = pathname === item.href;
+                        return (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className={cn(
+                              'flex items-center gap-3 px-4 py-2 text-sm transition-colors hover:bg-muted',
+                              isActive && 'bg-muted font-medium text-primary'
+                            )}
+                            role="menuitem"
+                            onClick={() => setIsUserMenuOpen(false)}
+                          >
+                            <Icon className="h-4 w-4" />
+                            {item.label}
+                          </Link>
+                        );
+                      })}
+                    </div>
+
+                    {/* Account */}
+                    <div className="border-b py-1">
+                      <Link
+                        href="/settings"
+                        className="flex items-center gap-3 px-4 py-2 text-sm transition-colors hover:bg-muted"
+                        role="menuitem"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        <Settings className="h-4 w-4" />
+                        Settings
+                      </Link>
+                      <button
+                        className="flex w-full items-center gap-3 px-4 py-2 text-sm transition-colors hover:bg-muted"
+                        role="menuitem"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        <HelpCircle className="h-4 w-4" />
+                        Help & Support
+                      </button>
+                    </div>
+
+                    {/* Sign Out */}
+                    <div className="py-1">
+                      <button
+                        onClick={handleLogout}
+                        className="flex w-full items-center gap-3 px-4 py-2 text-sm text-destructive transition-colors hover:bg-destructive/10"
+                        role="menuitem"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        Sign Out
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             ) : (
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
                 <Link href="/login">
-                  <Button variant="ghost">Sign In</Button>
+                  <Button variant="ghost" size="sm">
+                    Sign In
+                  </Button>
                 </Link>
                 <Link href="/register">
-                  <Button>Get Started</Button>
+                  <Button size="sm">Get Started</Button>
                 </Link>
               </div>
             )}
-          </nav>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              {isMobileMenuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
-        </div>
-
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="border-t py-4 md:hidden">
-            <nav className="flex flex-col gap-4">
-              {user ? (
-                <>
-                  <Link
-                    href="/dashboard"
-                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    Dashboard
-                  </Link>
-                  <Link
-                    href="/lists"
-                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    Lists
-                  </Link>
-                  <Link
-                    href="/pantry"
-                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    Pantry
-                  </Link>
-                  <div className="flex items-center gap-2 pt-2">
-                    <Avatar
-                      src={user.image}
-                      alt={user.name || user.email || 'User'}
-                      size="sm"
-                    />
-                    <span className="text-sm">{user.name || user.email}</span>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <Link href="/login">
-                    <Button variant="ghost" fullWidth>
-                      Sign In
-                    </Button>
-                  </Link>
-                  <Link href="/register">
-                    <Button fullWidth>Get Started</Button>
-                  </Link>
-                </>
-              )}
-            </nav>
           </div>
-        )}
+        </div>
       </Container>
     </header>
   );

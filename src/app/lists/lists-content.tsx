@@ -1,11 +1,13 @@
 'use client';
 
 import { Plus, Search } from 'lucide-react';
-import { useCallback, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { CreateListModal } from '@/components/features/lists/CreateListModal';
 import { ListCard } from '@/components/features/lists/ListCard';
-import { ShoppingListForm } from '@/components/features/lists/ShoppingListForm';
-import { Container, Header } from '@/components/layout';
+import { AppShell } from '@/components/layout';
+import { Container } from '@/components/layout/Container';
 import { Button, Input, Skeleton } from '@/components/ui';
 import { ErrorMessage } from '@/components/ui';
 import { useLists } from '@/hooks/api/useLists';
@@ -17,7 +19,17 @@ export function ListsContent() {
   const [filterStatus, _setFilterStatus] = useState<
     'ACTIVE' | 'COMPLETED' | 'ARCHIVED' | 'all'
   >('ACTIVE');
+  const searchParams = useSearchParams();
   const [showCreateModal, setShowCreateModal] = useState(false);
+
+  // Auto-open create modal when ?createList=true (from onboarding CTA)
+  useEffect(() => {
+    if (searchParams.get('createList') === 'true') {
+      setShowCreateModal(true);
+      // Clean URL without reloading
+      window.history.replaceState({}, '', '/lists');
+    }
+  }, [searchParams]);
 
   // Fetch lists
   const {
@@ -31,9 +43,9 @@ export function ListsContent() {
 
   // Filter lists by search query (client-side)
   const filteredLists = useMemo(() => {
-    if (!listsResponse?.data) return [];
+    if (!listsResponse) return [];
 
-    const lists = listsResponse.data;
+    const lists = listsResponse;
 
     if (!searchQuery.trim()) return lists;
 
@@ -43,7 +55,7 @@ export function ListsContent() {
         list.name.toLowerCase().includes(query) ||
         list.description?.toLowerCase().includes(query)
     );
-  }, [listsResponse?.data, searchQuery]);
+  }, [listsResponse, searchQuery]);
 
   // Separate templates from regular lists
   const { regularLists, templateLists } = useMemo(() => {
@@ -75,12 +87,11 @@ export function ListsContent() {
   // Error state
   if (error) {
     return (
-      <div className="flex min-h-screen flex-col bg-background">
-        <Header />
+      <AppShell>
         <Container className="flex flex-1 items-center justify-center py-12">
           <ErrorMessage error={error as Error} retry={refetch} />
         </Container>
-      </div>
+      </AppShell>
     );
   }
 
@@ -92,10 +103,7 @@ export function ListsContent() {
     !searchQuery;
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      {/* Header */}
-      <Header />
-
+    <AppShell>
       {/* Search Bar */}
       <div className="sticky top-14 z-10 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <Container className="py-4">
@@ -113,81 +121,75 @@ export function ListsContent() {
       </div>
 
       {/* Main Content */}
-      <main className="flex-1 pb-20">
-        <Container className="py-6">
-          {hasNoLists ? (
-            <EmptyListsState onCreateClick={() => setShowCreateModal(true)} />
-          ) : (
-            <>
-              {/* My Lists Section */}
-              {regularLists.length > 0 && (
-                <section className="mb-8">
-                  <div className="mb-4 flex items-center justify-between">
-                    <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-                      My Lists
-                    </h2>
-                    {/* Filter controls can be added here */}
-                  </div>
+      <Container className="py-6">
+        {hasNoLists ? (
+          <EmptyListsState onCreateClick={() => setShowCreateModal(true)} />
+        ) : (
+          <>
+            {/* My Lists Section */}
+            {regularLists.length > 0 && (
+              <section className="mb-8">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                    My Lists
+                  </h2>
+                </div>
 
-                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {isLoading ? (
-                      // Loading skeletons
-                      <>
-                        {[1, 2, 3].map((i) => (
-                          <Skeleton key={i} className="h-32 rounded-lg" />
-                        ))}
-                      </>
-                    ) : (
-                      regularLists.map((list) => (
-                        <ListCard key={list.id} list={list} />
-                      ))
-                    )}
-                  </div>
-                </section>
-              )}
-
-              {/* Templates Section */}
-              {templateLists.length > 0 && (
-                <section>
-                  <div className="mb-4 flex items-center justify-between">
-                    <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-                      Templates
-                    </h2>
-                  </div>
-
-                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {templateLists.map((list) => (
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {isLoading ? (
+                    <>
+                      {[1, 2, 3].map((i) => (
+                        <Skeleton key={i} className="h-32 rounded-lg" />
+                      ))}
+                    </>
+                  ) : (
+                    regularLists.map((list) => (
                       <ListCard key={list.id} list={list} />
-                    ))}
-                  </div>
-                </section>
+                    ))
+                  )}
+                </div>
+              </section>
+            )}
+
+            {/* Templates Section */}
+            {templateLists.length > 0 && (
+              <section>
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                    Templates
+                  </h2>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {templateLists.map((list) => (
+                    <ListCard key={list.id} list={list} />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* No results from search */}
+            {!isLoading &&
+              regularLists.length === 0 &&
+              templateLists.length === 0 &&
+              searchQuery && (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <Search className="mb-4 h-12 w-12 text-muted-foreground" />
+                  <h3 className="mb-2 text-lg font-semibold">No lists found</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Try searching with different keywords
+                  </p>
+                </div>
               )}
+          </>
+        )}
+      </Container>
 
-              {/* No results from search */}
-              {!isLoading &&
-                regularLists.length === 0 &&
-                templateLists.length === 0 &&
-                searchQuery && (
-                  <div className="flex flex-col items-center justify-center py-12 text-center">
-                    <Search className="mb-4 h-12 w-12 text-muted-foreground" />
-                    <h3 className="mb-2 text-lg font-semibold">
-                      No lists found
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      Try searching with different keywords
-                    </p>
-                  </div>
-                )}
-            </>
-          )}
-        </Container>
-      </main>
-
-      {/* Floating Action Button */}
+      {/* Floating Action Button — positioned above BottomNav on mobile */}
       {!hasNoLists && (
         <Button
           size="lg"
-          className="fixed bottom-20 right-4 h-14 w-14 rounded-full shadow-lg sm:bottom-6"
+          className="fixed bottom-24 right-4 z-40 h-14 w-14 rounded-full shadow-lg md:bottom-6"
           onClick={() => setShowCreateModal(true)}
           aria-label="Create new list"
         >
@@ -196,12 +198,11 @@ export function ListsContent() {
       )}
 
       {/* Create List Modal */}
-      {showCreateModal && (
-        <ShoppingListForm
-          onSuccess={handleCreateSuccess}
-          onCancel={() => setShowCreateModal(false)}
-        />
-      )}
-    </div>
+      <CreateListModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSuccess={handleCreateSuccess}
+      />
+    </AppShell>
   );
 }

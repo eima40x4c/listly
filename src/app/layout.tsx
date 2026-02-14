@@ -1,15 +1,18 @@
 import './globals.css';
 
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import localFont from 'next/font/local';
+import { SessionProvider } from 'next-auth/react';
 
 import { QueryProvider } from '@/components/providers';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { Toaster } from '@/components/ui/Toaster';
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
+const inter = localFont({
+  src: '../../public/fonts/Inter-Variable.woff2',
+  variable: '--font-sans',
   display: 'swap',
+  weight: '100 900',
 });
 
 export const metadata: Metadata = {
@@ -39,14 +42,17 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <body className="min-h-screen bg-background font-sans antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <QueryProvider>{children}</QueryProvider>
-        </ThemeProvider>
+        <SessionProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <QueryProvider>{children}</QueryProvider>
+            <Toaster />
+          </ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   );

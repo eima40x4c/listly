@@ -1,11 +1,16 @@
+'use client';
+
+import { useSession } from 'next-auth/react';
+
 import { Container, Header } from '@/components/layout';
 import { Skeleton } from '@/components/ui';
 
 export function ListsLoading() {
+  const { data: session } = useSession();
   return (
     <div className="flex min-h-screen flex-col bg-background">
       {/* Header */}
-      <Header />
+      <Header user={session?.user} />
 
       {/* Search Bar Skeleton */}
       <div className="sticky top-14 z-10 border-b bg-background/95 backdrop-blur">

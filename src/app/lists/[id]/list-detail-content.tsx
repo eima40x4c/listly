@@ -1,8 +1,16 @@
 'use client';
 
-import { ArrowLeft, Mic, MoreVertical, Plus, Share2 } from 'lucide-react';
+import {
+  ArrowLeft,
+  CheckCircle,
+  Mic,
+  MoreVertical,
+  Plus,
+  Share2,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { notFound } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { useCallback, useMemo, useState } from 'react';
 
 import { Container, Header } from '@/components/layout';
@@ -10,9 +18,14 @@ import { Badge, Button, Input } from '@/components/ui';
 import { ErrorMessage } from '@/components/ui';
 import { useCreateItem, useListItems } from '@/hooks/api/useItems';
 import { useList } from '@/hooks/api/useLists';
+import { cn } from '@/lib/utils';
+import { getCurrencySymbol } from '@/lib/utils/formatCurrency';
+import { useSettingsStore } from '@/stores/useSettingsStore';
 
 import { CategorySection } from './category-section';
+import { EditListModal } from './edit-list-modal';
 import { EmptyItemsState } from './empty-items-state';
+import { ShareListModal } from './share-list-modal';
 
 interface ListDetailContentProps {
   listId: string;
@@ -21,12 +34,17 @@ interface ListDetailContentProps {
 type ViewMode = 'edit' | 'shopping';
 
 export function ListDetailContent({ listId }: ListDetailContentProps) {
+  const { data: session } = useSession();
   const router = useRouter();
   const [mode, setMode] = useState<ViewMode>('edit');
+  const currency = useSettingsStore((s) => s.currency);
+  const currencySymbol = getCurrencySymbol(currency);
   const [itemInput, setItemInput] = useState('');
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set(['all'])
   );
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   // Fetch list and items
   const {
@@ -44,8 +62,8 @@ export function ListDetailContent({ listId }: ListDetailContentProps) {
 
   const createItemMutation = useCreateItem(listId);
 
-  const list = listResponse?.data;
-  const items = useMemo(() => itemsResponse?.data || [], [itemsResponse?.data]);
+  const list = listResponse;
+  const items = useMemo(() => itemsResponse || [], [itemsResponse]);
 
   // Group items by category
   const groupedItems = useMemo(() => {
@@ -120,6 +138,55 @@ export function ListDetailContent({ listId }: ListDetailContentProps) {
     });
   }, []);
 
+  const handleFinishShopping = useCallback(async () => {
+    if (!confirm('Mark all items as checked and finish shopping?')) return;
+
+    try {
+      // Mark all unchecked items as checked
+      const uncheckedItems = items.filter((item) => !item.isChecked);
+
+      for (const item of uncheckedItems) {
+        await fetch(`/api/v1/lists/${listId}/items/${item.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ isChecked: true }),
+        });
+      }
+
+      refetchItems();
+      alert('Shopping completed!');
+    } catch (error) {
+      console.error('Failed to finish shopping:', error);
+      alert('Failed to complete shopping. Please try again.');
+    }
+  }, [items, listId, refetchItems]);
+
+  // Calculate budget totals
+  const budgetInfo = useMemo(() => {
+    if (!list || !list.budget) return null;
+
+    const estimated = items.reduce(
+      (sum, item) => sum + (Number(item.estimatedPrice) || 0) * item.quantity,
+      0
+    );
+    const actual = items
+      .filter((item) => item.isChecked)
+      .reduce(
+        (sum, item) =>
+          sum +
+          (Number(item.actualPrice) || Number(item.estimatedPrice) || 0) *
+            item.quantity,
+        0
+      );
+
+    const budget = Number(list.budget);
+    const spent = mode === 'shopping' ? actual : estimated;
+    const percent = Math.min(Math.round((spent / budget) * 100), 100);
+    const isOverBudget = spent > budget;
+
+    return { budget, spent, percent, isOverBudget };
+  }, [list, items, mode]);
+
   // Handle 404
   if (listError && (listError as { status?: number }).status === 404) {
     notFound();
@@ -129,7 +196,7 @@ export function ListDetailContent({ listId }: ListDetailContentProps) {
   if (listError || itemsError) {
     return (
       <div className="flex min-h-screen flex-col bg-background">
-        <Header />
+        <Header user={session?.user} />
         <Container className="flex flex-1 items-center justify-center py-12">
           <ErrorMessage
             error={listError || itemsError || new Error('Unknown error')}
@@ -170,11 +237,21 @@ export function ListDetailContent({ listId }: ListDetailContentProps) {
           )}
         </div>
 
-        <Button variant="ghost" size="icon" aria-label="Share list">
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label="Share list"
+          onClick={() => setShowShareModal(true)}
+        >
           <Share2 className="h-5 w-5" />
         </Button>
 
-        <Button variant="ghost" size="icon" aria-label="More options">
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label="More options"
+          onClick={() => setShowEditModal(true)}
+        >
           <MoreVertical className="h-5 w-5" />
         </Button>
       </header>
@@ -241,6 +318,39 @@ export function ListDetailContent({ listId }: ListDetailContentProps) {
             </div>
           </div>
         )}
+
+        {budgetInfo && (
+          <div className="mt-3 space-y-1">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">Budget</span>
+              <span
+                className={cn(
+                  'font-medium',
+                  budgetInfo.isOverBudget && 'text-destructive'
+                )}
+              >
+                {currencySymbol}
+                {budgetInfo.spent.toFixed(2)} / {currencySymbol}
+                {budgetInfo.budget.toFixed(2)}
+              </span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-muted">
+              <div
+                className={cn(
+                  'h-full transition-all',
+                  budgetInfo.isOverBudget ? 'bg-destructive' : 'bg-success'
+                )}
+                style={{ width: `${budgetInfo.percent}%` }}
+              />
+            </div>
+            {budgetInfo.isOverBudget && (
+              <p className="text-xs text-destructive">
+                Over budget by {currencySymbol}
+                {(budgetInfo.spent - budgetInfo.budget).toFixed(2)}
+              </p>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Main Content */}
@@ -264,10 +374,49 @@ export function ListDetailContent({ listId }: ListDetailContentProps) {
                   listId={listId}
                 />
               ))}
+
+              {/* Finish Shopping Button */}
+              {mode === 'shopping' && hasItems && (
+                <div className="pt-4">
+                  <Button
+                    onClick={handleFinishShopping}
+                    variant="primary"
+                    size="lg"
+                    className="w-full"
+                    disabled={progress.percent < 100}
+                  >
+                    <CheckCircle className="mr-2 h-5 w-5" />
+                    {progress.percent === 100
+                      ? 'Finish Shopping'
+                      : `Complete ${progress.total - progress.completed} more items`}
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </Container>
       </main>
+
+      {/* Modals */}
+      {showShareModal && (
+        <ShareListModal
+          listId={listId}
+          listName={list.name}
+          onClose={() => setShowShareModal(false)}
+        />
+      )}
+
+      {showEditModal && (
+        <EditListModal
+          listId={listId}
+          listName={list.name}
+          listIcon={list.icon}
+          listColor={list.color}
+          listBudget={list.budget ? Number(list.budget) : undefined}
+          onClose={() => setShowEditModal(false)}
+          onUpdate={() => window.location.reload()}
+        />
+      )}
     </div>
   );
 }

@@ -9,6 +9,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import '../styles/animations.css';
+
 @layer base {
   :root {
     /* Light mode colors */

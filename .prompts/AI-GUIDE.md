@@ -66,82 +66,173 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 ## Checkpoint System (Drift Prevention)
 
-AI agents can drift from original specifications over time. Run **alignment checkpoints** at phase boundaries to catch drift early.
+AI agents can drift from original specifications over time. This **hierarchical validation system** catches drift at multiple levels.
+
+### Validation Hierarchy
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  LEVEL 0: SOURCE OF TRUTH (Human-Approved)                      │
+│  └── requirements.md, tech-stack.md                             │
+│      Owned by: Project Lead | Changes require approval          │
+├─────────────────────────────────────────────────────────────────┤
+│  LEVEL 1: DESIGN DECISIONS (SOP Documentation Outputs)          │
+│  └── schema.md, api-endpoints.md, component-architecture.md     │
+│      Must conform to: Level 0                                   │
+├─────────────────────────────────────────────────────────────────┤
+│  LEVEL 2: IMPLEMENTATION (Actual Code)                          │
+│  └── prisma/schema.prisma, src/app/api/**, components/**        │
+│      Must conform to: Level 1 (which conforms to Level 0)       │
+└─────────────────────────────────────────────────────────────────┘
+
+Validation flows DOWNWARD:
+  Level 0 → Level 1: Do design docs honor requirements?
+  Level 1 → Level 2: Does code honor design docs?
+```
+
+### Phase-Specific Validation Layers
+
+| Phase       | Level 1 (Design Docs)                                     | Level 2 (Code)                        |
+| ----------- | --------------------------------------------------------- | ------------------------------------- |
+| **Phase 1** | `/docs/database/schema.md`, `/docs/database/decisions.md` | `prisma/schema.prisma`, seed files    |
+| **Phase 2** | `/docs/api/endpoints.md`, `/docs/api/openapi.yaml`        | `src/app/api/**`, route handlers      |
+| **Phase 3** | `/docs/frontend/components.md`, `/docs/frontend/state.md` | `src/components/**`, pages            |
+| **Phase 4** | `/docs/ai/feasibility.md`, `/docs/ai/prompts.md`          | AI integration code, prompt templates |
+| **Phase 5** | Test strategy in docs                                     | `__tests__/**`, test files            |
+| **Phase 6** | `/docs/deployment/`, runbooks                             | `.github/workflows/**`, Dockerfiles   |
 
 ### When to Run Checkpoints
 
-| Checkpoint       | After Phase        | Purpose                               |
-| ---------------- | ------------------ | ------------------------------------- |
-| **Checkpoint 1** | Phase 1 (Database) | Verify schema covers all requirements |
-| **Checkpoint 2** | Phase 2 (Backend)  | Verify APIs support all features      |
-| **Checkpoint 3** | Phase 3 (Frontend) | Verify UI implements all user stories |
-| **Checkpoint 4** | Phase 5 (Quality)  | Final pre-deployment alignment check  |
+| Checkpoint | Trigger       | Validation Focus                                  |
+| ---------- | ------------- | ------------------------------------------------- |
+| **CP-1**   | After Phase 1 | Requirements → Database design → Schema code      |
+| **CP-2**   | After Phase 2 | Requirements → API design → Route implementations |
+| **CP-3**   | After Phase 3 | User stories → Component design → UI code         |
+| **CP-4**   | After Phase 5 | Full stack validation before deployment           |
 
 ### Checkpoint Prompt Template
 
-Use this prompt at each checkpoint:
+Use this hierarchical validation prompt at each checkpoint.
+
+> **Note:** Document locations and key decisions should already be filled in the **Checkpoint Tracker** section of `AI-SESSION.md`. Reference that section instead of searching for files.
 
 ```markdown
 ## Alignment Checkpoint — Phase {X} Complete
 
-Perform a drift analysis before proceeding to the next phase.
+Perform a **hierarchical drift analysis** before proceeding.
 
-### Step 1: Re-read Source Documents
+**First:** Read the Checkpoint Tracker in `.prompts/AI-SESSION.md` for pre-filled document locations and key decisions for this phase.
 
-Read these files completely:
+---
 
-- `/docs/requirements.md` — Original requirements and user stories
-- `/docs/tech-stack.md` — Agreed technology decisions
+### Layer 0 → Layer 1: Design Alignment
 
-### Step 2: Audit Current Implementation
+**Re-read Source of Truth:**
 
-Review what has been built so far and compare against requirements.
+- Read locations from AI-SESSION.md → Checkpoint Tracker → Source of Truth table
 
-### Step 3: Report Findings
+**Audit Design Documents for this phase:**
 
-**A. Requirements Coverage**
-For each user story in requirements.md:
-| User Story | Status | Implementation Location | Notes |
-|------------|--------|------------------------|-------|
-| US-001: ... | ✅ Covered / ⚠️ Partial / ❌ Missing | file:line | |
+- Read locations from AI-SESSION.md → Checkpoint Tracker → Phase {X} → Design Docs table
 
-**B. Tech Stack Compliance**
-| Decision | Expected | Actual | Compliant? |
-|----------|----------|--------|------------|
-| Framework | Next.js | ? | ✅/❌ |
-| Database | PostgreSQL | ? | ✅/❌ |
-| ORM | Prisma | ? | ✅/❌ |
-| ... | ... | ... | ... |
+**Report: Do design decisions honor requirements?**
 
-**C. Scope Drift**
-List any features that were:
+| Requirement/User Story | Design Doc                | Addressed? | Location in Doc | Drift Notes |
+| ---------------------- | ------------------------- | ---------- | --------------- | ----------- |
+| {from requirements.md} | {from checkpoint tracker} | ✅/⚠️/❌   | Section X       |             |
 
-- Added but NOT in original requirements (scope creep)
-- Modified from original specification
-- Deferred or descoped
+**Design Drift Findings:**
 
-**D. Recommended Actions**
+- [ ] Design decisions that don't trace to requirements (scope creep)
+- [ ] Requirements not addressed in design docs (gaps)
+- [ ] Tech stack deviations
 
-- [ ] Issues to fix before proceeding
-- [ ] Items to add to backlog
-- [ ] Specs that need updating
+---
 
-### Step 4: Await Approval
+### Layer 1 → Layer 2: Implementation Alignment
 
-Do not proceed to the next phase until the human reviews and approves this checkpoint.
+**Audit Code against Design Documents:**
+
+- Read locations from AI-SESSION.md → Checkpoint Tracker → Phase {X} → Implementation table
+
+**Report: Does code honor design decisions?**
+
+| Design Decision   | Expected Implementation | Actual Code | Compliant? | File:Line  |
+| ----------------- | ----------------------- | ----------- | ---------- | ---------- |
+| {from design doc} | {expected}              | {actual}    | ✅/❌      | {location} |
+
+**Implementation Drift Findings:**
+
+- [ ] Code that doesn't match design docs
+- [ ] Design docs not yet implemented (incomplete)
+- [ ] Undocumented implementations (rogue code)
+
+---
+
+### Summary & Actions
+
+**Overall Alignment Score:**
+
+- Level 0 → 1: \_\_\_% compliant
+- Level 1 → 2: \_\_\_% compliant
+
+**Critical Issues (Block Proceeding):**
+
+1. ...
+
+**Warnings (Track in Backlog):**
+
+1. ...
+
+**Recommendations:**
+
+- [ ] Fixes required before next phase
+- [ ] Design docs to update
+- [ ] Requirements clarifications needed from project lead
+
+---
+
+**Update AI-SESSION.md:**
+
+1. Set Checkpoint Status to ✅ Passed or ⚠️ Issues Found
+2. Record Last Run date
+3. Document any issues found
+
+⏸️ **STOP: Await human approval before proceeding to next phase.**
 ```
 
-### Quick Checkpoint (Mid-Phase)
+### Quick Checkpoint (Mid-SOP)
 
-For a lighter check during complex phases:
+For lightweight validation during complex SOPs:
 
 ```markdown
 Quick alignment check:
 
-1. Re-read `/docs/requirements.md`
-2. List the last 3 things you implemented
-3. Confirm each maps to a specific user story
-4. Flag any implementation that doesn't trace to requirements
+1. What did I just implement? (List last 3 items)
+2. For each, trace back:
+   - Which design doc specifies this? (Level 1)
+   - Which requirement/user story needs this? (Level 0)
+3. Flag anything that doesn't trace back to Level 0
+4. Flag any Level 0 requirement that should have been addressed but wasn't
+```
+
+### Recovery from Drift
+
+If checkpoint reveals drift:
+
+```markdown
+Drift detected. Recovery procedure:
+
+1. **Stop current work** — Don't compound the drift
+2. **Identify drift type:**
+   - Scope creep (added unrequested features) → Remove or get approval to add to requirements
+   - Deviation (built differently than specified) → Refactor to match spec OR update spec with approval
+   - Gap (missed requirement) → Implement missing piece
+3. **Update tracking:**
+   - Log drift in AI-SESSION.md Session Notes
+   - Update design docs if spec change is approved
+4. **Re-run checkpoint** after fixes
+5. **Get approval** before proceeding
 ```
 
 ---

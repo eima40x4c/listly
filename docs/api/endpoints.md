@@ -1,7 +1,7 @@
 # API Endpoints
 
-> **API Version:** 1.0.0  
-> **Base URL:** `http://localhost:3000/api/v1` (development)  
+> **API Version:** 1.0.0
+> **Base URL:** `http://localhost:3000/api/v1` (development)
 > **Production:** `https://api.listly.app/v1`
 
 ---
@@ -1703,6 +1703,325 @@ X-RateLimit-Reset: 1675934400
   }
 }
 ```
+
+---
+
+---
+
+## Pantry
+
+### GET /pantry
+
+Get pantry items for current user.
+
+**Auth Required:** Yes
+
+**Query Parameters:**
+
+- `page` (integer, default: 1)
+- `limit` (integer, default: 50)
+- `location` (string, optional): Filter by location (e.g., "pantry", "fridge")
+- `isConsumed` (boolean, optional): Filter by consumed status
+- `query` (string, optional): Search by name
+
+**Response:** `200 OK`
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "clxpantry123",
+      "name": "Flour",
+      "quantity": 1,
+      "unit": "kg",
+      "location": "pantry",
+      "expirationDate": "2026-12-31T00:00:00Z",
+      "isConsumed": false,
+      "category": {
+        "id": "clxcat123",
+        "name": "Baking",
+        "icon": "bread-slice"
+      }
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "limit": 50,
+    "total": 1,
+    "totalPages": 1
+  }
+}
+```
+
+---
+
+### POST /pantry
+
+Add item to pantry.
+
+**Auth Required:** Yes
+
+**Request Body:**
+
+```json
+{
+  "name": "Milk",
+  "quantity": 1,
+  "unit": "carton",
+  "location": "fridge",
+  "expirationDate": "2026-02-20T00:00:00Z",
+  "categoryId": "clxcat456"
+}
+```
+
+**Response:** `201 Created`
+
+---
+
+### GET /pantry/:id
+
+Get a specific pantry item.
+
+**Auth Required:** Yes
+
+**Response:** `200 OK`
+
+---
+
+### PATCH /pantry/:id
+
+Update a pantry item.
+
+**Auth Required:** Yes
+
+**Request Body:**
+
+```json
+{
+  "quantity": 0.5,
+  "isConsumed": false
+}
+```
+
+**Response:** `200 OK`
+
+---
+
+### DELETE /pantry/:id
+
+Delete a pantry item.
+
+**Auth Required:** Yes
+
+**Response:** `204 No Content`
+
+---
+
+## Recipes
+
+### GET /recipes
+
+Get recipes for current user.
+
+**Auth Required:** Yes
+
+**Query Parameters:**
+
+- `page` (integer, default: 1)
+- `limit` (integer, default: 20)
+- `query` (string, optional): Search by title
+- `cuisine` (string, optional): Filter by cuisine
+- `difficulty` (string, optional): Filter by difficulty
+
+**Response:** `200 OK`
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "clxrecipe123",
+      "title": "Pancakes",
+      "description": "Fluffy pancakes",
+      "prepTime": 10,
+      "cookTime": 15,
+      "difficulty": "easy",
+      "isPublic": false,
+      "createdAt": "2026-02-10T10:00:00Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "limit": 20,
+    "total": 1,
+    "totalPages": 1
+  }
+}
+```
+
+---
+
+### POST /recipes
+
+Create a new recipe.
+
+**Auth Required:** Yes
+
+**Request Body:**
+
+```json
+{
+  "title": "Pancakes",
+  "instructions": "Mix ingredients and cook on griddle.",
+  "ingredients": [
+    { "name": "Flour", "quantity": 2, "unit": "cup" },
+    { "name": "Milk", "quantity": 1.5, "unit": "cup" },
+    { "name": "Egg", "quantity": 2, "unit": "count" }
+  ],
+  "prepTime": 10,
+  "cookTime": 15,
+  "servings": 4,
+  "difficulty": "easy"
+}
+```
+
+**Response:** `201 Created`
+
+---
+
+### GET /recipes/:id
+
+Get a specific recipe with details.
+
+**Auth Required:** Yes
+
+**Response:** `200 OK`
+
+---
+
+### PATCH /recipes/:id
+
+Update a recipe.
+
+**Auth Required:** Yes
+
+**Request Body:**
+
+```json
+{
+  "title": "Blueberry Pancakes",
+  "description": "Now with blueberries!"
+}
+```
+
+**Response:** `200 OK`
+
+---
+
+### DELETE /recipes/:id
+
+Delete a recipe.
+
+**Auth Required:** Yes
+
+**Response:** `204 No Content`
+
+---
+
+## Meal Plans
+
+### GET /meal-plans
+
+Get meal plans for current user.
+
+**Auth Required:** Yes
+
+**Query Parameters:**
+
+- `startDate` (ISO8601 Date, optional): Filter start date
+- `endDate` (ISO8601 Date, optional): Filter end date
+- `mealType` (string, optional): Filter by meal type
+
+**Response:** `200 OK`
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "clxplan123",
+      "date": "2026-02-15T00:00:00Z",
+      "mealType": "BREAKFAST",
+      "recipe": {
+        "id": "clxrecipe123",
+        "title": "Pancakes"
+      },
+      "isCompleted": false
+    }
+  ]
+}
+```
+
+---
+
+### POST /meal-plans
+
+Create a new meal plan.
+
+**Auth Required:** Yes
+
+**Request Body:**
+
+```json
+{
+  "date": "2026-02-15T00:00:00Z",
+  "mealType": "BREAKFAST",
+  "recipeId": "clxrecipe123",
+  "notes": "Sunday brunch"
+}
+```
+
+**Response:** `201 Created`
+
+---
+
+### GET /meal-plans/:id
+
+Get a specific meal plan.
+
+**Auth Required:** Yes
+
+**Response:** `200 OK`
+
+---
+
+### PATCH /meal-plans/:id
+
+Update a meal plan.
+
+**Auth Required:** Yes
+
+**Request Body:**
+
+```json
+{
+  "isCompleted": true,
+  "notes": "Enjoyed it!"
+}
+```
+
+**Response:** `200 OK`
+
+---
+
+### DELETE /meal-plans/:id
+
+Delete a meal plan.
+
+**Auth Required:** Yes
+
+**Response:** `204 No Content`
 
 ---
 
