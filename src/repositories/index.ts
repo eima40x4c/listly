@@ -12,6 +12,9 @@ export { CategoryRepository } from './category.repository';
 export { CollaborationRepository } from './collaboration.repository';
 export { ItemRepository } from './item.repository';
 export { ListRepository } from './list.repository';
+export { MealPlanRepository } from './meal-plan.repository';
+export { PantryRepository } from './pantry.repository';
+export { RecipeRepository } from './recipe.repository';
 export { StoreRepository } from './store.repository';
 export { UserRepository } from './user.repository';
 

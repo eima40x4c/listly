@@ -11,6 +11,9 @@ import { CategoryService } from './category.service';
 import { CollaborationService } from './collaboration.service';
 import { ItemService } from './item.service';
 import { ListService } from './list.service';
+import { MealPlanService } from './meal-plan.service';
+import { PantryService } from './pantry.service';
+import { RecipeService } from './recipe.service';
 import { StoreService } from './store.service';
 import { UserService } from './user.service';
 
@@ -20,6 +23,9 @@ let itemService: ItemService | null = null;
 let categoryService: CategoryService | null = null;
 let userService: UserService | null = null;
 let collaborationService: CollaborationService | null = null;
+let mealPlanService: MealPlanService | null = null;
+let pantryService: PantryService | null = null;
+let recipeService: RecipeService | null = null;
 let storeService: StoreService | null = null;
 
 /**
@@ -73,6 +79,36 @@ export function getCollaborationService(): CollaborationService {
 }
 
 /**
+ * Get MealPlanService instance
+ */
+export function getMealPlanService(): MealPlanService {
+  if (!mealPlanService) {
+    mealPlanService = new MealPlanService();
+  }
+  return mealPlanService;
+}
+
+/**
+ * Get PantryService instance
+ */
+export function getPantryService(): PantryService {
+  if (!pantryService) {
+    pantryService = new PantryService();
+  }
+  return pantryService;
+}
+
+/**
+ * Get RecipeService instance
+ */
+export function getRecipeService(): RecipeService {
+  if (!recipeService) {
+    recipeService = new RecipeService();
+  }
+  return recipeService;
+}
+
+/**
  * Get StoreService instance
  */
 export function getStoreService(): StoreService {
@@ -91,6 +127,9 @@ export function resetServices(): void {
   categoryService = null;
   userService = null;
   collaborationService = null;
+  mealPlanService = null;
+  pantryService = null;
+  recipeService = null;
   storeService = null;
 }
 
@@ -99,6 +138,9 @@ export { CategoryService } from './category.service';
 export { CollaborationService } from './collaboration.service';
 export { ItemService } from './item.service';
 export { ListService } from './list.service';
+export { MealPlanService } from './meal-plan.service';
+export { PantryService } from './pantry.service';
+export { RecipeService } from './recipe.service';
 export { StoreService } from './store.service';
 export { UserService } from './user.service';
 
