@@ -41,7 +41,7 @@ export interface LoginFormProps {
  * <LoginForm callbackUrl="/dashboard" />
  * ```
  */
-export function LoginForm({ callbackUrl = '/dashboard' }: LoginFormProps) {
+export function LoginForm({ callbackUrl = '/lists' }: LoginFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

@@ -25,7 +25,7 @@ import { useCallback } from 'react';
  *   const { isLoading, isAuthenticated, signInWithGoogle, signInWithApple, signInWithCredentials } = useAuth();
  *
  *   if (isLoading) return <Spinner />;
- *   if (isAuthenticated) redirect('/dashboard');
+ *   if (isAuthenticated) redirect('/lists');
  *
  *   return (
  *     <div>
@@ -44,14 +44,14 @@ export function useAuth() {
   /** Sign in with Google (primary) */
   const signInWithGoogle = useCallback(async (callbackUrl?: string) => {
     await signIn('google', {
-      callbackUrl: callbackUrl || '/dashboard',
+      callbackUrl: callbackUrl || '/lists',
     });
   }, []);
 
   /** Sign in with Apple (primary) */
   const signInWithApple = useCallback(async (callbackUrl?: string) => {
     await signIn('apple', {
-      callbackUrl: callbackUrl || '/dashboard',
+      callbackUrl: callbackUrl || '/lists',
     });
   }, []);
 
@@ -62,7 +62,7 @@ export function useAuth() {
         email,
         password,
         redirect: false,
-        callbackUrl: callbackUrl || '/dashboard',
+        callbackUrl: callbackUrl || '/lists',
       });
       return result;
     },

@@ -43,9 +43,7 @@ export interface RegisterFormProps {
  * <RegisterForm callbackUrl="/dashboard" />
  * ```
  */
-export function RegisterForm({
-  callbackUrl = '/dashboard',
-}: RegisterFormProps) {
+export function RegisterForm({ callbackUrl = '/lists' }: RegisterFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

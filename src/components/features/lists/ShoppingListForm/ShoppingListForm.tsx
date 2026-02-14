@@ -104,7 +104,7 @@ export function ShoppingListForm({
       if (onSuccess) {
         onSuccess();
       } else {
-        router.push('/dashboard');
+        router.push('/lists');
         router.refresh();
       }
     } catch (err) {

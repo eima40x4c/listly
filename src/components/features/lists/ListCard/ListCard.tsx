@@ -146,7 +146,7 @@ export function ListCard({ list }: ListCardProps) {
           </div>
 
           {/* Budget */}
-          {list.budget && (
+          {list.budget != null && typeof list.budget === 'number' && (
             <div className="text-sm text-muted-foreground">
               Budget: ${list.budget.toFixed(2)}
             </div>
