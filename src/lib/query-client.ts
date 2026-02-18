@@ -8,6 +8,10 @@ export function makeQueryClient() {
         gcTime: 5 * 60 * 1000, // 5 minutes (previously cacheTime)
         retry: 1,
         refetchOnWindowFocus: false,
+        networkMode: 'offlineFirst',
+      },
+      mutations: {
+        networkMode: 'offlineFirst',
       },
     },
   });
