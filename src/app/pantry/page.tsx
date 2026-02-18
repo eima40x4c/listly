@@ -155,7 +155,7 @@ export default function PantryPage() {
         </div>
 
         {/* Location Tabs */}
-        <div className="mb-4 flex gap-2 overflow-x-auto">
+        <div className="no-scrollbar mb-4 flex max-w-full gap-2 overflow-x-auto pb-2">
           {LOCATIONS.map((loc) => (
             <button
               key={loc}

@@ -48,6 +48,7 @@ const dropdownNavItems = [
   { href: '/meals', label: 'Meal Plan', icon: UtensilsCrossed },
   { href: '/recipes', label: 'Recipes', icon: BookOpen },
   { href: '/budget', label: 'Budget', icon: BarChart3 },
+  { href: '/items', label: 'Manage Items', icon: Settings }, // Added Manage Items
 ];
 
 /**

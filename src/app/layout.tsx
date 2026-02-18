@@ -1,10 +1,11 @@
 import './globals.css';
 
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import { SessionProvider } from 'next-auth/react';
 
 import { QueryProvider } from '@/components/providers';
+import { OfflineIndicator } from '@/components/pwa/OfflineIndicator';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { Toaster } from '@/components/ui/Toaster';
 
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
   title: 'Listly - Smart Shopping Companion',
   description:
     'Mobile-first PWA for smart shopping list management with real-time collaboration, AI suggestions, and pantry tracking.',
-  manifest: '/manifest.json',
+
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -34,6 +35,18 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#000000' },
+  ],
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -42,14 +55,20 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <body className="min-h-screen bg-background font-sans antialiased">
-        <SessionProvider>
+        <SessionProvider
+          refetchOnWindowFocus={false}
+          refetchWhenOffline={false}
+        >
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
-            <QueryProvider>{children}</QueryProvider>
+            <QueryProvider>
+              {children}
+              <OfflineIndicator />
+            </QueryProvider>
             <Toaster />
           </ThemeProvider>
         </SessionProvider>

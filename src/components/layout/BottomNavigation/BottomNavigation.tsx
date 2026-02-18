@@ -13,6 +13,7 @@
 import {
   BarChart3,
   ClipboardList,
+  CookingPot,
   Settings,
   UtensilsCrossed,
   Warehouse,
@@ -26,6 +27,7 @@ const navItems = [
   { href: '/lists', label: 'Lists', icon: ClipboardList },
   { href: '/pantry', label: 'Pantry', icon: Warehouse },
   { href: '/meals', label: 'Meals', icon: UtensilsCrossed },
+  { href: '/recipes', label: 'Recipes', icon: CookingPot },
   { href: '/budget', label: 'Budget', icon: BarChart3 },
   { href: '/settings', label: 'Settings', icon: Settings },
 ] as const;

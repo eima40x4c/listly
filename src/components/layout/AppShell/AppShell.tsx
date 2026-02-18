@@ -32,13 +32,13 @@ export function AppShell({ children }: AppShellProps) {
   const { data: session } = useSession();
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className="flex min-h-screen flex-col overflow-x-hidden bg-background">
       <Header user={session?.user} />
 
       <div className="flex flex-1">
         <Sidebar />
 
-        <main className="flex-1 pb-20 md:pb-0">
+        <main className="min-w-0 flex-1 pb-20 md:pb-0">
           <PageTransition>{children}</PageTransition>
         </main>
       </div>

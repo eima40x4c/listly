@@ -17,6 +17,7 @@ import { AppShell } from '@/components/layout/AppShell';
 import { Container } from '@/components/layout/Container';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { CustomSelect } from '@/components/ui/CustomSelect/CustomSelect';
 import { Input } from '@/components/ui/Input';
 import { useComingSoon } from '@/hooks/useComingSoon';
 import { useRecipes } from '@/hooks/useRecipes';
@@ -105,7 +106,7 @@ export default function RecipesPage() {
         </div>
 
         {/* Category Tabs (Visual only for now as schema lacks category) */}
-        <div className="mb-4 flex gap-2 overflow-x-auto">
+        <div className="no-scrollbar mb-4 flex max-w-full gap-2 overflow-x-auto pb-2">
           {CATEGORIES.map((cat) => (
             <button
               key={cat}
@@ -124,19 +125,16 @@ export default function RecipesPage() {
 
         {/* Sort & View Toggle */}
         <div className="mb-6 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-sm">
-            <span className="text-muted-foreground">Sort:</span>
-            <select
+          <div className="flex w-full max-w-xs items-center gap-2 text-sm">
+            <span className="whitespace-nowrap text-muted-foreground">
+              Sort:
+            </span>
+            <CustomSelect
+              options={SORT_OPTIONS.map((opt) => ({ value: opt, label: opt }))}
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="rounded-md border bg-background px-2 py-1 text-sm"
-            >
-              {SORT_OPTIONS.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => setSortBy(val)}
+              className="w-full min-w-[120px]"
+            />
           </div>
           <div className="flex rounded-lg border">
             <button
