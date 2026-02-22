@@ -1,5 +1,11 @@
 # Listly - Smart Shopping Companion
 
+
+> [!WARNING]
+> **DEPRECATED: Initial Prototype / Exploration**
+>
+> This repository contains the initial prototype and exploration for the Listly project. Active development has been moved to a new repository called [listly](https://github.com/eima40x4c/listly)--This current repository no longer being maintained.
+
 Mobile-first Progressive Web App for smart shopping list management with real-time collaboration, AI suggestions, and pantry tracking.
 
 ## ✨ Features
